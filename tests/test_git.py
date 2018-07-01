@@ -33,7 +33,7 @@ class TestGit:
         git.commit_file(datetime_string_second, file_name)
 
         all_commits = git.get_commits(
-            repo_path=git_repo_path,
+            repo_path=str(git_repo_path),
             branch='master',
             author=git_author
         )
