@@ -19,7 +19,7 @@ class TestGit:
 
     def test_get_commits(self, tmpdir, datetime_string_first, datetime_string_second, git_author):
         git_repo_path = tmpdir.mkdir('get_commits')
-        os.chdir(git_repo_path)
+        os.chdir(str(git_repo_path))
         os.system('git init')
 
         new_repo_path = os.path.join(git_repo_path, 'sub_dir')
@@ -64,7 +64,7 @@ class TestGit:
 
     def test_build_repository(self, tmpdir, datetime_string_first, datetime_string_second, git_author):
         git_repo_path = tmpdir.mkdir('builg_git_repository')
-        os.chdir(git_repo_path)
+        os.chdir(str(git_repo_path))
 
         all_commits = [
             parse_iso_8601_string_to_datetime(datetime_string_first),

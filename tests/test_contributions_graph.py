@@ -10,7 +10,7 @@ from contributions_graph.repository_list import RepositoryList
 class TestCommitsStore:
     def test_commits_store_with_obfuscate(self, tmpdir, datetime_string_first, datetime_string_second, git_author):
         git_repo_path = tmpdir.mkdir('git_repo')
-        os.chdir(git_repo_path)
+        os.chdir(str(git_repo_path))
 
         new_repo_path = git_repo_path
         file_ext = 'py'
@@ -33,7 +33,7 @@ class TestCommitsStore:
         commit_store = ContributionsGraph(repository_list, git, obfuscate)
         commit_store.run()
 
-        os.chdir(new_repo_path)
+        os.chdir(str(new_repo_path))
         cmd = 'git --no-pager log --pretty="%cI" --author="{}"'.format(git_author)
         all_commits = subprocess.check_output(cmd, universal_newlines=True)
         all_commits = all_commits.splitlines()
@@ -42,7 +42,7 @@ class TestCommitsStore:
 
     def test_commits_store_without_obfuscate(self, tmpdir, datetime_string_first, datetime_string_second, git_author):
         git_repo_path = tmpdir.mkdir('git_repo')
-        os.chdir(git_repo_path)
+        os.chdir(str(git_repo_path))
 
         new_repo_path = git_repo_path
         file_ext = 'py'
@@ -64,7 +64,7 @@ class TestCommitsStore:
         commit_store = ContributionsGraph(repository_list, git)
         commit_store.run()
 
-        os.chdir(new_repo_path)
+        os.chdir(str(new_repo_path))
         cmd = 'git --no-pager log --pretty="%cI" --author="{}"'.format(git_author)
         all_commits = subprocess.check_output(cmd, universal_newlines=True)
         all_commits = all_commits.splitlines()
