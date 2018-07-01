@@ -1,0 +1,13 @@
+.idea/
+.vscode/
+
+# Python
+__pycache__/
+*.py[cod]
+
+# Pytest
+.pytest_cache/
+.coverage
+
+# Dev
+app_test.py
