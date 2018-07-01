@@ -11,12 +11,45 @@ We must fix it! And we have solution for this!
 
 # Features
 - [x] merge all commits from your project repositories to one repository
-- [x] enable or disable obfuscate feature for datetime commits data
+- [x] enable or disable obfuscate feature for datetime commits data (samples in `app.py` and `app_obfuscate.py`)
 
 # Quick start
 `$ git clone https://github.com/itcrab/contributions-graph.git`<br />
 `$ cd contributions-graph`<br />
 `$ cat app.py`
+```python
+from contributions_graph import ContributionsGraph
+from contributions_graph.git import Git
+from contributions_graph.repository_list import RepositoryList
+
+repository_list = RepositoryList()
+repository_list.add(
+    repo_path='/home/arcady/projects/project_1',
+    branch='master',
+    author='Arcady Usov <arcady.usov@example.email.com>',
+)
+repository_list.add(
+    repo_path='/home/arcady/projects/project_2',
+    branch='develop',
+    author='Arcady Usov <arcady.usov@example.email.com>',
+)
+repository_list.add(
+    repo_path='/home/arcady/projects/project_3',
+    branch='testing',
+    author='Arcady Usov <arcady.usov@example.email.com>',
+)
+
+git = Git(
+    new_repo_path='/home/arcady/projects/contributions_graph',
+    file_ext='py',
+)
+
+
+if __name__ == '__main__':
+    contributions_graph = ContributionsGraph(repository_list, git)
+    contributions_graph.run()
+```
+`$ cat app_obfuscate.py`
 ```python
 from contributions_graph import ContributionsGraph
 from contributions_graph.git import Git

@@ -1,5 +1,6 @@
 from contributions_graph import ContributionsGraph
 from contributions_graph.git import Git
+from contributions_graph.obfuscate import Obfuscate
 from contributions_graph.repository_list import RepositoryList
 
 repository_list = RepositoryList()
@@ -23,8 +24,14 @@ git = Git(
     new_repo_path='/home/arcady/projects/contributions_graph',
     file_ext='py',
 )
+obfuscate = Obfuscate(
+    start_hour=11,
+    start_minute=0,
+    start_second=0,
+    delta_minutes=5,
+)
 
 
 if __name__ == '__main__':
-    contributions_graph = ContributionsGraph(repository_list, git)
+    contributions_graph = ContributionsGraph(repository_list, git, obfuscate)
     contributions_graph.run()
