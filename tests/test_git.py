@@ -12,7 +12,7 @@ class TestGit:
     def test_new_repo_path_exists(self, tmpdir):
         tmpdir.mkdir('.git')
 
-        new_repo_path = tmpdir
+        new_repo_path = str(tmpdir)
         file_ext = 'py'
         with pytest.raises(GitRepositoryExistsError):
             Git(new_repo_path, file_ext)
@@ -41,7 +41,7 @@ class TestGit:
         assert all_commits == [datetime_string_second, datetime_string_first]
 
     def test_create_repository(self, tmpdir):
-        new_repo_path = tmpdir
+        new_repo_path = str(tmpdir)
         file_ext = 'py'
         git = Git(new_repo_path, file_ext)
 
@@ -71,7 +71,7 @@ class TestGit:
             parse_iso_8601_string_to_datetime(datetime_string_second),
         ]
 
-        new_repo_path = git_repo_path
+        new_repo_path = str(git_repo_path)
         file_ext = 'py'
         git = Git(new_repo_path, file_ext)
         git.create_repository()

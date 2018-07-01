@@ -12,7 +12,7 @@ class TestCommitsStore:
         git_repo_path = tmpdir.mkdir('git_repo')
         os.chdir(str(git_repo_path))
 
-        new_repo_path = git_repo_path
+        new_repo_path = str(git_repo_path)
         file_ext = 'py'
         git = Git(new_repo_path, file_ext)
         git.create_repository()
@@ -28,7 +28,7 @@ class TestCommitsStore:
         repository_list = RepositoryList()
         repository_list.add(git_repo_path, 'master', git_author)
 
-        git = Git(new_repo_path, 'py')
+        git = Git(str(new_repo_path), 'py')
         obfuscate = Obfuscate(11, 0, 0, 5)
         commit_store = ContributionsGraph(repository_list, git, obfuscate)
         commit_store.run()
@@ -44,7 +44,7 @@ class TestCommitsStore:
         git_repo_path = tmpdir.mkdir('git_repo')
         os.chdir(str(git_repo_path))
 
-        new_repo_path = git_repo_path
+        new_repo_path = str(git_repo_path)
         file_ext = 'py'
         git = Git(new_repo_path, file_ext)
         git.create_repository()
@@ -60,7 +60,7 @@ class TestCommitsStore:
         repository_list = RepositoryList()
         repository_list.add(git_repo_path, 'master', git_author)
 
-        git = Git(new_repo_path, 'py')
+        git = Git(str(new_repo_path), 'py')
         commit_store = ContributionsGraph(repository_list, git)
         commit_store.run()
 
