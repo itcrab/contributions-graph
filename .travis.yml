@@ -1,0 +1,20 @@
+sudo: false
+
+language: python
+
+python:
+  - "3.5"
+  - "3.6"
+  - "3.7"
+
+install:
+  - pip install -r test_requirements.txt
+
+before_script:
+  - export PYTHONPATH=$PYTHONPATH:$(pwd)
+
+script:
+  - py.test
+
+after_success:
+  - codecov --token=630e8ec7-ec99-4376-8322-412851a4bd3e
