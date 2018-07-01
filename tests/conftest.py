@@ -1,4 +1,4 @@
-import subprocess
+import os
 from datetime import datetime
 from datetime import timezone, timedelta
 
@@ -74,6 +74,10 @@ def repository_dict_third(tmpdir):
 
 @pytest.fixture
 def git_author():
-    user_name = subprocess.check_output('git config user.name', universal_newlines=True).strip()
-    user_email = subprocess.check_output('git config user.email', universal_newlines=True).strip()
+    user_name = 'Arcady Usov'
+    user_email = 'arcady.usov@example.email.com'
+
+    os.environ['GIT_AUTHOR_NAME'] = user_name
+    os.environ['GIT_AUTHOR_EMAIL'] = user_email
+
     return '{} <{}>'.format(user_name, user_email)
