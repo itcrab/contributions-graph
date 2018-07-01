@@ -74,6 +74,6 @@ def repository_dict_third(tmpdir):
 
 @pytest.fixture
 def git_author():
-    user_name = subprocess.check_output('git config --global user.name', universal_newlines=True).strip()
-    user_email = subprocess.check_output('git config --global user.email', universal_newlines=True).strip()
+    user_name = subprocess.check_output('git config user.name', universal_newlines=True).strip()
+    user_email = subprocess.check_output('git config user.email', universal_newlines=True).strip()
     return '{} <{}>'.format(user_name, user_email)
