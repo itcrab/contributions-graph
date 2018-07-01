@@ -22,7 +22,7 @@ class TestGit:
         os.chdir(str(git_repo_path))
         os.system('git init')
 
-        new_repo_path = os.path.join(git_repo_path, 'sub_dir')
+        new_repo_path = os.path.join(str(git_repo_path), 'sub_dir')
         file_ext = 'py'
         git = Git(new_repo_path, file_ext)
 
@@ -45,14 +45,14 @@ class TestGit:
         file_ext = 'py'
         git = Git(new_repo_path, file_ext)
 
-        git_repo_path = os.path.join(new_repo_path, '.git')
+        git_repo_path = os.path.join(str(new_repo_path), '.git')
         assert os.path.isdir(git_repo_path) is False
 
         git.create_repository()
         assert os.path.isdir(git_repo_path) is True
 
     def test_create_repository_with_wrong_path(self, tmpdir):
-        new_repo_path = os.path.join(tmpdir, 'wrong')
+        new_repo_path = os.path.join(str(tmpdir), 'wrong')
         file_ext = 'py'
         git = Git(new_repo_path, file_ext)
 
