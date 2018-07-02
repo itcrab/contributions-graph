@@ -7,13 +7,13 @@ python:
   - "3.6"
 
 install:
-  - sudo pip install -r test_requirements.txt
+  - pip install -r test_requirements.txt
 
 before_script:
   - export PYTHONPATH=$PYTHONPATH:$(pwd)
 
 script:
-  - sudo python3 -m pytest
+  - py.test
 
 after_success:
   - codecov --token=630e8ec7-ec99-4376-8322-412851a4bd3e
