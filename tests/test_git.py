@@ -1,4 +1,5 @@
 import os
+import subprocess
 
 import pytest
 
@@ -76,11 +77,9 @@ class TestGit:
         git.create_repository()
         git.build_repository(all_commits)
 
-        cmd = 'git --no-pager log --pretty="%cI" --author="{}" >git_log.txt'.format(git_author)
-        os.system(cmd)
-        with open('git_log.txt', 'r') as f:
-            all_commits = f.read().splitlines()
-        os.unlink('git_log.txt')
+        cmd = 'git --no-pager log --pretty="%cI" --author="{}"'.format(git_author)
+        all_commits = subprocess.check_output(cmd, shell=True).decode('utf-8')
+        all_commits = all_commits.splitlines()
 
         assert all_commits == ['2018-06-30T23:22:01+05:00', '2018-06-30T20:12:09+05:00']
         assert all_commits == [datetime_string_second, datetime_string_first]
