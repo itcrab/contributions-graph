@@ -1,3 +1,5 @@
+[![codecov](https://codecov.io/gh/itcrab/contributions-graph/branch/master/graph/badge.svg)](https://codecov.io/gh/itcrab/contributions-graph)
+
 # Contributions Graph
 Move all your commits from any repositories to one repository. It's simple way build and save right GitHub Contributions Graph.
 
