@@ -13,7 +13,7 @@ before_script:
   - export PYTHONPATH=$PYTHONPATH:$(pwd)
 
 script:
-  - sudo py.test
+  - sudo python -m pytest
 
 after_success:
   - codecov --token=630e8ec7-ec99-4376-8322-412851a4bd3e
