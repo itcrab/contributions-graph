@@ -1,5 +1,4 @@
 import os
-import subprocess
 
 from contributions_graph.exceptions import GitRepositoryExistsError
 from contributions_graph.utils import generate_full_file_name, write_file_data
@@ -20,9 +19,11 @@ class Git:
 
         os.system('git checkout {}'.format(branch))
 
-        cmd = 'git --no-pager log --pretty="%cI" --author="{}"'.format(author)
-        all_commits = subprocess.check_output(cmd, universal_newlines=True)
-        all_commits = all_commits.splitlines()
+        cmd = 'git --no-pager log --pretty="%cI" --author="{}" >git_log.txt'.format(author)
+        os.system(cmd)
+        with open('git_log.txt', 'r') as f:
+            all_commits = f.read().splitlines()
+        os.unlink('git_log.txt')
 
         os.chdir(self.current_path)
 

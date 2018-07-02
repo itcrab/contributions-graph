@@ -1,5 +1,4 @@
 import os
-import subprocess
 
 from contributions_graph import ContributionsGraph
 from contributions_graph.git import Git
@@ -38,6 +37,7 @@ class TestCommitsStore:
         os.system(cmd)
         with open('git_log.txt', 'r') as f:
             all_commits = f.read().splitlines()
+        os.unlink('git_log.txt')
 
         assert all_commits == ['2018-06-30T11:10:00+05:00', '2018-06-30T11:05:00+05:00']
 
@@ -70,6 +70,7 @@ class TestCommitsStore:
         os.system(cmd)
         with open('git_log.txt', 'r') as f:
             all_commits = f.read().splitlines()
+        os.unlink('git_log.txt')
 
         assert all_commits == ['2018-06-30T23:22:01+05:00', '2018-06-30T20:12:09+05:00']
         assert all_commits == [datetime_string_second, datetime_string_first]
