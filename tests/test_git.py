@@ -20,7 +20,8 @@ class TestGit:
     def test_get_commits(self, tmpdir, datetime_string_first, datetime_string_second, git_author):
         git_repo_path = tmpdir.mkdir('get_commits')
         os.chdir(str(git_repo_path))
-        os.system('git init')
+        cmd = 'git init --bare'
+        all_commits = subprocess.check_output(cmd, universal_newlines=True)
 
         new_repo_path = os.path.join(str(git_repo_path), 'sub_dir')
         file_ext = 'py'

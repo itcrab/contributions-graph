@@ -26,7 +26,7 @@ class TestCommitsStore:
         new_repo_path = tmpdir.mkdir('new_git_repo')
 
         repository_list = RepositoryList()
-        repository_list.add(git_repo_path, 'master', git_author)
+        repository_list.add(str(git_repo_path), 'master', git_author)
 
         git = Git(str(new_repo_path), 'py')
         obfuscate = Obfuscate(11, 0, 0, 5)
@@ -58,7 +58,7 @@ class TestCommitsStore:
         new_repo_path = tmpdir.mkdir('new_git_repo')
 
         repository_list = RepositoryList()
-        repository_list.add(git_repo_path, 'master', git_author)
+        repository_list.add(str(git_repo_path), 'master', git_author)
 
         git = Git(str(new_repo_path), 'py')
         commit_store = ContributionsGraph(repository_list, git)
