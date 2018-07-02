@@ -21,7 +21,7 @@ class Git:
         os.system('git checkout {}'.format(branch))
 
         cmd = 'git --no-pager log --pretty="%cI" --author="{}"'.format(author)
-        all_commits = subprocess.check_output(cmd, shell=True).decode('utf-8')
+        all_commits = subprocess.check_output(cmd, shell=True, universal_newlines=True)
         all_commits = all_commits.splitlines()
 
         os.chdir(self.current_path)
