@@ -18,10 +18,12 @@ class TestCommitsStore:
         git.create_repository()
 
         file_name = git.create_file(datetime_string_first)
-        git.commit_file(datetime_string_first, file_name)
+        git.set_current_datetime(datetime_string_first)
+        git.commit_file(file_name)
 
         file_name = git.create_file(datetime_string_second)
-        git.commit_file(datetime_string_second, file_name)
+        git.set_current_datetime(datetime_string_second)
+        git.commit_file(file_name)
 
         new_repo_path = tmpdir.mkdir('new_git_repo')
 
@@ -39,7 +41,8 @@ class TestCommitsStore:
         all_commits = subprocess.check_output(cmd, shell=True, universal_newlines=True)
         all_commits = all_commits.splitlines()
 
-        assert all_commits == ['2018-06-30T11:10:00+05:00', '2018-06-30T11:05:00+05:00']
+        assert all_commits[:-1] == ['2018-06-30T11:10:00+05:00', '2018-06-30T11:05:00+05:00']
+        assert os.path.isfile('README.md') is True
 
     def test_commits_store_without_obfuscate(self, tmpdir, datetime_string_first, datetime_string_second, git_author):
         git_repo_path = tmpdir.mkdir('git_repo')
@@ -51,10 +54,12 @@ class TestCommitsStore:
         git.create_repository()
 
         file_name = git.create_file(datetime_string_first)
-        git.commit_file(datetime_string_first, file_name)
+        git.set_current_datetime(datetime_string_first)
+        git.commit_file(file_name)
 
         file_name = git.create_file(datetime_string_second)
-        git.commit_file(datetime_string_second, file_name)
+        git.set_current_datetime(datetime_string_second)
+        git.commit_file(file_name)
 
         new_repo_path = tmpdir.mkdir('new_git_repo')
 
@@ -71,5 +76,6 @@ class TestCommitsStore:
         all_commits = subprocess.check_output(cmd, shell=True, universal_newlines=True)
         all_commits = all_commits.splitlines()
 
-        assert all_commits == ['2018-06-30T23:22:01+05:00', '2018-06-30T20:12:09+05:00']
-        assert all_commits == [datetime_string_second, datetime_string_first]
+        assert all_commits[:-1] == ['2018-06-30T23:22:01+05:00', '2018-06-30T20:12:09+05:00']
+        assert all_commits[:-1] == [datetime_string_second, datetime_string_first]
+        assert os.path.isfile('README.md') is True
