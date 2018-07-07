@@ -85,3 +85,4 @@ class TestGit:
 
         assert all_commits == ['2018-06-30T23:22:01+05:00', '2018-06-30T20:12:09+05:00']
         assert all_commits == [datetime_string_second, datetime_string_first]
+        assert os.path.isdir('all_commits') is True

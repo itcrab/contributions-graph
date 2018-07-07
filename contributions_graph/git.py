@@ -42,12 +42,17 @@ class Git:
         self.commit_file(file_name)
 
     def build_repository(self, all_commits):
+        os.mkdir('all_commits')
+        os.chdir('all_commits')
+
         for commit in all_commits:
             date_string = commit.isoformat()
 
             file_name = self.create_file(date_string)
             self.set_current_datetime(date_string)
             self.commit_file(file_name)
+
+        os.chdir(self.current_path)
 
     def create_file(self, date_string):
         file_name = generate_full_file_name(self.file_ext)
