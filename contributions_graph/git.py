@@ -34,6 +34,13 @@ class Git:
         os.chdir(self.new_repo_path)
         os.system('git init')
 
+    def create_readme(self):
+        file_name = 'README.md'
+        file_data = '# Contribution Graph Repository'
+        write_file_data(file_name, file_data)
+
+        self.commit_file(file_name)
+
     def build_repository(self, all_commits):
         for commit in all_commits:
             date_string = commit.isoformat()
