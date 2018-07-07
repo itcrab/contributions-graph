@@ -32,7 +32,8 @@ class TestUtils:
         os.chdir(tmpdir.strpath)
 
         file_name = '2946f6aa-de86-42dc-a7e5-d6f278378741.py'
-        write_file_data(file_name, datetime_string_first)
+        file_data = 'commit_datetime="{}"'.format(datetime_string_first)
+        write_file_data(file_name, file_data)
 
         f = tmpdir.join(file_name)
         assert f.read() == 'commit_datetime="2018-06-30T20:12:09+05:00"'
@@ -41,7 +42,8 @@ class TestUtils:
         os.chdir(tmpdir.strpath)
 
         file_name = '2946f6aa-de86-42dc-a7e5-d6f278378742.py'
-        write_file_data(file_name, datetime_string_second)
+        file_data = 'commit_datetime="{}"'.format(datetime_string_second)
+        write_file_data(file_name, file_data)
 
         f = tmpdir.join(file_name)
         assert f.read() == 'commit_datetime="2018-06-30T23:22:01+05:00"'
