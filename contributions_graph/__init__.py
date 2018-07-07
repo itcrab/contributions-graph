@@ -29,6 +29,7 @@ class ContributionsGraph:
         return all_commits
 
     def sort_commits(self, all_commits):
+        all_commits = list(set(all_commits))
         for idx, commit in enumerate(all_commits):
             all_commits[idx] = parse_iso_8601_string_to_datetime(commit)
 
