@@ -27,10 +27,12 @@ class TestGit:
         git = Git(new_repo_path, file_ext)
 
         file_name = git.create_file(datetime_string_first)
-        git.commit_file(datetime_string_first, file_name)
+        git.set_current_datetime(datetime_string_first)
+        git.commit_file(file_name)
 
         file_name = git.create_file(datetime_string_second)
-        git.commit_file(datetime_string_second, file_name)
+        git.set_current_datetime(datetime_string_second)
+        git.commit_file(file_name)
 
         all_commits = git.get_commits(
             repo_path=git_repo_path.strpath,

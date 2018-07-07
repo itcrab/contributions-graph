@@ -39,7 +39,8 @@ class Git:
             date_string = commit.isoformat()
 
             file_name = self.create_file(date_string)
-            self.commit_file(date_string, file_name)
+            self.set_current_datetime(date_string)
+            self.commit_file(file_name)
 
     def create_file(self, date_string):
         file_name = generate_full_file_name(self.file_ext)
@@ -47,9 +48,10 @@ class Git:
 
         return file_name
 
-    def commit_file(self, date_string, file_name):
+    def set_current_datetime(self, date_string):
         os.environ['GIT_AUTHOR_DATE'] = date_string
         os.environ['GIT_COMMITTER_DATE'] = date_string
 
+    def commit_file(self, file_name):
         os.system('git add {}'.format(file_name))
         os.system('git commit -m "Commit file {}"'.format(file_name))
