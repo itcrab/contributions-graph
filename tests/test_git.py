@@ -27,10 +27,12 @@ class TestGit:
         git = Git(new_repo_path, file_ext)
 
         file_name = git.create_file(datetime_string_first)
-        git.commit_file(datetime_string_first, file_name)
+        git.set_current_datetime(datetime_string_first)
+        git.commit_file(file_name)
 
         file_name = git.create_file(datetime_string_second)
-        git.commit_file(datetime_string_second, file_name)
+        git.set_current_datetime(datetime_string_second)
+        git.commit_file(file_name)
 
         all_commits = git.get_commits(
             repo_path=git_repo_path.strpath,
@@ -83,3 +85,4 @@ class TestGit:
 
         assert all_commits == ['2018-06-30T23:22:01+05:00', '2018-06-30T20:12:09+05:00']
         assert all_commits == [datetime_string_second, datetime_string_first]
+        assert os.path.isdir('all_commits') is True

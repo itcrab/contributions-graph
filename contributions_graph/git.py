@@ -34,22 +34,37 @@ class Git:
         os.chdir(self.new_repo_path)
         os.system('git init')
 
+    def create_readme(self):
+        file_name = 'README.md'
+        file_data = '# Contribution Graph Repository'
+        write_file_data(file_name, file_data)
+
+        self.commit_file(file_name)
+
     def build_repository(self, all_commits):
+        os.mkdir('all_commits')
+        os.chdir('all_commits')
+
         for commit in all_commits:
             date_string = commit.isoformat()
 
             file_name = self.create_file(date_string)
-            self.commit_file(date_string, file_name)
+            self.set_current_datetime(date_string)
+            self.commit_file(file_name)
+
+        os.chdir(self.current_path)
 
     def create_file(self, date_string):
         file_name = generate_full_file_name(self.file_ext)
-        write_file_data(file_name, date_string)
+        file_data = 'commit_datetime="{}"'.format(date_string)
+        write_file_data(file_name, file_data)
 
         return file_name
 
-    def commit_file(self, date_string, file_name):
+    def set_current_datetime(self, date_string):
         os.environ['GIT_AUTHOR_DATE'] = date_string
         os.environ['GIT_COMMITTER_DATE'] = date_string
 
+    def commit_file(self, file_name):
         os.system('git add {}'.format(file_name))
         os.system('git commit -m "Commit file {}"'.format(file_name))

@@ -6,7 +6,7 @@ class ContributionsGraph:
         self.repository_list = repository_list
         self.git = git
         self.obfuscate = obfuscate
-    
+
     def run(self):
         all_commits = self.get_all_commits()
         all_commits = self.sort_commits(all_commits)
@@ -38,4 +38,5 @@ class ContributionsGraph:
 
     def build_repo(self, all_commits):
         self.git.create_repository()
+        self.git.create_readme()
         self.git.build_repository(all_commits)

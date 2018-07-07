@@ -11,6 +11,6 @@ def generate_full_file_name(file_ext):
     return '{}.{}'.format(uuid.uuid4(), file_ext)
 
 
-def write_file_data(file_name, date_string):
+def write_file_data(file_name, file_data):
     with open(file_name, 'w') as f:
-        f.write('commit_datetime="{}"'.format(date_string))
+        f.write(file_data)
