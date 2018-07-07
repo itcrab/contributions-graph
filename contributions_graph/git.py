@@ -44,7 +44,8 @@ class Git:
 
     def create_file(self, date_string):
         file_name = generate_full_file_name(self.file_ext)
-        write_file_data(file_name, date_string)
+        file_data = 'commit_datetime="{}"'.format(date_string)
+        write_file_data(file_name, file_data)
 
         return file_name
 
