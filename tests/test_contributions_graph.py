@@ -18,10 +18,12 @@ class TestCommitsStore:
         git.create_repository()
 
         file_name = git.create_file(datetime_string_first)
-        git.commit_file(datetime_string_first, file_name)
+        git.set_current_datetime(datetime_string_first)
+        git.commit_file(file_name)
 
         file_name = git.create_file(datetime_string_second)
-        git.commit_file(datetime_string_second, file_name)
+        git.set_current_datetime(datetime_string_second)
+        git.commit_file(file_name)
 
         new_repo_path = tmpdir.mkdir('new_git_repo')
 
@@ -51,10 +53,12 @@ class TestCommitsStore:
         git.create_repository()
 
         file_name = git.create_file(datetime_string_first)
-        git.commit_file(datetime_string_first, file_name)
+        git.set_current_datetime(datetime_string_first)
+        git.commit_file(file_name)
 
         file_name = git.create_file(datetime_string_second)
-        git.commit_file(datetime_string_second, file_name)
+        git.set_current_datetime(datetime_string_second)
+        git.commit_file(file_name)
 
         new_repo_path = tmpdir.mkdir('new_git_repo')
 
