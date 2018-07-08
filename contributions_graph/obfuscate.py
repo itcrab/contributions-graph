@@ -21,7 +21,7 @@ class Obfuscate:
             if commit.day != ofuscate_date.day:
                 ofuscate_date = self.get_obfuscate_date(commit)
 
-            ofuscate_date += self.delta_minutes
             all_commits[idx] = ofuscate_date
+            ofuscate_date += self.delta_minutes
 
         return all_commits
