@@ -16,12 +16,19 @@ class TestRepositoryList:
         assert repository_list._max_position == 1
 
         repository_list.add(**repository_dicts[1])
-        assert repository_list._repositories == [repository_dicts[0], repository_dicts[1]]
+        assert repository_list._repositories == [
+            repository_dicts[0],
+            repository_dicts[1],
+        ]
         assert repository_list._position == 0
         assert repository_list._max_position == 2
 
         repository_list.add(**repository_dicts[2])
-        assert repository_list._repositories == [repository_dicts[0], repository_dicts[1], repository_dicts[2]]
+        assert repository_list._repositories == [
+            repository_dicts[0],
+            repository_dicts[1],
+            repository_dicts[2],
+        ]
         assert repository_list._position == 0
         assert repository_list._max_position == 3
 
@@ -34,22 +41,38 @@ class TestRepositoryList:
         repository_list.add(**repository_dicts[0])
         repository_list.add(**repository_dicts[1])
         repository_list.add(**repository_dicts[2])
-        assert repository_list._repositories == [repository_dicts[0], repository_dicts[1], repository_dicts[2]]
+        assert repository_list._repositories == [
+            repository_dicts[0],
+            repository_dicts[1],
+            repository_dicts[2],
+        ]
         assert repository_list._position == 0
         assert repository_list._max_position == 3
 
         next(repository_list)
-        assert repository_list._repositories == [repository_dicts[0], repository_dicts[1], repository_dicts[2]]
+        assert repository_list._repositories == [
+            repository_dicts[0],
+            repository_dicts[1],
+            repository_dicts[2],
+        ]
         assert repository_list._position == 1
         assert repository_list._max_position == 3
 
         next(repository_list)
-        assert repository_list._repositories == [repository_dicts[0], repository_dicts[1], repository_dicts[2]]
+        assert repository_list._repositories == [
+            repository_dicts[0],
+            repository_dicts[1],
+            repository_dicts[2],
+        ]
         assert repository_list._position == 2
         assert repository_list._max_position == 3
 
         next(repository_list)
-        assert repository_list._repositories == [repository_dicts[0], repository_dicts[1], repository_dicts[2]]
+        assert repository_list._repositories == [
+            repository_dicts[0],
+            repository_dicts[1],
+            repository_dicts[2],
+        ]
         assert repository_list._position == 3
         assert repository_list._max_position == 3
 
@@ -65,14 +88,26 @@ class TestRepositoryList:
         repository_list.add(**repository_dicts[0])
         repository_list.add(**repository_dicts[1])
         repository_list.add(**repository_dicts[2])
-        assert repository_list._repositories == [repository_dicts[0], repository_dicts[1], repository_dicts[2]]
+        assert repository_list._repositories == [
+            repository_dicts[0],
+            repository_dicts[1],
+            repository_dicts[2],
+        ]
         assert repository_list._position == 0
         assert repository_list._max_position == 3
 
-        repository_list_values = [repository for repository in repository_list]
-        assert repository_list_values == [repository_dicts[0], repository_dicts[1], repository_dicts[2]]
+        repository_list_values = [repo for repo in repository_list]
+        assert repository_list_values == [
+            repository_dicts[0],
+            repository_dicts[1],
+            repository_dicts[2],
+        ]
 
-        assert repository_list._repositories == [repository_dicts[0], repository_dicts[1], repository_dicts[2]]
+        assert repository_list._repositories == [
+            repository_dicts[0],
+            repository_dicts[1],
+            repository_dicts[2],
+        ]
         assert repository_list._position == 3
         assert repository_list._max_position == 3
 
