@@ -26,6 +26,36 @@ def datetime_string_second():
 
 
 @pytest.fixture
+def datetime_string_third():
+    return '2018-07-01T17:43:04+05:00'
+
+
+@pytest.fixture
+def datetime_string_fourth():
+    return '2018-07-01T17:59:08+05:00'
+
+
+@pytest.fixture
+def datetime_string_first_obfuscate():
+    return '2018-06-30T11:05:00+05:00'
+
+
+@pytest.fixture
+def datetime_string_second_obfuscate():
+    return '2018-06-30T11:10:00+05:00'
+
+
+@pytest.fixture
+def datetime_string_third_obfuscate():
+    return '2018-07-01T11:05:00+05:00'
+
+
+@pytest.fixture
+def datetime_string_fourth_obfuscate():
+    return '2018-07-01T11:10:00+05:00'
+
+
+@pytest.fixture
 def datetime_first(tz_info_0500):
     return datetime(2018, 6, 30, 20, 12, 9, tzinfo=tz_info_0500)
 

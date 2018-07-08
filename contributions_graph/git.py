@@ -1,19 +1,28 @@
 import os
 import subprocess
+from datetime import datetime
 
-from contributions_graph.exceptions import GitRepositoryExistsError
 from contributions_graph.utils import generate_full_file_name, write_file_data
 
 
 class Git:
-    def __init__(self, new_repo_path, file_ext):
-        if os.path.exists(os.path.join(new_repo_path, '.git')):
-            raise GitRepositoryExistsError('Error: Git repository is exists!')
-
+    def __init__(self, new_repo_path, new_repo_branch, new_repo_author, file_ext):
         self.new_repo_path = new_repo_path
+        self.new_repo_branch = new_repo_branch
+        self.new_repo_author = new_repo_author
         self.file_ext = file_ext
 
         self.current_path = os.getcwd()
+
+    def repository_exists(self):
+        return os.path.isdir(os.path.join(self.new_repo_path, '.git'))
+
+    def get_commits_exists(self):
+        return self.get_commits(
+            repo_path=self.new_repo_path,
+            branch=self.new_repo_branch,
+            author=self.new_repo_author,
+        )
 
     def get_commits(self, repo_path, branch, author):
         os.chdir(repo_path)
@@ -29,17 +38,20 @@ class Git:
         return all_commits
 
     def create_repository(self):
-        if not os.path.exists(self.new_repo_path):
+        if not os.path.isdir(self.new_repo_path):
             os.mkdir(self.new_repo_path)
         os.chdir(self.new_repo_path)
-        os.system('git init')
+        if not self.repository_exists():
+            os.system('git init')
 
     def create_readme(self):
         file_name = 'README.md'
-        file_data = '# Contribution Graph Repository'
-        write_file_data(file_name, file_data)
+        if not os.path.isfile(file_name):
+            file_data = '# Contribution Graph Repository'
+            write_file_data(file_name, file_data)
 
-        self.commit_file(file_name)
+            self.set_current_datetime(datetime.today().isoformat())
+            self.commit_file(file_name)
 
     def build_repository(self, all_commits):
         os.mkdir('all_commits')
