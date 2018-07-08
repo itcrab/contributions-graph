@@ -16,90 +16,54 @@ def tz_info_0300():
 
 
 @pytest.fixture
-def datetime_string_first():
-    return '2018-06-30T20:12:09+05:00'
+def datetime_objects(tz_info_0500, tz_info_0300):
+    return [
+        datetime(2018, 6, 30, 20, 12, 9, tzinfo=tz_info_0500),
+        datetime(2018, 6, 30, 23, 22, 1, tzinfo=tz_info_0500),
+        datetime(2018, 7, 1, 17, 43, 4, tzinfo=tz_info_0300),
+        datetime(2018, 7, 1, 17, 59, 8, tzinfo=tz_info_0300),
+    ]
 
 
 @pytest.fixture
-def datetime_string_second():
-    return '2018-06-30T23:22:01+05:00'
+def datetime_strings(datetime_objects):
+    return [dt.isoformat() for dt in datetime_objects]
 
 
 @pytest.fixture
-def datetime_string_third():
-    return '2018-07-01T17:43:04+05:00'
+def datetime_objects_obfuscate(tz_info_0500, tz_info_0300):
+    return [
+        datetime(2018, 6, 30, 11, 0, 0, tzinfo=tz_info_0500),
+        datetime(2018, 6, 30, 11, 5, 0, tzinfo=tz_info_0500),
+        datetime(2018, 7, 1, 11, 0, 0, tzinfo=tz_info_0300),
+        datetime(2018, 7, 1, 11, 5, 0, tzinfo=tz_info_0300),
+    ]
 
 
 @pytest.fixture
-def datetime_string_fourth():
-    return '2018-07-01T17:59:08+05:00'
+def datetime_strings_obfuscate(datetime_objects_obfuscate):
+    return [dt.isoformat() for dt in datetime_objects_obfuscate]
 
 
 @pytest.fixture
-def datetime_string_first_obfuscate():
-    return '2018-06-30T11:05:00+05:00'
-
-
-@pytest.fixture
-def datetime_string_second_obfuscate():
-    return '2018-06-30T11:10:00+05:00'
-
-
-@pytest.fixture
-def datetime_string_third_obfuscate():
-    return '2018-07-01T11:05:00+05:00'
-
-
-@pytest.fixture
-def datetime_string_fourth_obfuscate():
-    return '2018-07-01T11:10:00+05:00'
-
-
-@pytest.fixture
-def datetime_first(tz_info_0500):
-    return datetime(2018, 6, 30, 20, 12, 9, tzinfo=tz_info_0500)
-
-
-@pytest.fixture
-def datetime_second(tz_info_0500):
-    return datetime(2018, 6, 30, 23, 22, 1, tzinfo=tz_info_0500)
-
-
-@pytest.fixture
-def datetime_third(tz_info_0300):
-    return datetime(2018, 7, 1, 17, 43, 4, tzinfo=tz_info_0300)
-
-
-@pytest.fixture
-def datetime_fourth(tz_info_0300):
-    return datetime(2018, 7, 1, 17, 59, 8, tzinfo=tz_info_0300)
-
-
-@pytest.fixture
-def repository_dict_first(tmpdir):
-    return dict(
-        repo_path=tmpdir,
-        branch='branch-name-first',
-        author='Developer Name <e-first@mail.com>',
-    )
-
-
-@pytest.fixture
-def repository_dict_second(tmpdir):
-    return dict(
-        repo_path=tmpdir,
-        branch='branch-name-second',
-        author='Developer Name <e-second@mail.com>',
-    )
-
-
-@pytest.fixture
-def repository_dict_third(tmpdir):
-    return dict(
-        repo_path=tmpdir,
-        branch='branch-name-third',
-        author='Developer Name <e-third@mail.com>',
-    )
+def repository_dicts(tmpdir):
+    return [
+        dict(
+            repo_path=tmpdir,
+            branch='branch-name-first',
+            author='Developer Name <e-first@mail.com>',
+        ),
+        dict(
+            repo_path=tmpdir,
+            branch='branch-name-second',
+            author='Developer Name <e-second@mail.com>',
+        ),
+        dict(
+            repo_path=tmpdir,
+            branch='branch-name-third',
+            author='Developer Name <e-third@mail.com>',
+        )
+    ]
 
 
 @pytest.fixture
