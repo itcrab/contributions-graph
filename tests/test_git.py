@@ -2,11 +2,10 @@ import os
 import subprocess
 
 from contributions_graph.git import Git
-from contributions_graph.utils import parse_iso_8601_string_to_datetime
 
 
 class TestGit:
-    def test_get_commits(self, tmpdir, datetime_string_first, datetime_string_second, git_author):
+    def test_get_commits(self, tmpdir, datetime_strings, git_author):
         git_repo_path = tmpdir.mkdir('get_commits')
         os.chdir(git_repo_path.strpath)
         os.system('git init')
@@ -17,12 +16,12 @@ class TestGit:
         new_repo_author = git_author
         git = Git(new_repo_path, new_repo_brach, new_repo_author, file_ext)
 
-        file_name = git.create_file(datetime_string_first)
-        git.set_current_datetime(datetime_string_first)
+        file_name = git.create_file(datetime_strings[0])
+        git.set_current_datetime(datetime_strings[0])
         git.commit_file(file_name)
 
-        file_name = git.create_file(datetime_string_second)
-        git.set_current_datetime(datetime_string_second)
+        file_name = git.create_file(datetime_strings[1])
+        git.set_current_datetime(datetime_strings[1])
         git.commit_file(file_name)
 
         all_commits = git.get_commits(
@@ -30,8 +29,7 @@ class TestGit:
             branch='master',
             author=git_author,
         )
-        assert all_commits == ['2018-06-30T23:22:01+05:00', '2018-06-30T20:12:09+05:00']
-        assert all_commits == [datetime_string_second, datetime_string_first]
+        assert all_commits == [datetime_strings[1], datetime_strings[0]]
 
     def test_create_repository(self, tmpdir, git_author):
         new_repo_path = tmpdir.strpath
@@ -59,13 +57,13 @@ class TestGit:
         git.create_repository()
         assert os.path.isdir(git_repo_path) is True
 
-    def test_build_repository(self, tmpdir, datetime_string_first, datetime_string_second, git_author):
+    def test_build_repository(self, tmpdir, datetime_objects, datetime_strings, git_author):
         git_repo_path = tmpdir.mkdir('builg_git_repository')
         os.chdir(git_repo_path.strpath)
 
         all_commits = [
-            parse_iso_8601_string_to_datetime(datetime_string_first),
-            parse_iso_8601_string_to_datetime(datetime_string_second),
+            datetime_objects[0],
+            datetime_objects[1],
         ]
 
         new_repo_path = git_repo_path.strpath
@@ -80,6 +78,5 @@ class TestGit:
         all_commits = subprocess.check_output(cmd, shell=True, universal_newlines=True)
         all_commits = all_commits.splitlines()
 
-        assert all_commits == ['2018-06-30T23:22:01+05:00', '2018-06-30T20:12:09+05:00']
-        assert all_commits == [datetime_string_second, datetime_string_first]
+        assert all_commits == [datetime_strings[1], datetime_strings[0]]
         assert os.path.isdir('all_commits') is True
