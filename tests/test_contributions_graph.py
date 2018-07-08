@@ -121,7 +121,7 @@ class TestCommitsStore:
 
         new_repo_path = tmpdir.mkdir('new_git_repo')
 
-        git = Git(new_repo_path, new_repo_brach, new_repo_author, file_ext)
+        git = Git(new_repo_path.strpath, new_repo_brach, new_repo_author, file_ext)
         git.create_repository()
 
         file_name = git.create_file(datetime_string_first_obfuscate)
@@ -200,7 +200,7 @@ class TestCommitsStore:
 
         new_repo_path = tmpdir.mkdir('new_git_repo')
 
-        git = Git(new_repo_path, new_repo_brach, new_repo_author, file_ext)
+        git = Git(new_repo_path.strpath, new_repo_brach, new_repo_author, file_ext)
         git.create_repository()
 
         file_name = git.create_file(datetime_string_first)
