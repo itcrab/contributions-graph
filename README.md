@@ -43,6 +43,8 @@ repository_list.add(
 
 git = Git(
     new_repo_path='/home/arcady/projects/contributions_graph',
+    new_repo_branch='master',
+    new_repo_author='Arcady Usov <arcady.usov@example.email.com>',
     file_ext='py',
 )
 
@@ -77,6 +79,8 @@ repository_list.add(
 
 git = Git(
     new_repo_path='/home/arcady/projects/contributions_graph',
+    new_repo_branch='master',
+    new_repo_author='Arcady Usov <arcady.usov@example.email.com>',
     file_ext='py',
 )
 obfuscate = Obfuscate(
