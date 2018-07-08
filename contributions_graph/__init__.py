@@ -29,6 +29,7 @@ class ContributionsGraph:
         return all_commits
 
     def sort_commits(self, all_commits):
+        all_commits = list(set(all_commits))
         for idx, commit in enumerate(all_commits):
             all_commits[idx] = parse_iso_8601_string_to_datetime(commit)
 
@@ -36,7 +37,22 @@ class ContributionsGraph:
 
         return all_commits
 
+    def get_subtraction_commits(self, all_commits):
+        exists_commits = self.git.get_commits_exists()
+        exists_commits = self.sort_commits(exists_commits)
+
+        if self.obfuscate:
+            all_commits = self.obfuscate.run(all_commits)
+
+        all_commits = list(set(set(all_commits) - set(exists_commits)))
+        all_commits.sort()
+
+        return all_commits
+
     def build_repo(self, all_commits):
+        if self.git.repository_exists():
+            all_commits = self.get_subtraction_commits(all_commits)
+
         self.git.create_repository()
         self.git.create_readme()
         self.git.build_repository(all_commits)

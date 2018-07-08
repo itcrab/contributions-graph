@@ -1,22 +1,11 @@
 import os
 import subprocess
 
-import pytest
-
-from contributions_graph.exceptions import GitRepositoryExistsError
 from contributions_graph.git import Git
 from contributions_graph.utils import parse_iso_8601_string_to_datetime
 
 
 class TestGit:
-    def test_new_repo_path_exists(self, tmpdir):
-        tmpdir.mkdir('.git')
-
-        new_repo_path = tmpdir.strpath
-        file_ext = 'py'
-        with pytest.raises(GitRepositoryExistsError):
-            Git(new_repo_path, file_ext)
-
     def test_get_commits(self, tmpdir, datetime_string_first, datetime_string_second, git_author):
         git_repo_path = tmpdir.mkdir('get_commits')
         os.chdir(git_repo_path.strpath)
@@ -24,7 +13,9 @@ class TestGit:
 
         new_repo_path = os.path.join(git_repo_path.strpath, 'sub_dir')
         file_ext = 'py'
-        git = Git(new_repo_path, file_ext)
+        new_repo_brach = 'master'
+        new_repo_author = git_author
+        git = Git(new_repo_path, new_repo_brach, new_repo_author, file_ext)
 
         file_name = git.create_file(datetime_string_first)
         git.set_current_datetime(datetime_string_first)
@@ -37,15 +28,17 @@ class TestGit:
         all_commits = git.get_commits(
             repo_path=git_repo_path.strpath,
             branch='master',
-            author=git_author
+            author=git_author,
         )
         assert all_commits == ['2018-06-30T23:22:01+05:00', '2018-06-30T20:12:09+05:00']
         assert all_commits == [datetime_string_second, datetime_string_first]
 
-    def test_create_repository(self, tmpdir):
+    def test_create_repository(self, tmpdir, git_author):
         new_repo_path = tmpdir.strpath
         file_ext = 'py'
-        git = Git(new_repo_path, file_ext)
+        new_repo_brach = 'master'
+        new_repo_author = git_author
+        git = Git(new_repo_path, file_ext, new_repo_brach, new_repo_author)
 
         git_repo_path = os.path.join(new_repo_path, '.git')
         assert os.path.isdir(git_repo_path) is False
@@ -53,10 +46,12 @@ class TestGit:
         git.create_repository()
         assert os.path.isdir(git_repo_path) is True
 
-    def test_create_repository_with_wrong_path(self, tmpdir):
+    def test_create_repository_with_wrong_path(self, tmpdir, git_author):
         new_repo_path = os.path.join(tmpdir.strpath, 'wrong')
         file_ext = 'py'
-        git = Git(new_repo_path, file_ext)
+        new_repo_brach = 'master'
+        new_repo_author = git_author
+        git = Git(new_repo_path, file_ext, new_repo_brach, new_repo_author)
 
         git_repo_path = new_repo_path
         assert os.path.isdir(git_repo_path) is False
@@ -75,7 +70,9 @@ class TestGit:
 
         new_repo_path = git_repo_path.strpath
         file_ext = 'py'
-        git = Git(new_repo_path, file_ext)
+        new_repo_brach = 'master'
+        new_repo_author = git_author
+        git = Git(new_repo_path, new_repo_brach, new_repo_author, file_ext)
         git.create_repository()
         git.build_repository(all_commits)
 
