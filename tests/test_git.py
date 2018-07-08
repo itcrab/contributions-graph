@@ -51,7 +51,7 @@ class TestGit(GitTestMixin):
         assert os.path.isdir(git_repo_path) is True
 
     def test_create_repository_with_wrong_path(self, tmpdir, git_author):
-        new_repo_path = os.path.join(tmpdir, 'wrong')
+        new_repo_path = os.path.join(tmpdir.strpath, 'wrong')
         git = Git(
             new_repo_path=new_repo_path,
             new_repo_branch='master',
