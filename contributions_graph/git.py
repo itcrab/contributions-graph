@@ -54,7 +54,8 @@ class Git:
             self.commit_file(file_name)
 
     def build_repository(self, all_commits):
-        os.mkdir('all_commits')
+        if not os.path.isdir('all_commits'):
+            os.mkdir('all_commits')
         os.chdir('all_commits')
 
         for commit in all_commits:
