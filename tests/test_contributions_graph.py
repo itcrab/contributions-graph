@@ -7,7 +7,7 @@ from contributions_graph.repository_list import RepositoryList
 from tests.mixins import GitTestMixin
 
 
-class TestCommitsStore(GitTestMixin):
+class TestContributionsGraph(GitTestMixin):
     def test_contributions_graph_with_obfuscate(self, tmpdir, datetime_strings, git_author, datetime_strings_obfuscate):
         git_repo_path = tmpdir.mkdir('git_repo').strpath
         os.chdir(git_repo_path)
@@ -16,6 +16,7 @@ class TestCommitsStore(GitTestMixin):
             new_repo_path=git_repo_path,
             new_repo_branch='master',
             new_repo_author=git_author,
+            file_dir='all_commits',
             file_ext='py',
         )
         git.create_repository()
@@ -31,6 +32,7 @@ class TestCommitsStore(GitTestMixin):
             new_repo_path=new_repo_path,
             new_repo_branch='master',
             new_repo_author=git_author,
+            file_dir='all_commits',
             file_ext='py',
         )
         obfuscate = Obfuscate(11, 0, 0, 5)
@@ -54,6 +56,7 @@ class TestCommitsStore(GitTestMixin):
             new_repo_path=git_repo_path,
             new_repo_branch='master',
             new_repo_author=git_author,
+            file_dir='all_commits',
             file_ext='py',
         )
         git.create_repository()
@@ -69,6 +72,7 @@ class TestCommitsStore(GitTestMixin):
             new_repo_path=new_repo_path,
             new_repo_branch='master',
             new_repo_author=git_author,
+            file_dir='all_commits',
             file_ext='py',
         )
         contributions_graph = ContributionsGraph(repository_list, git)
@@ -91,6 +95,7 @@ class TestCommitsStore(GitTestMixin):
             new_repo_path=git_repo_path,
             new_repo_branch='master',
             new_repo_author=git_author,
+            file_dir='all_commits',
             file_ext='py',
         )
         git.create_repository()
@@ -106,6 +111,7 @@ class TestCommitsStore(GitTestMixin):
             new_repo_path=new_repo_path,
             new_repo_branch='master',
             new_repo_author=git_author,
+            file_dir='all_commits',
             file_ext='py',
         )
         git.create_repository()
@@ -124,6 +130,7 @@ class TestCommitsStore(GitTestMixin):
             new_repo_path=new_repo_path,
             new_repo_branch='master',
             new_repo_author=git_author,
+            file_dir='all_commits',
             file_ext='py',
         )
         obfuscate = Obfuscate(11, 0, 0, 5)
@@ -152,6 +159,7 @@ class TestCommitsStore(GitTestMixin):
             new_repo_path=git_repo_path,
             new_repo_branch='master',
             new_repo_author=git_author,
+            file_dir='all_commits',
             file_ext='py',
         )
         git.create_repository()
@@ -167,6 +175,7 @@ class TestCommitsStore(GitTestMixin):
             new_repo_path=new_repo_path,
             new_repo_branch='master',
             new_repo_author=git_author,
+            file_dir='all_commits',
             file_ext='py',
         )
         git.create_repository()
@@ -185,6 +194,7 @@ class TestCommitsStore(GitTestMixin):
             new_repo_path=new_repo_path,
             new_repo_branch='master',
             new_repo_author=git_author,
+            file_dir='all_commits',
             file_ext='py',
         )
         contributions_graph = ContributionsGraph(repository_list, git)

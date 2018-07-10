@@ -17,6 +17,7 @@ class TestGit(GitTestMixin):
             new_repo_path=sub_git_repo_path,
             new_repo_branch='master',
             new_repo_author=git_author,
+            file_dir='all_commits',
             file_ext='py',
         )
 
@@ -41,6 +42,7 @@ class TestGit(GitTestMixin):
             new_repo_path=new_repo_path,
             new_repo_branch='master',
             new_repo_author=git_author,
+            file_dir='all_commits',
             file_ext='py',
         )
 
@@ -56,6 +58,7 @@ class TestGit(GitTestMixin):
             new_repo_path=new_repo_path,
             new_repo_branch='master',
             new_repo_author=git_author,
+            file_dir='all_commits',
             file_ext='py',
         )
 
@@ -78,6 +81,7 @@ class TestGit(GitTestMixin):
             new_repo_path=git_repo_path,
             new_repo_branch='master',
             new_repo_author=git_author,
+            file_dir='all_commits',
             file_ext='py',
         )
         git.create_repository()
@@ -104,6 +108,7 @@ class TestGit(GitTestMixin):
             new_repo_path=git_repo_path,
             new_repo_branch='master',
             new_repo_author=git_author,
+            file_dir='all_commits',
             file_ext='py',
         )
         git.create_repository()
@@ -113,3 +118,29 @@ class TestGit(GitTestMixin):
 
         assert all_commits == [datetime_strings[1], datetime_strings[0]]
         assert os.path.isdir('all_commits') is True
+
+    def test_build_repository_with_custom_file_dir(self, tmpdir, datetime_objects, datetime_strings, git_author):
+        git_repo_path = tmpdir.mkdir('builg_git_repository').strpath
+        os.chdir(git_repo_path)
+
+        assert os.path.isdir('custom_file_dir') is False
+
+        all_commits = [
+            datetime_objects[0],
+            datetime_objects[1],
+        ]
+
+        git = Git(
+            new_repo_path=git_repo_path,
+            new_repo_branch='master',
+            new_repo_author=git_author,
+            file_dir='custom_file_dir',
+            file_ext='py',
+        )
+        git.create_repository()
+        git.build_repository(all_commits)
+
+        all_commits = self.git_log_commits(git_author)
+
+        assert all_commits == [datetime_strings[1], datetime_strings[0]]
+        assert os.path.isdir('custom_file_dir') is True
