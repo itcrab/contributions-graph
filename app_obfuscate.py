@@ -24,6 +24,7 @@ git = Git(
     new_repo_path='/home/arcady/projects/contributions_graph',
     new_repo_branch='master',
     new_repo_author='Arcady Usov <arcady.usov@example.email.com>',
+    file_dir='all_commits',
     file_ext='py',
 )
 obfuscate = Obfuscate(
