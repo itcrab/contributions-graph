@@ -6,10 +6,12 @@ from contributions_graph.utils import generate_full_file_name, write_file_data
 
 
 class Git:
-    def __init__(self, new_repo_path, new_repo_branch, new_repo_author, file_ext):
+    def __init__(self, new_repo_path, new_repo_branch, new_repo_author, file_dir, file_ext):
         self.new_repo_path = new_repo_path
         self.new_repo_branch = new_repo_branch
         self.new_repo_author = new_repo_author
+
+        self.file_dir = file_dir
         self.file_ext = file_ext
 
         self.current_path = os.getcwd()
@@ -54,9 +56,9 @@ class Git:
             self.commit_file(file_name)
 
     def build_repository(self, all_commits):
-        if not os.path.isdir('all_commits'):
-            os.mkdir('all_commits')
-        os.chdir('all_commits')
+        if not os.path.isdir(self.file_dir):
+            os.mkdir(self.file_dir)
+        os.chdir(self.file_dir)
 
         for commit in all_commits:
             date_string = commit.isoformat()
