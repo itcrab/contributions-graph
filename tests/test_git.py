@@ -87,3 +87,29 @@ class TestGit(GitTestMixin):
 
         assert all_commits == [datetime_strings[1], datetime_strings[0]]
         assert os.path.isdir('all_commits') is True
+
+    def test_build_repository_with_commits_directory_exists(self, tmpdir, datetime_objects, datetime_strings, git_author):
+        tmpdir.mkdir('builg_git_repository').mkdir('all_commits')
+        git_repo_path = tmpdir.join('builg_git_repository').strpath
+        os.chdir(git_repo_path)
+
+        assert os.path.isdir('all_commits') is True
+
+        all_commits = [
+            datetime_objects[0],
+            datetime_objects[1],
+        ]
+
+        git = Git(
+            new_repo_path=git_repo_path,
+            new_repo_branch='master',
+            new_repo_author=git_author,
+            file_ext='py',
+        )
+        git.create_repository()
+        git.build_repository(all_commits)
+
+        all_commits = self.git_log_commits(git_author)
+
+        assert all_commits == [datetime_strings[1], datetime_strings[0]]
+        assert os.path.isdir('all_commits') is True
