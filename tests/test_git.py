@@ -104,7 +104,7 @@ class TestGit(GitTestMixin):
         assert os.path.isdir(git_repo_path) is True
 
     def test_build_repository(self, tmpdir, datetime_objects, datetime_strings, git_author):
-        git_repo_path = tmpdir.mkdir('builg_git_repository').strpath
+        git_repo_path = tmpdir.mkdir('build_git_repository').strpath
         os.chdir(git_repo_path)
 
         all_commits = [
@@ -128,8 +128,8 @@ class TestGit(GitTestMixin):
         assert os.path.isdir('all_commits') is True
 
     def test_build_repository_with_commits_directory_exists(self, tmpdir, datetime_objects, datetime_strings, git_author):
-        tmpdir.mkdir('builg_git_repository').mkdir('all_commits')
-        git_repo_path = tmpdir.join('builg_git_repository').strpath
+        tmpdir.mkdir('build_git_repository').mkdir('all_commits')
+        git_repo_path = tmpdir.join('build_git_repository').strpath
         os.chdir(git_repo_path)
 
         assert os.path.isdir('all_commits') is True
@@ -155,7 +155,7 @@ class TestGit(GitTestMixin):
         assert os.path.isdir('all_commits') is True
 
     def test_build_repository_with_custom_file_dir(self, tmpdir, datetime_objects, datetime_strings, git_author):
-        git_repo_path = tmpdir.mkdir('builg_git_repository').strpath
+        git_repo_path = tmpdir.mkdir('build_git_repository').strpath
         os.chdir(git_repo_path)
 
         assert os.path.isdir('custom_file_dir') is False
