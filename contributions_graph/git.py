@@ -29,13 +29,34 @@ class Git:
     def get_commits(self, repo_path, branch, author):
         os.chdir(repo_path)
 
-        os.system('git checkout {}'.format(branch))
+        repo_branch = self.get_repo_branch()
 
+        if repo_branch != branch:
+            os.system('git checkout {}'.format(branch))
+
+        all_commits = self.get_all_commits(author)
+
+        if repo_branch != branch:
+            os.system('git checkout {}'.format(repo_branch))
+
+        os.chdir(self.current_path)
+
+        return all_commits
+
+    def get_repo_branch(self):
+        cmd = 'git branch'
+        repo_branches = subprocess.check_output(cmd, shell=True, universal_newlines=True)
+        repo_branches = repo_branches.splitlines()
+
+        repo_branch = [rb for rb in repo_branches if rb.startswith('* ')][0]
+        repo_branch = repo_branch[2:]
+
+        return repo_branch
+
+    def get_all_commits(self, author):
         cmd = 'git --no-pager log --pretty="%cI" --author="{}"'.format(author)
         all_commits = subprocess.check_output(cmd, shell=True, universal_newlines=True)
         all_commits = all_commits.splitlines()
-
-        os.chdir(self.current_path)
 
         return all_commits
 
