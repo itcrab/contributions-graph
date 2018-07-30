@@ -6,15 +6,13 @@ from tests.mixins import GitTestMixin
 
 class TestGit(GitTestMixin):
     def test_get_commits(self, tmpdir, datetime_strings, git_author):
-        tmpdir.mkdir('get_commits').mkdir('sub_dir')
+        git_repo_path = tmpdir.mkdir('get_commits').strpath
 
-        git_repo_path = tmpdir.join('get_commits').strpath
-        sub_git_repo_path = tmpdir.join('get_commits', 'sub_dir').strpath
         os.chdir(git_repo_path)
         os.system('git init')
 
         git = Git(
-            new_repo_path=sub_git_repo_path,
+            new_repo_path=git_repo_path,
             new_repo_branch='master',
             new_repo_author=git_author,
             file_dir='all_commits',
@@ -37,15 +35,13 @@ class TestGit(GitTestMixin):
         assert all_commits == [datetime_strings[1], datetime_strings[0]]
 
     def test_get_commits_with_different_base_branch(self, tmpdir, datetime_strings, git_author):
-        tmpdir.mkdir('get_commits').mkdir('sub_dir')
+        git_repo_path = tmpdir.mkdir('get_commits').strpath
 
-        git_repo_path = tmpdir.join('get_commits').strpath
-        sub_git_repo_path = tmpdir.join('get_commits', 'sub_dir').strpath
         os.chdir(git_repo_path)
         os.system('git init')
 
         git = Git(
-            new_repo_path=sub_git_repo_path,
+            new_repo_path=git_repo_path,
             new_repo_branch='master',
             new_repo_author=git_author,
             file_dir='all_commits',
@@ -69,6 +65,198 @@ class TestGit(GitTestMixin):
             author=git_author,
         )
         assert git.get_repo_branch() == 'new-branch'
+        assert all_commits == [datetime_strings[1], datetime_strings[0]]
+
+    def test_get_commits_with_read_only_master_commits_case_1(self, tmpdir, datetime_strings, git_author):
+        git_repo_path = tmpdir.mkdir('get_commits').strpath
+
+        os.chdir(git_repo_path)
+        os.system('git init')
+
+        git = Git(
+            new_repo_path=git_repo_path,
+            new_repo_branch='master',
+            new_repo_author=git_author,
+            file_dir='all_commits',
+            file_ext='py',
+        )
+
+        os.system('git checkout -b master')
+
+        file_name = git.create_file(datetime_strings[0])
+        git.set_current_datetime(datetime_strings[0])
+        git.commit_file(file_name)
+
+        os.system('git checkout -b new-branch')
+
+        file_name = git.create_file(datetime_strings[1])
+        git.set_current_datetime(datetime_strings[1])
+        git.commit_file(file_name)
+
+        os.system('git checkout master')
+
+        file_name = git.create_file(datetime_strings[2])
+        git.set_current_datetime(datetime_strings[2])
+        git.commit_file(file_name)
+
+        all_commits = git.get_commits(
+            repo_path=git_repo_path,
+            branch='master',
+            author=git_author,
+        )
+        assert all_commits == [datetime_strings[2], datetime_strings[0]]
+
+    def test_get_commits_with_read_only_master_commits_case_2(self, tmpdir, datetime_strings, git_author):
+        git_repo_path = tmpdir.mkdir('get_commits').strpath
+
+        os.chdir(git_repo_path)
+        os.system('git init')
+        os.system('git checkout -b master')
+
+        git = Git(
+            new_repo_path=git_repo_path,
+            new_repo_branch='master',
+            new_repo_author=git_author,
+            file_dir='all_commits',
+            file_ext='py',
+        )
+
+        os.system('git checkout -b master')
+
+        file_name = git.create_file(datetime_strings[0])
+        git.set_current_datetime(datetime_strings[0])
+        git.commit_file(file_name)
+
+        os.system('git checkout -b new-branch')
+
+        file_name = git.create_file(datetime_strings[1])
+        git.set_current_datetime(datetime_strings[1])
+        git.commit_file(file_name)
+
+        file_name = git.create_file(datetime_strings[2])
+        git.set_current_datetime(datetime_strings[2])
+        git.commit_file(file_name)
+
+        all_commits = git.get_commits(
+            repo_path=git_repo_path,
+            branch='master',
+            author=git_author,
+        )
+        assert all_commits == [datetime_strings[0]]
+
+    def test_get_commits_with_read_only_master_commits_case_3(self, tmpdir, datetime_strings, git_author):
+        git_repo_path = tmpdir.mkdir('get_commits').strpath
+
+        os.chdir(git_repo_path)
+        os.system('git init')
+        os.system('git checkout -b master')
+
+        git = Git(
+            new_repo_path=git_repo_path,
+            new_repo_branch='master',
+            new_repo_author=git_author,
+            file_dir='all_commits',
+            file_ext='py',
+        )
+
+        os.system('git checkout -b new-branch')
+
+        file_name = git.create_file(datetime_strings[0])
+        git.set_current_datetime(datetime_strings[0])
+        git.commit_file(file_name)
+
+        os.system('git checkout -b master')
+
+        file_name = git.create_file(datetime_strings[1])
+        git.set_current_datetime(datetime_strings[1])
+        git.commit_file(file_name)
+
+        file_name = git.create_file(datetime_strings[2])
+        git.set_current_datetime(datetime_strings[2])
+        git.commit_file(file_name)
+
+        all_commits = git.get_commits(
+            repo_path=git_repo_path,
+            branch='master',
+            author=git_author,
+        )
+        assert all_commits == [datetime_strings[2], datetime_strings[1], datetime_strings[0]]
+
+    def test_get_commits_with_read_only_new_branch_commits_case_1(self, tmpdir, datetime_strings, git_author):
+        git_repo_path = tmpdir.mkdir('get_commits').strpath
+
+        os.chdir(git_repo_path)
+        os.system('git init')
+        os.system('git checkout -b master')
+
+        git = Git(
+            new_repo_path=git_repo_path,
+            new_repo_branch='master',
+            new_repo_author=git_author,
+            file_dir='all_commits',
+            file_ext='py',
+        )
+
+        os.system('git checkout -b new-branch')
+
+        file_name = git.create_file(datetime_strings[0])
+        git.set_current_datetime(datetime_strings[0])
+        git.commit_file(file_name)
+
+        os.system('git checkout -b master')
+
+        file_name = git.create_file(datetime_strings[1])
+        git.set_current_datetime(datetime_strings[1])
+        git.commit_file(file_name)
+
+        file_name = git.create_file(datetime_strings[2])
+        git.set_current_datetime(datetime_strings[2])
+        git.commit_file(file_name)
+
+        all_commits = git.get_commits(
+            repo_path=git_repo_path,
+            branch='new-branch',
+            author=git_author,
+        )
+        assert all_commits == [datetime_strings[0]]
+
+    def test_get_commits_with_read_only_new_branch_commits_case_2(self, tmpdir, datetime_strings, git_author):
+        git_repo_path = tmpdir.mkdir('get_commits').strpath
+
+        os.chdir(git_repo_path)
+        os.system('git init')
+
+        git = Git(
+            new_repo_path=git_repo_path,
+            new_repo_branch='master',
+            new_repo_author=git_author,
+            file_dir='all_commits',
+            file_ext='py',
+        )
+
+        os.system('git checkout -b master')
+
+        file_name = git.create_file(datetime_strings[0])
+        git.set_current_datetime(datetime_strings[0])
+        git.commit_file(file_name)
+
+        os.system('git checkout -b new-branch')
+
+        file_name = git.create_file(datetime_strings[1])
+        git.set_current_datetime(datetime_strings[1])
+        git.commit_file(file_name)
+
+        os.system('git checkout master')
+
+        file_name = git.create_file(datetime_strings[2])
+        git.set_current_datetime(datetime_strings[2])
+        git.commit_file(file_name)
+
+        all_commits = git.get_commits(
+            repo_path=git_repo_path,
+            branch='new-branch',
+            author=git_author,
+        )
         assert all_commits == [datetime_strings[1], datetime_strings[0]]
 
     def test_create_repository(self, tmpdir, git_author):
