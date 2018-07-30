@@ -2,6 +2,7 @@ import os
 import subprocess
 from datetime import datetime
 
+from contributions_graph.exceptions import GitBranchNotFoundError
 from contributions_graph.utils import generate_full_file_name, write_file_data
 
 
@@ -33,6 +34,12 @@ class Git:
 
         if repo_branch != branch:
             os.system('git checkout {}'.format(branch))
+
+            selected_branch = self.get_repo_branch()
+            if selected_branch != branch:
+                raise GitBranchNotFoundError(
+                    'Git branch "{}" not found!'.format(branch)
+                )
 
         all_commits = self.get_all_commits(author)
 

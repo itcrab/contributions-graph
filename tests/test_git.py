@@ -1,5 +1,8 @@
 import os
 
+import pytest
+
+from contributions_graph.exceptions import GitBranchNotFoundError
 from contributions_graph.git import Git
 from tests.mixins import GitTestMixin
 
@@ -258,6 +261,35 @@ class TestGit(GitTestMixin):
             author=git_author,
         )
         assert all_commits == [datetime_strings[1], datetime_strings[0]]
+
+    def test_get_commits_with_wrong_branch(self, tmpdir, datetime_strings, git_author):
+        git_repo_path = tmpdir.mkdir('get_commits').strpath
+
+        os.chdir(git_repo_path)
+        os.system('git init')
+
+        git = Git(
+            new_repo_path=git_repo_path,
+            new_repo_branch='master',
+            new_repo_author=git_author,
+            file_dir='all_commits',
+            file_ext='py',
+        )
+
+        file_name = git.create_file(datetime_strings[0])
+        git.set_current_datetime(datetime_strings[0])
+        git.commit_file(file_name)
+
+        file_name = git.create_file(datetime_strings[1])
+        git.set_current_datetime(datetime_strings[1])
+        git.commit_file(file_name)
+
+        with pytest.raises(GitBranchNotFoundError):
+            all_commits = git.get_commits(
+                repo_path=git_repo_path,
+                branch='wrong-branch',
+                author=git_author,
+            )
 
     def test_create_repository(self, tmpdir, git_author):
         new_repo_path = tmpdir.strpath
