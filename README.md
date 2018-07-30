@@ -5,15 +5,17 @@
 Move all your commits from any repositories to one repository. It's simple way build and save right GitHub Contributions Graph.
 
 # Goal idea
-Developers works with many projects on some services like GitHub (eq: GitLab, Gogs, etc).<br />
-But many developers loves GitHub and want see GitHub Contributions Graph is correct and saved.<br />
-For projects places on GitHub we don't have problems with build and save right GitHub Contributions Graph.<br />
-Suddenly projects on GitHub maybe lost - customer give you permissions for working with repository, then delete this permitions (you done good job) and at one moment customer decides to remove this repository... Your amazing GitHub Contributions Graph in one second was be so bad.<br />
-But for all projects located outside GitHub we don't see GitHub Contributions Graph but we worked on projects and every day try do good job for done all tasks for customers.<br />
+Developers works with many projects hosted sources on some services like GitHub (eq: GitLab, Gogs, etc).<br />
+But many developers loves GitHub and want see all works in GitHub Contributions Graph.<br />
+For projects hosted on GitHub we don't have any problems - all works automatically.<br />
+Suddenly projects on GitHub maybe lost - customer give you permissions for working with repository, then delete this permissions (you done good job) and at the moment customer decides to remove this repository... Your amazing GitHub Contributions Graph in one second was be so bad (lost works activities).<br />
+But for all projects hosted outside GitHub we don't see GitHub Contributions Graph, but we worked on projects hardly and every day try to doing good job with our customers and solving their tasks.<br />
 We must fix it! And we have solution for this!
 
 # Features
-- [x] merge all commits from your project repositories to one repository
+- [x] merge all commits from your repositories to new one repository
+- [x] append new commits from your repositories to existing one repository
+- [x] selected branches in your repositories don't changed on any new branch names
 - [x] enable or disable obfuscate feature for datetime commits data (samples in `app.py` and `app_obfuscate.py`)
 
 # Quick start
