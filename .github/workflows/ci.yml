@@ -19,6 +19,11 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
+    - name: Upload Test Directory
+      uses: actions/upload-artifact@v2
+      with:
+        name: tmpdir
+        path: tmpdir/
     - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v2
       with:

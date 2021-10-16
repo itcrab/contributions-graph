@@ -1,8 +1,16 @@
 import os
+import uuid
+from pathlib import Path
 from datetime import datetime
 from datetime import timezone, timedelta
 
 import pytest
+
+
+@pytest.fixture
+def github_actions_tmpdir():
+    tmp_path = f'./tmpdir/{uuid.uuid4().hex}'
+    return Path(tmp_path)
 
 
 @pytest.fixture

@@ -8,9 +8,8 @@ from tests.mixins import GitTestMixin
 
 
 class TestGit(GitTestMixin):
-    def test_get_commits(self, tmpdir, datetime_strings, git_author):
-        print('****************', os.getenv('TMPDIR'))
-        git_repo_path = tmpdir.mkdir('get_commits').strpath
+    def test_get_commits(self, github_actions_tmpdir, datetime_strings, git_author):
+        git_repo_path = github_actions_tmpdir.mkdir('get_commits').strpath
 
         os.chdir(git_repo_path)
         os.system('git init')
