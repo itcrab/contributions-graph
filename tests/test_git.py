@@ -13,6 +13,8 @@ class TestGit(GitTestMixin):
 
         os.chdir(git_repo_path)
         os.system('git init')
+        os.system('git config user.email "contributions.graph@example.com"')
+        os.system('git config user.name "Contributions Graph"')
 
         git = Git(
             new_repo_path=git_repo_path,
@@ -42,6 +44,8 @@ class TestGit(GitTestMixin):
 
         os.chdir(git_repo_path)
         os.system('git init')
+        os.system('git config user.email "contributions.graph@example.com"')
+        os.system('git config user.name "Contributions Graph"')
 
         git = Git(
             new_repo_path=git_repo_path,
@@ -75,6 +79,8 @@ class TestGit(GitTestMixin):
 
         os.chdir(git_repo_path)
         os.system('git init')
+        os.system('git config user.email "contributions.graph@example.com"')
+        os.system('git config user.name "Contributions Graph"')
 
         git = Git(
             new_repo_path=git_repo_path,
@@ -114,6 +120,8 @@ class TestGit(GitTestMixin):
 
         os.chdir(git_repo_path)
         os.system('git init')
+        os.system('git config user.email "contributions.graph@example.com"')
+        os.system('git config user.name "Contributions Graph"')
         os.system('git checkout -b master')
 
         git = Git(
@@ -152,6 +160,8 @@ class TestGit(GitTestMixin):
 
         os.chdir(git_repo_path)
         os.system('git init')
+        os.system('git config user.email "contributions.graph@example.com"')
+        os.system('git config user.name "Contributions Graph"')
         os.system('git checkout -b master')
 
         git = Git(
@@ -190,6 +200,8 @@ class TestGit(GitTestMixin):
 
         os.chdir(git_repo_path)
         os.system('git init')
+        os.system('git config user.email "contributions.graph@example.com"')
+        os.system('git config user.name "Contributions Graph"')
         os.system('git checkout -b master')
 
         git = Git(
@@ -228,6 +240,8 @@ class TestGit(GitTestMixin):
 
         os.chdir(git_repo_path)
         os.system('git init')
+        os.system('git config user.email "contributions.graph@example.com"')
+        os.system('git config user.name "Contributions Graph"')
 
         git = Git(
             new_repo_path=git_repo_path,
@@ -267,6 +281,8 @@ class TestGit(GitTestMixin):
 
         os.chdir(git_repo_path)
         os.system('git init')
+        os.system('git config user.email "contributions.graph@example.com"')
+        os.system('git config user.name "Contributions Graph"')
 
         git = Git(
             new_repo_path=git_repo_path,

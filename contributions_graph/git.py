@@ -73,6 +73,8 @@ class Git:
         os.chdir(self.new_repo_path)
         if not self.repository_exists():
             os.system('git init')
+            os.system('git config user.email "contributions.graph@example.com"')
+            os.system('git config user.name "Contributions Graph"')
 
     def create_readme(self):
         file_name = 'README.md'
