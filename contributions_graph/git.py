@@ -4,7 +4,7 @@ from datetime import datetime
 from typing import List
 
 from contributions_graph.exceptions import GitBranchNotFoundError
-from contributions_graph.utils import generate_full_file_name, write_file_data
+from contributions_graph.utils import generate_full_file_name, write_file_data, parse_iso_8601_string_to_datetime
 
 
 class Git:
@@ -21,14 +21,14 @@ class Git:
     def repository_exists(self) -> bool:
         return os.path.isdir(os.path.join(self.new_repo_path, '.git'))
 
-    def get_commits_exists(self) -> List[str]:
+    def get_commits_exists(self) -> List[datetime]:
         return self.get_commits(
             repo_path=self.new_repo_path,
             branch=self.new_repo_branch,
             author=self.new_repo_author,
         )
 
-    def get_commits(self, repo_path: str, branch: str, author: str) -> List[str]:
+    def get_commits(self, repo_path: str, branch: str, author: str) -> List[datetime]:
         os.chdir(repo_path)
 
         repo_branch = self.get_repo_branch()
@@ -65,11 +65,12 @@ class Git:
 
         return repo_branch
 
-    def get_all_commits(self, author: str) -> List[str]:
+    def get_all_commits(self, author: str) -> List[datetime]:
         cmd = 'git --no-pager log --pretty="%cI" --author="{}"'.format(author)
         all_commits = subprocess.check_output(cmd, shell=True, universal_newlines=True)
+        all_commits_list = all_commits.splitlines()
 
-        return all_commits.splitlines()
+        return list(map(parse_iso_8601_string_to_datetime, all_commits_list))
 
     def create_repository(self) -> None:
         if not os.path.isdir(self.new_repo_path):
