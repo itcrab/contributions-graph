@@ -72,14 +72,22 @@ class Git:
 
         return list(map(parse_iso_8601_string_to_datetime, all_commits_list))
 
+    def get_committers(self) -> List[str]:
+        cmd = 'git --no-pager log --pretty="%cn <%ce>"'
+        all_commits = subprocess.check_output(cmd, shell=True, universal_newlines=True)
+
+        return all_commits.splitlines()
+
     def create_repository(self) -> None:
         if not os.path.isdir(self.new_repo_path):
             os.mkdir(self.new_repo_path)
         os.chdir(self.new_repo_path)
         if not self.repository_exists():
+            repo_author = self.new_repo_author.split('<')
+
             os.system('git init')
-            os.system('git config user.email "contributions.graph@example.com"')
-            os.system('git config user.name "Contributions Graph"')
+            os.system('git config user.email "{}"'.format(repo_author[1][:-1]))
+            os.system('git config user.name "{}"'.format(repo_author[0]))
 
     def create_readme(self) -> None:
         file_name = 'README.md'

@@ -364,6 +364,9 @@ class TestGit:
         assert all_commits == [datetime_objects[1], datetime_objects[0]]
         assert os.path.isdir('all_commits') is True
 
+        committers = git.get_committers()
+        assert committers == [git_author, git_author]
+
     def test_build_repository_with_commits_directory_exists(self, tmpdir, datetime_objects, datetime_strings, git_author):
         tmpdir.mkdir('build_git_repository').mkdir('all_commits')
         git_repo_path = tmpdir.join('build_git_repository').strpath
