@@ -1,13 +1,19 @@
+from datetime import datetime
+from typing import Optional, List
+
+from contributions_graph.git import Git
+from contributions_graph.obfuscate import Obfuscate
+from contributions_graph.repository_list import RepositoryList
 from contributions_graph.utils import parse_iso_8601_string_to_datetime
 
 
 class ContributionsGraph:
-    def __init__(self, repository_list, git, obfuscate=False):
+    def __init__(self, repository_list: RepositoryList, git: Git, obfuscate: Optional[Obfuscate] = None) -> None:
         self.repository_list = repository_list
         self.git = git
         self.obfuscate = obfuscate
 
-    def run(self):
+    def run(self) -> None:
         all_commits = self.get_all_commits()
         all_commits = self.sort_commits(all_commits)
 
@@ -16,7 +22,7 @@ class ContributionsGraph:
 
         self.build_repo(all_commits)
 
-    def get_all_commits(self):
+    def get_all_commits(self) -> List[datetime]:
         all_commits = []
         for repository in self.repository_list:
             commits = self.git.get_commits(
@@ -28,16 +34,13 @@ class ContributionsGraph:
 
         return all_commits
 
-    def sort_commits(self, all_commits):
+    def sort_commits(self, all_commits: List[datetime]) -> List[datetime]:
         all_commits = list(set(all_commits))
-        for idx, commit in enumerate(all_commits):
-            all_commits[idx] = parse_iso_8601_string_to_datetime(commit)
-
         all_commits.sort()
 
         return all_commits
 
-    def get_subtraction_commits(self, all_commits):
+    def get_subtraction_commits(self, all_commits: List[datetime]) -> List[datetime]:
         exists_commits = self.git.get_commits_exists()
         exists_commits = self.sort_commits(exists_commits)
 
@@ -49,7 +52,7 @@ class ContributionsGraph:
 
         return all_commits
 
-    def build_repo(self, all_commits):
+    def build_repo(self, all_commits: List[datetime]) -> None:
         if self.git.repository_exists():
             all_commits = self.get_subtraction_commits(all_commits)
 
