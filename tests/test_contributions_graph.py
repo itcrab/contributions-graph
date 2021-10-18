@@ -87,7 +87,8 @@ class TestContributionsGraph(GitTestMixin):
 
         assert all_commits == [datetime_strings[1], datetime_strings[0]]
 
-    def test_contributions_graph_with_exists_repository_and_obfuscate(self, tmpdir, datetime_strings, datetime_strings_obfuscate, git_author):
+    def test_contributions_graph_with_exists_repository_and_obfuscate(self, tmpdir, datetime_strings,
+                                                                      datetime_strings_obfuscate, git_author):
         git_repo_path = tmpdir.mkdir('git_repo').strpath
         os.chdir(git_repo_path)
 

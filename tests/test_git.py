@@ -301,7 +301,7 @@ class TestGit(GitTestMixin):
         git.commit_file(file_name)
 
         with pytest.raises(GitBranchNotFoundError):
-            all_commits = git.get_commits(
+            git.get_commits(
                 repo_path=git_repo_path,
                 branch='wrong-branch',
                 author=git_author,
