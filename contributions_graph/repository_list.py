@@ -1,10 +1,13 @@
+from typing import List, Iterator
+
+
 class RepositoryList:
-    def __init__(self):
-        self._repositories = []
+    def __init__(self) -> None:
+        self._repositories: List[dict] = []
         self._position = 0
         self._max_position = 0
 
-    def __next__(self):
+    def __next__(self) -> dict:
         if self._position == self._max_position:
             raise StopIteration
 
@@ -13,10 +16,10 @@ class RepositoryList:
 
         return repository
 
-    def __iter__(self):
+    def __iter__(self) -> Iterator[dict]:
         return self
 
-    def add(self, repo_path, branch, author):
+    def add(self, repo_path: str, branch: str, author: str) -> None:
         self._repositories.append(dict(
             repo_path=repo_path,
             branch=branch,
