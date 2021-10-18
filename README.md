@@ -47,19 +47,15 @@ git = Git(
     file_ext='py',
 )
 
-obfuscate = Obfuscate(
+obfuscate_enabled = False
+obfuscate = None if not obfuscate_enabled else Obfuscate(
     start_hour=11,
     start_minute=0,
     start_second=0,
     delta_minutes=5,
 )
 
-
 if __name__ == '__main__':
-    obfuscate_enabled = False
-    if not obfuscate_enabled:
-        obfuscate = None
-
     contributions_graph = ContributionsGraph(repository_list, git, obfuscate)
     contributions_graph.run()
 ```
