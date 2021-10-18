@@ -4,7 +4,6 @@ from typing import Optional, List
 from contributions_graph.git import Git
 from contributions_graph.obfuscate import Obfuscate
 from contributions_graph.repository_list import RepositoryList
-from contributions_graph.utils import parse_iso_8601_string_to_datetime
 
 
 class ContributionsGraph:

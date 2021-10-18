@@ -194,7 +194,8 @@ class TestGit:
         )
         assert all_commits == [datetime_objects[2], datetime_objects[1], datetime_objects[0]]
 
-    def test_get_commits_with_read_only_new_branch_commits_case_1(self, tmpdir, datetime_strings, git_author, datetime_objects):
+    def test_get_commits_with_read_only_new_branch_commits_case_1(self, tmpdir, datetime_strings, git_author,
+                                                                  datetime_objects):
         git_repo_path = tmpdir.mkdir('get_commits').strpath
 
         os.chdir(git_repo_path)
@@ -234,7 +235,8 @@ class TestGit:
         )
         assert all_commits == [datetime_objects[0]]
 
-    def test_get_commits_with_read_only_new_branch_commits_case_2(self, tmpdir, datetime_strings, git_author, datetime_objects):
+    def test_get_commits_with_read_only_new_branch_commits_case_2(self, tmpdir, datetime_strings, git_author,
+                                                                  datetime_objects):
         git_repo_path = tmpdir.mkdir('get_commits').strpath
 
         os.chdir(git_repo_path)
