@@ -1,8 +1,7 @@
 import os
 from datetime import datetime
 
-from contributions_graph import parse_iso_8601_string_to_datetime
-from contributions_graph.utils import generate_full_file_name, write_file_data
+from contributions_graph.utils import generate_full_file_name, write_file_data, parse_iso_8601_string_to_datetime
 
 
 class TestUtils:
