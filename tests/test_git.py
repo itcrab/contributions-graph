@@ -4,10 +4,9 @@ import pytest
 
 from contributions_graph.exceptions import GitBranchNotFoundError
 from contributions_graph.git import Git
-from tests.mixins import GitTestMixin
 
 
-class TestGit(GitTestMixin):
+class TestGit:
     def test_get_commits(self, tmpdir, datetime_strings, git_author, datetime_objects):
         git_repo_path = tmpdir.mkdir('get_commits').strpath
 
@@ -358,9 +357,9 @@ class TestGit(GitTestMixin):
         git.create_repository()
         git.build_repository(all_commits)
 
-        all_commits = self.git_log_commits(git_author)
+        all_commits = git.get_all_commits(git_author)
 
-        assert all_commits == [datetime_strings[1], datetime_strings[0]]
+        assert all_commits == [datetime_objects[1], datetime_objects[0]]
         assert os.path.isdir('all_commits') is True
 
     def test_build_repository_with_commits_directory_exists(self, tmpdir, datetime_objects, datetime_strings, git_author):
@@ -385,9 +384,9 @@ class TestGit(GitTestMixin):
         git.create_repository()
         git.build_repository(all_commits)
 
-        all_commits = self.git_log_commits(git_author)
+        all_commits = git.get_all_commits(git_author)
 
-        assert all_commits == [datetime_strings[1], datetime_strings[0]]
+        assert all_commits == [datetime_objects[1], datetime_objects[0]]
         assert os.path.isdir('all_commits') is True
 
     def test_build_repository_with_custom_file_dir(self, tmpdir, datetime_objects, datetime_strings, git_author):
@@ -411,7 +410,7 @@ class TestGit(GitTestMixin):
         git.create_repository()
         git.build_repository(all_commits)
 
-        all_commits = self.git_log_commits(git_author)
+        all_commits = git.get_all_commits(git_author)
 
-        assert all_commits == [datetime_strings[1], datetime_strings[0]]
+        assert all_commits == [datetime_objects[1], datetime_objects[0]]
         assert os.path.isdir('custom_file_dir') is True
