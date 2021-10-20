@@ -9,5 +9,8 @@ __pycache__/
 .pytest_cache/
 .coverage
 
+# mypy
+.mypy_cache/
+
 # Dev
 app_test.py
