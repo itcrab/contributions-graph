@@ -4,23 +4,16 @@ from contributions_graph import ContributionsGraph
 from contributions_graph.git import Git
 from contributions_graph.obfuscate import Obfuscate
 from contributions_graph.repository_list import RepositoryList
+from tests.mixins import GitTestMixin
 
 
-class TestContributionsGraph:
+class TestContributionsGraph(GitTestMixin):
     def test_contributions_graph_with_obfuscate(self, tmpdir, datetime_strings, git_author, datetime_strings_obfuscate,
                                                 datetime_objects_obfuscate):
         git_repo_path = tmpdir.mkdir('git_repo').strpath
         os.chdir(git_repo_path)
 
-        git = Git(
-            new_repo_path=git_repo_path,
-            new_repo_branch='master',
-            new_repo_author=git_author,
-            file_dir='all_commits',
-            file_ext='py',
-        )
-        git.create_repository()
-
+        git = self.git_create_repository(new_repo_path=git_repo_path, new_repo_author=git_author)
         for i in range(2):
             file_name = git.create_file(datetime_strings[i])
             git.set_current_datetime(datetime_strings[i])
@@ -54,15 +47,7 @@ class TestContributionsGraph:
         git_repo_path = tmpdir.mkdir('git_repo').strpath
         os.chdir(git_repo_path)
 
-        git = Git(
-            new_repo_path=git_repo_path,
-            new_repo_branch='master',
-            new_repo_author=git_author,
-            file_dir='all_commits',
-            file_ext='py',
-        )
-        git.create_repository()
-
+        git = self.git_create_repository(new_repo_path=git_repo_path, new_repo_author=git_author)
         for i in range(2):
             file_name = git.create_file(datetime_strings[i])
             git.set_current_datetime(datetime_strings[i])
@@ -97,31 +82,14 @@ class TestContributionsGraph:
         git_repo_path = tmpdir.mkdir('git_repo').strpath
         os.chdir(git_repo_path)
 
-        git = Git(
-            new_repo_path=git_repo_path,
-            new_repo_branch='master',
-            new_repo_author=git_author,
-            file_dir='all_commits',
-            file_ext='py',
-        )
-        git.create_repository()
-
+        git = self.git_create_repository(new_repo_path=git_repo_path, new_repo_author=git_author)
         for i in range(4):
             file_name = git.create_file(datetime_strings[i])
             git.set_current_datetime(datetime_strings[i])
             git.commit_file(file_name)
 
         new_repo_path = tmpdir.mkdir('new_git_repo').strpath
-
-        git = Git(
-            new_repo_path=new_repo_path,
-            new_repo_branch='master',
-            new_repo_author=git_author,
-            file_dir='all_commits',
-            file_ext='py',
-        )
-        git.create_repository()
-
+        git = self.git_create_repository(new_repo_path=new_repo_path, new_repo_author=git_author)
         for i in range(2):
             file_name = git.create_file(datetime_strings_obfuscate[i])
             git.set_current_datetime(datetime_strings_obfuscate[i])
@@ -164,15 +132,7 @@ class TestContributionsGraph:
         git_repo_path = tmpdir.mkdir('git_repo').strpath
         os.chdir(git_repo_path)
 
-        git = Git(
-            new_repo_path=git_repo_path,
-            new_repo_branch='master',
-            new_repo_author=git_author,
-            file_dir='all_commits',
-            file_ext='py',
-        )
-        git.create_repository()
-
+        git = self.git_create_repository(new_repo_path=git_repo_path, new_repo_author=git_author)
         for i in range(4):
             file_name = git.create_file(datetime_strings[i])
             git.set_current_datetime(datetime_strings[i])
@@ -180,15 +140,7 @@ class TestContributionsGraph:
 
         new_repo_path = tmpdir.mkdir('new_git_repo').strpath
 
-        git = Git(
-            new_repo_path=new_repo_path,
-            new_repo_branch='master',
-            new_repo_author=git_author,
-            file_dir='all_commits',
-            file_ext='py',
-        )
-        git.create_repository()
-
+        git = self.git_create_repository(new_repo_path=new_repo_path, new_repo_author=git_author)
         for i in range(2):
             file_name = git.create_file(datetime_strings[i])
             git.set_current_datetime(datetime_strings[i])
