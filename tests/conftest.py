@@ -74,4 +74,4 @@ def git_author():
     os.environ['GIT_AUTHOR_NAME'] = user_name
     os.environ['GIT_AUTHOR_EMAIL'] = user_email
 
-    return '{} <{}>'.format(user_name, user_email)
+    return f'{user_name} <{user_email}>'
