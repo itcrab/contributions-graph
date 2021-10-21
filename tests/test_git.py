@@ -9,11 +9,7 @@ from contributions_graph.git import Git
 class TestGit:
     def test_get_commits(self, tmpdir, datetime_strings, git_author, datetime_objects):
         git_repo_path = tmpdir.mkdir('get_commits').strpath
-
         os.chdir(git_repo_path)
-        os.system('git init')
-        os.system('git config user.email "contributions.graph@example.com"')
-        os.system('git config user.name "Contributions Graph"')
 
         git = Git(
             new_repo_path=git_repo_path,
@@ -22,6 +18,7 @@ class TestGit:
             file_dir='all_commits',
             file_ext='py',
         )
+        git.create_repository()
 
         file_name = git.create_file(datetime_strings[0])
         git.set_current_datetime(datetime_strings[0])
@@ -40,11 +37,7 @@ class TestGit:
 
     def test_get_commits_with_different_base_branch(self, tmpdir, datetime_strings, git_author, datetime_objects):
         git_repo_path = tmpdir.mkdir('get_commits').strpath
-
         os.chdir(git_repo_path)
-        os.system('git init')
-        os.system('git config user.email "contributions.graph@example.com"')
-        os.system('git config user.name "Contributions Graph"')
 
         git = Git(
             new_repo_path=git_repo_path,
@@ -53,6 +46,7 @@ class TestGit:
             file_dir='all_commits',
             file_ext='py',
         )
+        git.create_repository()
 
         file_name = git.create_file(datetime_strings[0])
         git.set_current_datetime(datetime_strings[0])
@@ -75,11 +69,7 @@ class TestGit:
 
     def test_get_commits_with_read_only_master_commits_case_1(self, tmpdir, datetime_strings, git_author, datetime_objects):
         git_repo_path = tmpdir.mkdir('get_commits').strpath
-
         os.chdir(git_repo_path)
-        os.system('git init')
-        os.system('git config user.email "contributions.graph@example.com"')
-        os.system('git config user.name "Contributions Graph"')
 
         git = Git(
             new_repo_path=git_repo_path,
@@ -88,8 +78,7 @@ class TestGit:
             file_dir='all_commits',
             file_ext='py',
         )
-
-        os.system('git checkout -b master')
+        git.create_repository()
 
         file_name = git.create_file(datetime_strings[0])
         git.set_current_datetime(datetime_strings[0])
@@ -116,12 +105,7 @@ class TestGit:
 
     def test_get_commits_with_read_only_master_commits_case_2(self, tmpdir, datetime_strings, git_author, datetime_objects):
         git_repo_path = tmpdir.mkdir('get_commits').strpath
-
         os.chdir(git_repo_path)
-        os.system('git init')
-        os.system('git config user.email "contributions.graph@example.com"')
-        os.system('git config user.name "Contributions Graph"')
-        os.system('git checkout -b master')
 
         git = Git(
             new_repo_path=git_repo_path,
@@ -130,8 +114,7 @@ class TestGit:
             file_dir='all_commits',
             file_ext='py',
         )
-
-        os.system('git checkout -b master')
+        git.create_repository()
 
         file_name = git.create_file(datetime_strings[0])
         git.set_current_datetime(datetime_strings[0])
@@ -156,12 +139,7 @@ class TestGit:
 
     def test_get_commits_with_read_only_master_commits_case_3(self, tmpdir, datetime_strings, git_author, datetime_objects):
         git_repo_path = tmpdir.mkdir('get_commits').strpath
-
         os.chdir(git_repo_path)
-        os.system('git init')
-        os.system('git config user.email "contributions.graph@example.com"')
-        os.system('git config user.name "Contributions Graph"')
-        os.system('git checkout -b master')
 
         git = Git(
             new_repo_path=git_repo_path,
@@ -170,6 +148,7 @@ class TestGit:
             file_dir='all_commits',
             file_ext='py',
         )
+        git.create_repository()
 
         os.system('git checkout -b new-branch')
 
@@ -197,12 +176,7 @@ class TestGit:
     def test_get_commits_with_read_only_new_branch_commits_case_1(self, tmpdir, datetime_strings, git_author,
                                                                   datetime_objects):
         git_repo_path = tmpdir.mkdir('get_commits').strpath
-
         os.chdir(git_repo_path)
-        os.system('git init')
-        os.system('git config user.email "contributions.graph@example.com"')
-        os.system('git config user.name "Contributions Graph"')
-        os.system('git checkout -b master')
 
         git = Git(
             new_repo_path=git_repo_path,
@@ -211,6 +185,7 @@ class TestGit:
             file_dir='all_commits',
             file_ext='py',
         )
+        git.create_repository()
 
         os.system('git checkout -b new-branch')
 
@@ -238,11 +213,7 @@ class TestGit:
     def test_get_commits_with_read_only_new_branch_commits_case_2(self, tmpdir, datetime_strings, git_author,
                                                                   datetime_objects):
         git_repo_path = tmpdir.mkdir('get_commits').strpath
-
         os.chdir(git_repo_path)
-        os.system('git init')
-        os.system('git config user.email "contributions.graph@example.com"')
-        os.system('git config user.name "Contributions Graph"')
 
         git = Git(
             new_repo_path=git_repo_path,
@@ -251,8 +222,7 @@ class TestGit:
             file_dir='all_commits',
             file_ext='py',
         )
-
-        os.system('git checkout -b master')
+        git.create_repository()
 
         file_name = git.create_file(datetime_strings[0])
         git.set_current_datetime(datetime_strings[0])
@@ -279,11 +249,7 @@ class TestGit:
 
     def test_get_commits_with_wrong_branch(self, tmpdir, datetime_strings, git_author):
         git_repo_path = tmpdir.mkdir('get_commits').strpath
-
         os.chdir(git_repo_path)
-        os.system('git init')
-        os.system('git config user.email "contributions.graph@example.com"')
-        os.system('git config user.name "Contributions Graph"')
 
         git = Git(
             new_repo_path=git_repo_path,
@@ -292,6 +258,7 @@ class TestGit:
             file_dir='all_commits',
             file_ext='py',
         )
+        git.create_repository()
 
         file_name = git.create_file(datetime_strings[0])
         git.set_current_datetime(datetime_strings[0])
