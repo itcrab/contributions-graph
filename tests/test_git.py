@@ -20,13 +20,10 @@ class TestGit:
         )
         git.create_repository()
 
-        file_name = git.create_file(datetime_strings[0])
-        git.set_current_datetime(datetime_strings[0])
-        git.commit_file(file_name)
-
-        file_name = git.create_file(datetime_strings[1])
-        git.set_current_datetime(datetime_strings[1])
-        git.commit_file(file_name)
+        for i in range(2):
+            file_name = git.create_file(datetime_strings[i])
+            git.set_current_datetime(datetime_strings[i])
+            git.commit_file(file_name)
 
         all_commits = git.get_commits(
             repo_path=git_repo_path,
@@ -48,13 +45,10 @@ class TestGit:
         )
         git.create_repository()
 
-        file_name = git.create_file(datetime_strings[0])
-        git.set_current_datetime(datetime_strings[0])
-        git.commit_file(file_name)
-
-        file_name = git.create_file(datetime_strings[1])
-        git.set_current_datetime(datetime_strings[1])
-        git.commit_file(file_name)
+        for i in range(2):
+            file_name = git.create_file(datetime_strings[i])
+            git.set_current_datetime(datetime_strings[i])
+            git.commit_file(file_name)
 
         os.system('git checkout -b new-branch')
 
@@ -122,13 +116,10 @@ class TestGit:
 
         os.system('git checkout -b new-branch')
 
-        file_name = git.create_file(datetime_strings[1])
-        git.set_current_datetime(datetime_strings[1])
-        git.commit_file(file_name)
-
-        file_name = git.create_file(datetime_strings[2])
-        git.set_current_datetime(datetime_strings[2])
-        git.commit_file(file_name)
+        for i in range(1, 3):
+            file_name = git.create_file(datetime_strings[i])
+            git.set_current_datetime(datetime_strings[i])
+            git.commit_file(file_name)
 
         all_commits = git.get_commits(
             repo_path=git_repo_path,
@@ -158,13 +149,10 @@ class TestGit:
 
         os.system('git checkout -b master')
 
-        file_name = git.create_file(datetime_strings[1])
-        git.set_current_datetime(datetime_strings[1])
-        git.commit_file(file_name)
-
-        file_name = git.create_file(datetime_strings[2])
-        git.set_current_datetime(datetime_strings[2])
-        git.commit_file(file_name)
+        for i in range(1, 3):
+            file_name = git.create_file(datetime_strings[i])
+            git.set_current_datetime(datetime_strings[i])
+            git.commit_file(file_name)
 
         all_commits = git.get_commits(
             repo_path=git_repo_path,
@@ -195,13 +183,10 @@ class TestGit:
 
         os.system('git checkout -b master')
 
-        file_name = git.create_file(datetime_strings[1])
-        git.set_current_datetime(datetime_strings[1])
-        git.commit_file(file_name)
-
-        file_name = git.create_file(datetime_strings[2])
-        git.set_current_datetime(datetime_strings[2])
-        git.commit_file(file_name)
+        for i in range(1, 3):
+            file_name = git.create_file(datetime_strings[i])
+            git.set_current_datetime(datetime_strings[i])
+            git.commit_file(file_name)
 
         all_commits = git.get_commits(
             repo_path=git_repo_path,
@@ -260,13 +245,10 @@ class TestGit:
         )
         git.create_repository()
 
-        file_name = git.create_file(datetime_strings[0])
-        git.set_current_datetime(datetime_strings[0])
-        git.commit_file(file_name)
-
-        file_name = git.create_file(datetime_strings[1])
-        git.set_current_datetime(datetime_strings[1])
-        git.commit_file(file_name)
+        for i in range(2):
+            file_name = git.create_file(datetime_strings[i])
+            git.set_current_datetime(datetime_strings[i])
+            git.commit_file(file_name)
 
         with pytest.raises(GitBranchNotFoundError):
             git.get_commits(
