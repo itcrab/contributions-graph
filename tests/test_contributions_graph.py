@@ -43,7 +43,8 @@ class TestContributionsGraph(GitTestMixin):
 
         assert all_commits == [datetime_objects_obfuscate[1], datetime_objects_obfuscate[0]]
 
-    def test_contributions_graph_without_obfuscate(self, tmpdir, datetime_strings, git_author, datetime_objects):
+    def test_contributions_graph_without_obfuscate(self, tmpdir, datetime_strings, git_author, datetime_objects,
+                                                   datetime_objects_utc):
         git_repo_path = tmpdir.mkdir('git_repo').strpath
         os.chdir(git_repo_path)
 
@@ -74,7 +75,7 @@ class TestContributionsGraph(GitTestMixin):
         del all_commits[-1]  # README.md
         assert os.path.isfile('README.md') is True
 
-        assert all_commits == [datetime_objects[1], datetime_objects[0]]
+        assert all_commits == [datetime_objects_utc[1], datetime_objects_utc[0]]
 
     def test_contributions_graph_with_exists_repository_and_obfuscate(self, tmpdir, datetime_strings,
                                                                       datetime_strings_obfuscate, git_author,
@@ -128,7 +129,8 @@ class TestContributionsGraph(GitTestMixin):
         ]
 
     def test_contributions_graph_with_exists_repository_and_without_obfuscate(self, tmpdir, datetime_strings,
-                                                                              git_author, datetime_objects):
+                                                                              git_author, datetime_objects,
+                                                                              datetime_objects_utc):
         git_repo_path = tmpdir.mkdir('git_repo').strpath
         os.chdir(git_repo_path)
 
@@ -148,7 +150,7 @@ class TestContributionsGraph(GitTestMixin):
 
         all_commits = git.get_all_commits(git_author)
 
-        assert all_commits == [datetime_objects[1], datetime_objects[0]]
+        assert all_commits == [datetime_objects_utc[1], datetime_objects_utc[0]]
 
         repository_list = RepositoryList()
         repository_list.add(git_repo_path, 'master', git_author)
@@ -171,8 +173,8 @@ class TestContributionsGraph(GitTestMixin):
         assert os.path.isfile('README.md') is True
 
         assert all_commits == [
-            datetime_objects[3],
-            datetime_objects[2],
-            datetime_objects[1],
-            datetime_objects[0],
+            datetime_objects_utc[3],
+            datetime_objects_utc[2],
+            datetime_objects_utc[1],
+            datetime_objects_utc[0],
         ]
