@@ -16,6 +16,11 @@ def tz_info_0300():
 
 
 @pytest.fixture
+def tz_info_utc():
+    return timezone.utc
+
+
+@pytest.fixture
 def datetime_objects(tz_info_0500, tz_info_0300):
     return [
         datetime(2018, 6, 30, 20, 12, 9, tzinfo=tz_info_0500),
@@ -31,12 +36,27 @@ def datetime_strings(datetime_objects):
 
 
 @pytest.fixture
-def datetime_objects_obfuscate(tz_info_0500, tz_info_0300):
+def datetime_objects_utc(tz_info_utc):
     return [
-        datetime(2018, 6, 30, 11, 0, 0, tzinfo=tz_info_0500),
-        datetime(2018, 6, 30, 11, 5, 0, tzinfo=tz_info_0500),
-        datetime(2018, 7, 1, 11, 0, 0, tzinfo=tz_info_0300),
-        datetime(2018, 7, 1, 11, 5, 0, tzinfo=tz_info_0300),
+        datetime(2018, 6, 30, 15, 12, 9, tzinfo=tz_info_utc),
+        datetime(2018, 6, 30, 18, 22, 1, tzinfo=tz_info_utc),
+        datetime(2018, 7, 1, 14, 43, 4, tzinfo=tz_info_utc),
+        datetime(2018, 7, 1, 14, 59, 8, tzinfo=tz_info_utc),
+    ]
+
+
+@pytest.fixture
+def datetime_strings_utc(datetime_objects_utc):
+    return [dt.isoformat() for dt in datetime_objects_utc]
+
+
+@pytest.fixture
+def datetime_objects_obfuscate(tz_info_utc):
+    return [
+        datetime(2018, 6, 30, 11, 0, 0, tzinfo=tz_info_utc),
+        datetime(2018, 6, 30, 11, 5, 0, tzinfo=tz_info_utc),
+        datetime(2018, 7, 1, 11, 0, 0, tzinfo=tz_info_utc),
+        datetime(2018, 7, 1, 11, 5, 0, tzinfo=tz_info_utc),
     ]
 
 
