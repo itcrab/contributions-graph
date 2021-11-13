@@ -88,9 +88,7 @@ class Git:
 
             selected_branch = self.get_repo_branch()
             if selected_branch != branch:
-                raise GitBranchNotFoundError(
-                    'Git branch "{}" not found!'.format(branch)
-                )
+                raise GitBranchNotFoundError(f'Git branch "{branch}" not found!')
 
         all_commits = self.get_all_commits(author)
 
@@ -152,7 +150,7 @@ class Git:
 
     def create_file(self, date_string: str) -> str:
         file_name = generate_full_file_name(self.file_ext)
-        file_data = 'commit_datetime="{}"'.format(date_string)
+        file_data = f'commit_datetime="{date_string}"'
         write_file_data(file_name, file_data)
 
         return file_name

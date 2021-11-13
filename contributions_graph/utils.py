@@ -7,7 +7,7 @@ def parse_iso_8601_string_to_datetime(date_string: str) -> datetime:
 
 
 def generate_full_file_name(file_ext: str) -> str:
-    return '{}.{}'.format(uuid.uuid4(), file_ext)
+    return f'{uuid.uuid4()}.{file_ext}'
 
 
 def write_file_data(file_name: str, file_data: str) -> None:
