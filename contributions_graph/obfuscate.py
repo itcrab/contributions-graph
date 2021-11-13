@@ -1,4 +1,4 @@
-from datetime import timedelta, datetime
+from datetime import timedelta, datetime, timezone
 from typing import List
 
 
@@ -14,6 +14,7 @@ class Obfuscate:
             hour=self.start_hour,
             minute=self.start_minute,
             second=self.start_second,
+            tzinfo=timezone.utc,
         )
 
     def run(self, all_commits: List[datetime]) -> List[datetime]:

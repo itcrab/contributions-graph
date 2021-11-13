@@ -1,10 +1,9 @@
 import uuid
-from datetime import datetime
+from datetime import datetime, timezone
 
 
 def parse_iso_8601_string_to_datetime(date_string: str) -> datetime:
-    date_string = '{}{}'.format(date_string[:-3], date_string[-2:])
-    return datetime.strptime(date_string, '%Y-%m-%dT%H:%M:%S%z')
+    return datetime.fromisoformat(date_string).astimezone(timezone.utc)
 
 
 def generate_full_file_name(file_ext: str) -> str:
