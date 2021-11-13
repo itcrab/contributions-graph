@@ -8,7 +8,7 @@ from tests.mixins import GitTestMixin
 
 
 class TestGit(GitTestMixin):
-    def test_get_commits(self, tmpdir, datetime_strings, git_author, datetime_objects):
+    def test_get_commits(self, tmpdir, datetime_strings, git_author, datetime_objects, datetime_objects_utc):
         git_repo_path = tmpdir.mkdir('get_commits').strpath
         os.chdir(git_repo_path)
 
@@ -23,9 +23,10 @@ class TestGit(GitTestMixin):
             branch='master',
             author=git_author,
         )
-        assert all_commits == [datetime_objects[1], datetime_objects[0]]
+        assert all_commits == [datetime_objects_utc[1], datetime_objects_utc[0]]
 
-    def test_get_commits_with_different_base_branch(self, tmpdir, datetime_strings, git_author, datetime_objects):
+    def test_get_commits_with_different_base_branch(self, tmpdir, datetime_strings, git_author, datetime_objects,
+                                                    datetime_objects_utc):
         git_repo_path = tmpdir.mkdir('get_commits').strpath
         os.chdir(git_repo_path)
 
@@ -44,9 +45,10 @@ class TestGit(GitTestMixin):
             author=git_author,
         )
         assert git.get_repo_branch() == 'new-branch'
-        assert all_commits == [datetime_objects[1], datetime_objects[0]]
+        assert all_commits == [datetime_objects_utc[1], datetime_objects_utc[0]]
 
-    def test_get_commits_with_read_only_master_commits_case_1(self, tmpdir, datetime_strings, git_author, datetime_objects):
+    def test_get_commits_with_read_only_master_commits_case_1(self, tmpdir, datetime_strings, git_author,
+                                                              datetime_objects, datetime_objects_utc):
         git_repo_path = tmpdir.mkdir('get_commits').strpath
         os.chdir(git_repo_path)
 
@@ -73,9 +75,10 @@ class TestGit(GitTestMixin):
             branch='master',
             author=git_author,
         )
-        assert all_commits == [datetime_objects[2], datetime_objects[0]]
+        assert all_commits == [datetime_objects_utc[2], datetime_objects_utc[0]]
 
-    def test_get_commits_with_read_only_master_commits_case_2(self, tmpdir, datetime_strings, git_author, datetime_objects):
+    def test_get_commits_with_read_only_master_commits_case_2(self, tmpdir, datetime_strings, git_author,
+                                                              datetime_objects, datetime_objects_utc):
         git_repo_path = tmpdir.mkdir('get_commits').strpath
         os.chdir(git_repo_path)
 
@@ -97,9 +100,10 @@ class TestGit(GitTestMixin):
             branch='master',
             author=git_author,
         )
-        assert all_commits == [datetime_objects[0]]
+        assert all_commits == [datetime_objects_utc[0]]
 
-    def test_get_commits_with_read_only_master_commits_case_3(self, tmpdir, datetime_strings, git_author, datetime_objects):
+    def test_get_commits_with_read_only_master_commits_case_3(self, tmpdir, datetime_strings, git_author,
+                                                              datetime_objects, datetime_objects_utc):
         git_repo_path = tmpdir.mkdir('get_commits').strpath
         os.chdir(git_repo_path)
 
@@ -123,10 +127,10 @@ class TestGit(GitTestMixin):
             branch='master',
             author=git_author,
         )
-        assert all_commits == [datetime_objects[2], datetime_objects[1], datetime_objects[0]]
+        assert all_commits == [datetime_objects_utc[2], datetime_objects_utc[1], datetime_objects_utc[0]]
 
     def test_get_commits_with_read_only_new_branch_commits_case_1(self, tmpdir, datetime_strings, git_author,
-                                                                  datetime_objects):
+                                                                  datetime_objects, datetime_objects_utc):
         git_repo_path = tmpdir.mkdir('get_commits').strpath
         os.chdir(git_repo_path)
 
@@ -150,10 +154,10 @@ class TestGit(GitTestMixin):
             branch='new-branch',
             author=git_author,
         )
-        assert all_commits == [datetime_objects[0]]
+        assert all_commits == [datetime_objects_utc[0]]
 
     def test_get_commits_with_read_only_new_branch_commits_case_2(self, tmpdir, datetime_strings, git_author,
-                                                                  datetime_objects):
+                                                                  datetime_objects, datetime_objects_utc):
         git_repo_path = tmpdir.mkdir('get_commits').strpath
         os.chdir(git_repo_path)
 
@@ -180,7 +184,7 @@ class TestGit(GitTestMixin):
             branch='new-branch',
             author=git_author,
         )
-        assert all_commits == [datetime_objects[1], datetime_objects[0]]
+        assert all_commits == [datetime_objects_utc[1], datetime_objects_utc[0]]
 
     def test_get_commits_with_wrong_branch(self, tmpdir, datetime_strings, git_author):
         git_repo_path = tmpdir.mkdir('get_commits').strpath
@@ -251,7 +255,8 @@ class TestGit(GitTestMixin):
         committers = git.get_committers()
         assert committers == [git_author, git_author]
 
-    def test_build_repository_with_commits_directory_exists(self, tmpdir, datetime_objects, datetime_strings, git_author):
+    def test_build_repository_with_commits_directory_exists(self, tmpdir, datetime_objects, datetime_strings,
+                                                            git_author, datetime_objects_utc):
         tmpdir.mkdir('build_git_repository').mkdir('all_commits')
         git_repo_path = tmpdir.join('build_git_repository').strpath
         os.chdir(git_repo_path)
@@ -268,10 +273,11 @@ class TestGit(GitTestMixin):
 
         all_commits = git.get_all_commits(git_author)
 
-        assert all_commits == [datetime_objects[1], datetime_objects[0]]
+        assert all_commits == [datetime_objects_utc[1], datetime_objects_utc[0]]
         assert os.path.isdir('all_commits') is True
 
-    def test_build_repository_with_custom_file_dir(self, tmpdir, datetime_objects, datetime_strings, git_author):
+    def test_build_repository_with_custom_file_dir(self, tmpdir, datetime_objects, datetime_strings, git_author,
+                                                   datetime_objects_utc):
         git_repo_path = tmpdir.mkdir('build_git_repository').strpath
         os.chdir(git_repo_path)
 
@@ -294,5 +300,5 @@ class TestGit(GitTestMixin):
 
         all_commits = git.get_all_commits(git_author)
 
-        assert all_commits == [datetime_objects[1], datetime_objects[0]]
+        assert all_commits == [datetime_objects_utc[1], datetime_objects_utc[0]]
         assert os.path.isdir('custom_file_dir') is True

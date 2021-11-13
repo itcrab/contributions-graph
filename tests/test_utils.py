@@ -7,11 +7,11 @@ from contributions_graph.utils import generate_full_file_name, write_file_data, 
 
 
 class TestUtils:
-    def test_parse_iso_8601_string_to_datetime(self, datetime_strings, datetime_objects):
+    def test_parse_iso_8601_string_to_datetime(self, datetime_strings, datetime_objects, datetime_objects_utc):
         for i in range(4):
             parsed_date = parse_iso_8601_string_to_datetime(datetime_strings[i])
             assert isinstance(parsed_date, datetime)
-            assert parsed_date == datetime_objects[i]
+            assert parsed_date == datetime_objects_utc[i]
 
     @pytest.mark.parametrize("ext", ['py', 'cpp', 'java'])
     def test_generate_full_file_name(self, monkeypatch, ext):
