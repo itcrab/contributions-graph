@@ -317,3 +317,24 @@ class TestGit(GitTestMixin):
 
         assert all_commits == [datetime_objects_utc[1], datetime_objects_utc[0]]
         assert os.path.isdir('custom_file_dir') is True
+
+    @pytest.mark.parametrize("branch_name", ['py', 'cpp', 'java'])
+    def test_create_repository_with_custom_branch_name(self, tmpdir, git_author, datetime_objects, branch_name):
+        git_repo_path = tmpdir.mkdir(branch_name).strpath
+        os.chdir(git_repo_path)
+
+        all_commits = [
+            datetime_objects[0],
+            datetime_objects[1],
+        ]
+
+        git = Git(
+            new_repo_path=git_repo_path,
+            new_repo_branch=branch_name,
+            new_repo_author=git_author,
+            file_dir='all_commits',
+            file_ext='py',
+        )
+        git.create_repository()
+        git.build_repository(all_commits)
+        assert git.get_repo_branch() == branch_name

@@ -15,7 +15,7 @@ class GitConsole:
         os.system(f'git config user.name "{name}"')
 
     @staticmethod
-    def create_branch(branch: str) -> None:  # only for testing
+    def create_branch(branch: str) -> None:
         os.system(f'git checkout -b {branch}')
 
     @staticmethod
@@ -117,11 +117,13 @@ class Git:
     def create_repository(self) -> None:
         if not os.path.isdir(self.new_repo_path):
             os.mkdir(self.new_repo_path)
+
         os.chdir(self.new_repo_path)
         if not self.repository_exists():
             repo_author = self.new_repo_author.split('<')
 
             GitConsole.init_repo(email=repo_author[1][:-1], name=repo_author[0])
+            GitConsole.create_branch(self.new_repo_branch)
 
     def create_readme(self) -> None:
         file_name = 'README.md'
