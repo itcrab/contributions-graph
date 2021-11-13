@@ -7,6 +7,56 @@ from contributions_graph.exceptions import GitBranchNotFoundError
 from contributions_graph.utils import generate_full_file_name, write_file_data, parse_iso_8601_string_to_datetime
 
 
+class GitConsole:
+    @classmethod
+    def init_repo(cls, email: str, name: str) -> None:
+        os.system('git init')
+        os.system(f'git config user.email "{email}"')
+        os.system(f'git config user.name "{name}"')
+
+    @staticmethod
+    def create_branch(branch: str) -> None:  # only for testing
+        os.system(f'git checkout -b {branch}')
+
+    @staticmethod
+    def switch_branch(branch: str) -> None:
+        os.system(f'git checkout {branch}')
+
+    @classmethod
+    def add_file(cls, file_name: str) -> None:
+        os.system(f'git add {file_name}')
+
+    @classmethod
+    def commit_file(cls, file_name: str) -> None:
+        os.system(f'git commit -m "Commit file {file_name}"')
+
+    @classmethod
+    def set_current_datetime(cls, date_string: str) -> None:
+        os.environ['GIT_AUTHOR_DATE'] = date_string
+        os.environ['GIT_COMMITTER_DATE'] = date_string
+
+    @staticmethod
+    def get_branches() -> List[str]:
+        cmd = 'git branch'
+        repo_branches = subprocess.check_output(cmd, shell=True, universal_newlines=True)
+
+        return repo_branches.splitlines()
+
+    @classmethod
+    def get_commits_by_author(cls, author: str) -> List[str]:
+        cmd = f'git --no-pager log --pretty="%cI" --author="{author}"'
+        all_commits = subprocess.check_output(cmd, shell=True, universal_newlines=True)
+
+        return all_commits.splitlines()
+
+    @staticmethod
+    def get_committers() -> List[str]:  # only for testing
+        cmd = 'git --no-pager log --pretty="%cn <%ce>"'
+        all_committers = subprocess.check_output(cmd, shell=True, universal_newlines=True)
+
+        return all_committers.splitlines()
+
+
 class Git:
     def __init__(self, new_repo_path: str, new_repo_branch: str, new_repo_author: str, file_dir: str, file_ext: str) -> None:
         self.new_repo_path = new_repo_path
@@ -34,7 +84,7 @@ class Git:
         repo_branch = self.get_repo_branch()
 
         if repo_branch != branch:
-            os.system('git checkout {}'.format(branch))
+            GitConsole.switch_branch(branch)
 
             selected_branch = self.get_repo_branch()
             if selected_branch != branch:
@@ -45,20 +95,14 @@ class Git:
         all_commits = self.get_all_commits(author)
 
         if repo_branch != branch:
-            os.system('git checkout {}'.format(repo_branch))
+            GitConsole.switch_branch(branch)
 
         os.chdir(self.current_path)
 
         return all_commits
 
-    def get_repo_branches(self) -> List[str]:
-        cmd = 'git branch'
-        repo_branches = subprocess.check_output(cmd, shell=True, universal_newlines=True)
-
-        return repo_branches.splitlines()
-
     def get_repo_branch(self) -> str:
-        repo_branches = self.get_repo_branches()
+        repo_branches = GitConsole.get_branches()
 
         repo_branch = [rb for rb in repo_branches if rb.startswith('* ')][0]
         repo_branch = repo_branch[2:]
@@ -66,17 +110,9 @@ class Git:
         return repo_branch
 
     def get_all_commits(self, author: str) -> List[datetime]:
-        cmd = 'git --no-pager log --pretty="%cI" --author="{}"'.format(author)
-        all_commits = subprocess.check_output(cmd, shell=True, universal_newlines=True)
-        all_commits_list = all_commits.splitlines()
+        all_commits = GitConsole.get_commits_by_author(author)
 
-        return list(map(parse_iso_8601_string_to_datetime, all_commits_list))
-
-    def get_committers(self) -> List[str]:
-        cmd = 'git --no-pager log --pretty="%cn <%ce>"'
-        all_commits = subprocess.check_output(cmd, shell=True, universal_newlines=True)
-
-        return all_commits.splitlines()
+        return list(map(parse_iso_8601_string_to_datetime, all_commits))
 
     def create_repository(self) -> None:
         if not os.path.isdir(self.new_repo_path):
@@ -85,9 +121,7 @@ class Git:
         if not self.repository_exists():
             repo_author = self.new_repo_author.split('<')
 
-            os.system('git init')
-            os.system('git config user.email "{}"'.format(repo_author[1][:-1]))
-            os.system('git config user.name "{}"'.format(repo_author[0]))
+            GitConsole.init_repo(email=repo_author[1][:-1], name=repo_author[0])
 
     def create_readme(self) -> None:
         file_name = 'README.md'
@@ -95,8 +129,9 @@ class Git:
             file_data = '# Contribution Graph Repository'
             write_file_data(file_name, file_data)
 
-            self.set_current_datetime(datetime.today().isoformat())
-            self.commit_file(file_name)
+            GitConsole.set_current_datetime(datetime.today().isoformat())
+            GitConsole.add_file(file_name)
+            GitConsole.commit_file(file_name)
 
     def build_repository(self, all_commits: List[datetime]) -> None:
         if not os.path.isdir(self.file_dir):
@@ -107,8 +142,9 @@ class Git:
             date_string = commit.isoformat()
 
             file_name = self.create_file(date_string)
-            self.set_current_datetime(date_string)
-            self.commit_file(file_name)
+            GitConsole.set_current_datetime(date_string)
+            GitConsole.add_file(file_name)
+            GitConsole.commit_file(file_name)
 
         os.chdir(self.current_path)
 
@@ -118,11 +154,3 @@ class Git:
         write_file_data(file_name, file_data)
 
         return file_name
-
-    def set_current_datetime(self, date_string: str) -> None:
-        os.environ['GIT_AUTHOR_DATE'] = date_string
-        os.environ['GIT_COMMITTER_DATE'] = date_string
-
-    def commit_file(self, file_name: str) -> None:
-        os.system('git add {}'.format(file_name))
-        os.system('git commit -m "Commit file {}"'.format(file_name))

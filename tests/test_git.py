@@ -3,7 +3,7 @@ import os
 import pytest
 
 from contributions_graph.exceptions import GitBranchNotFoundError
-from contributions_graph.git import Git
+from contributions_graph.git import Git, GitConsole
 from tests.mixins import GitTestMixin
 
 
@@ -15,8 +15,9 @@ class TestGit(GitTestMixin):
         git = self.git_create_repository(new_repo_path=git_repo_path, new_repo_author=git_author)
         for i in range(2):
             file_name = git.create_file(datetime_strings[i])
-            git.set_current_datetime(datetime_strings[i])
-            git.commit_file(file_name)
+            GitConsole.set_current_datetime(datetime_strings[i])
+            GitConsole.add_file(file_name)
+            GitConsole.commit_file(file_name)
 
         all_commits = git.get_commits(
             repo_path=git_repo_path,
@@ -33,18 +34,19 @@ class TestGit(GitTestMixin):
         git = self.git_create_repository(new_repo_path=git_repo_path, new_repo_author=git_author)
         for i in range(2):
             file_name = git.create_file(datetime_strings[i])
-            git.set_current_datetime(datetime_strings[i])
-            git.commit_file(file_name)
+            GitConsole.set_current_datetime(datetime_strings[i])
+            GitConsole.add_file(file_name)
+            GitConsole.commit_file(file_name)
 
-        os.system('git checkout -b new-branch')
-
+        GitConsole.create_branch('new-branch')
         assert git.get_repo_branch() == 'new-branch'
+
         all_commits = git.get_commits(
             repo_path=git_repo_path,
             branch='master',
             author=git_author,
         )
-        assert git.get_repo_branch() == 'new-branch'
+        assert git.get_repo_branch() == 'master'
         assert all_commits == [datetime_objects_utc[1], datetime_objects_utc[0]]
 
     def test_get_commits_with_read_only_master_commits_case_1(self, tmpdir, datetime_strings, git_author,
@@ -55,20 +57,23 @@ class TestGit(GitTestMixin):
         git = self.git_create_repository(new_repo_path=git_repo_path, new_repo_author=git_author)
 
         file_name = git.create_file(datetime_strings[0])
-        git.set_current_datetime(datetime_strings[0])
-        git.commit_file(file_name)
+        GitConsole.set_current_datetime(datetime_strings[0])
+        GitConsole.add_file(file_name)
+        GitConsole.commit_file(file_name)
 
-        os.system('git checkout -b new-branch')
+        GitConsole.create_branch('new-branch')
 
         file_name = git.create_file(datetime_strings[1])
-        git.set_current_datetime(datetime_strings[1])
-        git.commit_file(file_name)
+        GitConsole.set_current_datetime(datetime_strings[1])
+        GitConsole.add_file(file_name)
+        GitConsole.commit_file(file_name)
 
-        os.system('git checkout master')
+        GitConsole.switch_branch('master')
 
         file_name = git.create_file(datetime_strings[2])
-        git.set_current_datetime(datetime_strings[2])
-        git.commit_file(file_name)
+        GitConsole.set_current_datetime(datetime_strings[2])
+        GitConsole.add_file(file_name)
+        GitConsole.commit_file(file_name)
 
         all_commits = git.get_commits(
             repo_path=git_repo_path,
@@ -85,15 +90,17 @@ class TestGit(GitTestMixin):
         git = self.git_create_repository(new_repo_path=git_repo_path, new_repo_author=git_author)
 
         file_name = git.create_file(datetime_strings[0])
-        git.set_current_datetime(datetime_strings[0])
-        git.commit_file(file_name)
+        GitConsole.set_current_datetime(datetime_strings[0])
+        GitConsole.add_file(file_name)
+        GitConsole.commit_file(file_name)
 
-        os.system('git checkout -b new-branch')
+        GitConsole.create_branch('new-branch')
 
         for i in range(1, 3):
             file_name = git.create_file(datetime_strings[i])
-            git.set_current_datetime(datetime_strings[i])
-            git.commit_file(file_name)
+            GitConsole.set_current_datetime(datetime_strings[i])
+            GitConsole.add_file(file_name)
+            GitConsole.commit_file(file_name)
 
         all_commits = git.get_commits(
             repo_path=git_repo_path,
@@ -109,18 +116,20 @@ class TestGit(GitTestMixin):
 
         git = self.git_create_repository(new_repo_path=git_repo_path, new_repo_author=git_author)
 
-        os.system('git checkout -b new-branch')
+        GitConsole.create_branch('new-branch')
 
         file_name = git.create_file(datetime_strings[0])
-        git.set_current_datetime(datetime_strings[0])
-        git.commit_file(file_name)
+        GitConsole.set_current_datetime(datetime_strings[0])
+        GitConsole.add_file(file_name)
+        GitConsole.commit_file(file_name)
 
-        os.system('git checkout -b master')
+        GitConsole.create_branch('master')
 
         for i in range(1, 3):
             file_name = git.create_file(datetime_strings[i])
-            git.set_current_datetime(datetime_strings[i])
-            git.commit_file(file_name)
+            GitConsole.set_current_datetime(datetime_strings[i])
+            GitConsole.add_file(file_name)
+            GitConsole.commit_file(file_name)
 
         all_commits = git.get_commits(
             repo_path=git_repo_path,
@@ -136,18 +145,20 @@ class TestGit(GitTestMixin):
 
         git = self.git_create_repository(new_repo_path=git_repo_path, new_repo_author=git_author)
 
-        os.system('git checkout -b new-branch')
+        GitConsole.create_branch('new-branch')
 
         file_name = git.create_file(datetime_strings[0])
-        git.set_current_datetime(datetime_strings[0])
-        git.commit_file(file_name)
+        GitConsole.set_current_datetime(datetime_strings[0])
+        GitConsole.add_file(file_name)
+        GitConsole.commit_file(file_name)
 
-        os.system('git checkout -b master')
+        GitConsole.create_branch('master')
 
         for i in range(1, 3):
             file_name = git.create_file(datetime_strings[i])
-            git.set_current_datetime(datetime_strings[i])
-            git.commit_file(file_name)
+            GitConsole.set_current_datetime(datetime_strings[i])
+            GitConsole.add_file(file_name)
+            GitConsole.commit_file(file_name)
 
         all_commits = git.get_commits(
             repo_path=git_repo_path,
@@ -164,20 +175,23 @@ class TestGit(GitTestMixin):
         git = self.git_create_repository(new_repo_path=git_repo_path, new_repo_author=git_author)
 
         file_name = git.create_file(datetime_strings[0])
-        git.set_current_datetime(datetime_strings[0])
-        git.commit_file(file_name)
+        GitConsole.set_current_datetime(datetime_strings[0])
+        GitConsole.add_file(file_name)
+        GitConsole.commit_file(file_name)
 
-        os.system('git checkout -b new-branch')
+        GitConsole.create_branch('new-branch')
 
         file_name = git.create_file(datetime_strings[1])
-        git.set_current_datetime(datetime_strings[1])
-        git.commit_file(file_name)
+        GitConsole.set_current_datetime(datetime_strings[1])
+        GitConsole.add_file(file_name)
+        GitConsole.commit_file(file_name)
 
-        os.system('git checkout master')
+        GitConsole.switch_branch('master')
 
         file_name = git.create_file(datetime_strings[2])
-        git.set_current_datetime(datetime_strings[2])
-        git.commit_file(file_name)
+        GitConsole.set_current_datetime(datetime_strings[2])
+        GitConsole.add_file(file_name)
+        GitConsole.commit_file(file_name)
 
         all_commits = git.get_commits(
             repo_path=git_repo_path,
@@ -193,8 +207,9 @@ class TestGit(GitTestMixin):
         git = self.git_create_repository(new_repo_path=git_repo_path, new_repo_author=git_author)
         for i in range(2):
             file_name = git.create_file(datetime_strings[i])
-            git.set_current_datetime(datetime_strings[i])
-            git.commit_file(file_name)
+            GitConsole.set_current_datetime(datetime_strings[i])
+            GitConsole.add_file(file_name)
+            GitConsole.commit_file(file_name)
 
         with pytest.raises(GitBranchNotFoundError):
             git.get_commits(
@@ -252,7 +267,7 @@ class TestGit(GitTestMixin):
         assert all_commits == [datetime_objects[1], datetime_objects[0]]
         assert os.path.isdir('all_commits') is True
 
-        committers = git.get_committers()
+        committers = GitConsole.get_committers()
         assert committers == [git_author, git_author]
 
     def test_build_repository_with_commits_directory_exists(self, tmpdir, datetime_objects, datetime_strings,

@@ -1,7 +1,7 @@
 import os
 
 from contributions_graph import ContributionsGraph
-from contributions_graph.git import Git
+from contributions_graph.git import Git, GitConsole
 from contributions_graph.obfuscate import Obfuscate
 from contributions_graph.repository_list import RepositoryList
 from tests.mixins import GitTestMixin
@@ -16,8 +16,9 @@ class TestContributionsGraph(GitTestMixin):
         git = self.git_create_repository(new_repo_path=git_repo_path, new_repo_author=git_author)
         for i in range(2):
             file_name = git.create_file(datetime_strings[i])
-            git.set_current_datetime(datetime_strings[i])
-            git.commit_file(file_name)
+            GitConsole.set_current_datetime(datetime_strings[i])
+            GitConsole.add_file(file_name)
+            GitConsole.commit_file(file_name)
 
         repository_list = RepositoryList()
         repository_list.add(git_repo_path, 'master', git_author)
@@ -51,8 +52,9 @@ class TestContributionsGraph(GitTestMixin):
         git = self.git_create_repository(new_repo_path=git_repo_path, new_repo_author=git_author)
         for i in range(2):
             file_name = git.create_file(datetime_strings[i])
-            git.set_current_datetime(datetime_strings[i])
-            git.commit_file(file_name)
+            GitConsole.set_current_datetime(datetime_strings[i])
+            GitConsole.add_file(file_name)
+            GitConsole.commit_file(file_name)
 
         repository_list = RepositoryList()
         repository_list.add(git_repo_path, 'master', git_author)
@@ -86,15 +88,17 @@ class TestContributionsGraph(GitTestMixin):
         git = self.git_create_repository(new_repo_path=git_repo_path, new_repo_author=git_author)
         for i in range(4):
             file_name = git.create_file(datetime_strings[i])
-            git.set_current_datetime(datetime_strings[i])
-            git.commit_file(file_name)
+            GitConsole.set_current_datetime(datetime_strings[i])
+            GitConsole.add_file(file_name)
+            GitConsole.commit_file(file_name)
 
         new_repo_path = tmpdir.mkdir('new_git_repo').strpath
         git = self.git_create_repository(new_repo_path=new_repo_path, new_repo_author=git_author)
         for i in range(2):
             file_name = git.create_file(datetime_strings_obfuscate[i])
-            git.set_current_datetime(datetime_strings_obfuscate[i])
-            git.commit_file(file_name)
+            GitConsole.set_current_datetime(datetime_strings_obfuscate[i])
+            GitConsole.add_file(file_name)
+            GitConsole.commit_file(file_name)
 
         all_commits = git.get_all_commits(git_author)
 
@@ -137,16 +141,18 @@ class TestContributionsGraph(GitTestMixin):
         git = self.git_create_repository(new_repo_path=git_repo_path, new_repo_author=git_author)
         for i in range(4):
             file_name = git.create_file(datetime_strings[i])
-            git.set_current_datetime(datetime_strings[i])
-            git.commit_file(file_name)
+            GitConsole.set_current_datetime(datetime_strings[i])
+            GitConsole.add_file(file_name)
+            GitConsole.commit_file(file_name)
 
         new_repo_path = tmpdir.mkdir('new_git_repo').strpath
 
         git = self.git_create_repository(new_repo_path=new_repo_path, new_repo_author=git_author)
         for i in range(2):
             file_name = git.create_file(datetime_strings[i])
-            git.set_current_datetime(datetime_strings[i])
-            git.commit_file(file_name)
+            GitConsole.set_current_datetime(datetime_strings[i])
+            GitConsole.add_file(file_name)
+            GitConsole.commit_file(file_name)
 
         all_commits = git.get_all_commits(git_author)
 
