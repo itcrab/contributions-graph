@@ -1,6 +1,8 @@
 from datetime import timedelta, datetime, timezone
 from typing import List
 
+from contributions_graph.exceptions import DayCapacityOverflowObfuscateError
+
 
 class Obfuscate:
     def __init__(self, start_hour: int, start_minute: int, start_second: int, delta_minutes: int) -> None:
@@ -18,12 +20,16 @@ class Obfuscate:
         )
 
     def run(self, all_commits: List[datetime]) -> List[datetime]:
-        ofuscate_date = self.get_obfuscate_date(all_commits[0])
+        obfuscate_date = self.get_obfuscate_date(all_commits[0])
         for idx, commit in enumerate(all_commits):
-            if commit.day != ofuscate_date.day:
-                ofuscate_date = self.get_obfuscate_date(commit)
+            if commit.day != obfuscate_date.day:
+                obfuscate_date = self.get_obfuscate_date(commit)
 
-            all_commits[idx] = ofuscate_date
-            ofuscate_date += self.delta_minutes
+            all_commits[idx] = obfuscate_date
+            obfuscate_date += self.delta_minutes
+            if obfuscate_date.day != commit.day:
+                raise DayCapacityOverflowObfuscateError(
+                    f'Commit {commit} have overflow day {commit.day} (next commit: {obfuscate_date})'
+                )
 
         return all_commits
