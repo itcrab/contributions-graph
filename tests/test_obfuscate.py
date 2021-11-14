@@ -81,7 +81,7 @@ class TestObfuscate:
             datetime_objects_obfuscate[3],
         ]
 
-    def test_obfuscate_case_day_max_capacity_(self, datetime_objects, datetime_objects_obfuscate):
+    def test_obfuscate_case_day_max_capacity(self, datetime_objects, datetime_objects_obfuscate):
         obfuscate = Obfuscate(
             start_hour=23,
             start_minute=0,
