@@ -245,7 +245,7 @@ class TestGit(GitTestMixin):
         git = self.git_create_repository(new_repo_path=git_repo_path, new_repo_author=git_author)
         git.build_repository(all_commits)
 
-        all_commits = git.get_all_commits(git_author)
+        all_commits = git.get_commits(git_author)
 
         assert all_commits == [datetime_objects[1], datetime_objects[0]]
         assert os.path.isdir('all_commits') is True
@@ -269,7 +269,7 @@ class TestGit(GitTestMixin):
         git = self.git_create_repository(new_repo_path=git_repo_path, new_repo_author=git_author)
         git.build_repository(all_commits)
 
-        all_commits = git.get_all_commits(git_author)
+        all_commits = git.get_commits(git_author)
 
         assert all_commits == [datetime_objects_utc[1], datetime_objects_utc[0]]
         assert os.path.isdir('all_commits') is True
@@ -296,7 +296,7 @@ class TestGit(GitTestMixin):
         git.create_repository()
         git.build_repository(all_commits)
 
-        all_commits = git.get_all_commits(git_author)
+        all_commits = git.get_commits(git_author)
 
         assert all_commits == [datetime_objects_utc[1], datetime_objects_utc[0]]
         assert os.path.isdir('custom_file_dir') is True

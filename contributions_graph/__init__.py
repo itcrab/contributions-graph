@@ -38,7 +38,7 @@ class ContributionsGraph:
 
     def get_subtraction_commits(self, all_commits: List[datetime]) -> List[datetime]:
         with GitRepositorySwitch(new_repo_path=self.git.new_repo_path, new_repo_branch=self.git.new_repo_branch):
-            exists_commits = self.git.get_commits_exists()
+            exists_commits = self.git.get_commits(author=self.git.new_repo_author)
         exists_commits = self.sort_commits(exists_commits)
 
         if self.obfuscate:

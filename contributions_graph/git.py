@@ -98,17 +98,7 @@ class Git:
     def repository_exists(self) -> bool:
         return os.path.isdir(os.path.join(self.new_repo_path, '.git'))
 
-    def get_commits_exists(self) -> List[datetime]:
-        return self.get_commits(
-            author=self.new_repo_author,
-        )
-
     def get_commits(self, author: str) -> List[datetime]:
-        all_commits = self.get_all_commits(author)
-
-        return all_commits
-
-    def get_all_commits(self, author: str) -> List[datetime]:
         all_commits = GitConsole.get_commits_by_author(author)
 
         return list(map(parse_iso_8601_string_to_datetime, all_commits))

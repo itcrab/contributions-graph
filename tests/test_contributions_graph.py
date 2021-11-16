@@ -37,7 +37,7 @@ class TestContributionsGraph(GitTestMixin):
 
         os.chdir(new_repo_path)
 
-        all_commits = git.get_all_commits(git_author)
+        all_commits = git.get_commits(git_author)
 
         del all_commits[-1]  # README.md
         assert os.path.isfile('README.md') is True
@@ -72,7 +72,7 @@ class TestContributionsGraph(GitTestMixin):
 
         os.chdir(new_repo_path)
 
-        all_commits = git.get_all_commits(git_author)
+        all_commits = git.get_commits(git_author)
 
         del all_commits[-1]  # README.md
         assert os.path.isfile('README.md') is True
@@ -100,7 +100,7 @@ class TestContributionsGraph(GitTestMixin):
             GitConsole.add_file(file_name)
             GitConsole.commit_file(file_name)
 
-        all_commits = git.get_all_commits(git_author)
+        all_commits = git.get_commits(git_author)
 
         assert all_commits == [datetime_objects_obfuscate[1], datetime_objects_obfuscate[0]]
 
@@ -120,7 +120,7 @@ class TestContributionsGraph(GitTestMixin):
 
         os.chdir(new_repo_path)
 
-        all_commits = git.get_all_commits(git_author)
+        all_commits = git.get_commits(git_author)
 
         del all_commits[-3]  # README.md
         assert os.path.isfile('README.md') is True
@@ -154,7 +154,7 @@ class TestContributionsGraph(GitTestMixin):
             GitConsole.add_file(file_name)
             GitConsole.commit_file(file_name)
 
-        all_commits = git.get_all_commits(git_author)
+        all_commits = git.get_commits(git_author)
 
         assert all_commits == [datetime_objects_utc[1], datetime_objects_utc[0]]
 
@@ -173,7 +173,7 @@ class TestContributionsGraph(GitTestMixin):
 
         os.chdir(new_repo_path)
 
-        all_commits = git.get_all_commits(git_author)
+        all_commits = git.get_commits(git_author)
 
         del all_commits[-3]  # README.md
         assert os.path.isfile('README.md') is True
