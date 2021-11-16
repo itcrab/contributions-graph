@@ -36,11 +36,11 @@ class GitConsole:
         os.environ['GIT_COMMITTER_DATE'] = date_string
 
     @staticmethod
-    def get_branches() -> List[str]:
-        cmd = 'git branch'
-        repo_branches = subprocess.check_output(cmd, shell=True, universal_newlines=True)
+    def get_current_branch() -> str:
+        cmd = 'git branch --show-current'
+        current_branch = subprocess.check_output(cmd, shell=True, universal_newlines=True)
 
-        return repo_branches.splitlines()
+        return current_branch.strip()
 
     @classmethod
     def get_commits_by_author(cls, author: str) -> List[str]:
@@ -68,29 +68,20 @@ class GitRepositorySwitch:
     def __enter__(self) -> None:
         os.chdir(self.new_repo_path)
 
-        self.base_branch = self.get_selected_branch()
+        self.base_branch = GitConsole.get_current_branch()
         if self.base_branch != self.new_repo_branch:
             GitConsole.switch_branch(self.new_repo_branch)
 
-            selected_branch = self.get_selected_branch()
+            selected_branch = GitConsole.get_current_branch()
             if selected_branch != self.new_repo_branch:
                 raise GitBranchNotFoundError(f'Git branch "{self.new_repo_branch}" not found!')
 
     def __exit__(self, *exc) -> None:
-        selected_branch = self.get_selected_branch()
+        selected_branch = GitConsole.get_current_branch()
         if self.base_branch != selected_branch:
             GitConsole.switch_branch(self.base_branch)
 
         os.chdir(self.base_path)
-
-    @staticmethod
-    def get_selected_branch() -> str:
-        repo_branches = GitConsole.get_branches()
-
-        repo_branch = [rb for rb in repo_branches if rb.startswith('* ')][0]
-        repo_branch = repo_branch[2:]
-
-        return repo_branch
 
 
 class Git:

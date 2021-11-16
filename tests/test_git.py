@@ -37,12 +37,12 @@ class TestGit(GitTestMixin):
             GitConsole.commit_file(file_name)
 
         GitConsole.create_branch('new-branch')
-        assert GitRepositorySwitch.get_selected_branch() == 'new-branch'
+        assert GitConsole.get_current_branch() == 'new-branch'
 
         with GitRepositorySwitch(new_repo_path=git_repo_path, new_repo_branch='master'):
             all_commits = git.get_commits(author=git_author)
 
-            assert GitRepositorySwitch.get_selected_branch() == 'master'
+            assert GitConsole.get_current_branch() == 'master'
             assert all_commits == [datetime_objects_utc[1], datetime_objects_utc[0]]
 
     def test_get_commits_with_read_only_master_commits_case_1(self, tmpdir, datetime_strings, git_author,
@@ -320,4 +320,4 @@ class TestGit(GitTestMixin):
         )
         git.create_repository()
         git.build_repository(all_commits)
-        assert GitRepositorySwitch.get_selected_branch() == branch_name
+        assert GitConsole.get_current_branch() == branch_name
