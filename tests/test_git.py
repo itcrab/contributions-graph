@@ -3,7 +3,7 @@ import os
 import pytest
 
 from contributions_graph.exceptions import GitBranchNotFoundError
-from contributions_graph.git import Git, GitConsole
+from contributions_graph.git import Git, GitConsole, GitRepositorySwitch
 from tests.mixins import GitTestMixin
 
 
@@ -19,11 +19,9 @@ class TestGit(GitTestMixin):
             GitConsole.add_file(file_name)
             GitConsole.commit_file(file_name)
 
-        all_commits = git.get_commits(
-            repo_path=git_repo_path,
-            branch='master',
-            author=git_author,
-        )
+        with GitRepositorySwitch(new_repo_path=git_repo_path, new_repo_branch='master'):
+            all_commits = git.get_commits(author=git_author)
+
         assert all_commits == [datetime_objects_utc[1], datetime_objects_utc[0]]
 
     def test_get_commits_with_different_base_branch(self, tmpdir, datetime_strings, git_author, datetime_objects,
@@ -39,15 +37,13 @@ class TestGit(GitTestMixin):
             GitConsole.commit_file(file_name)
 
         GitConsole.create_branch('new-branch')
-        assert git.get_repo_branch() == 'new-branch'
+        assert GitRepositorySwitch.get_selected_branch() == 'new-branch'
 
-        all_commits = git.get_commits(
-            repo_path=git_repo_path,
-            branch='master',
-            author=git_author,
-        )
-        assert git.get_repo_branch() == 'master'
-        assert all_commits == [datetime_objects_utc[1], datetime_objects_utc[0]]
+        with GitRepositorySwitch(new_repo_path=git_repo_path, new_repo_branch='master'):
+            all_commits = git.get_commits(author=git_author)
+
+            assert GitRepositorySwitch.get_selected_branch() == 'master'
+            assert all_commits == [datetime_objects_utc[1], datetime_objects_utc[0]]
 
     def test_get_commits_with_read_only_master_commits_case_1(self, tmpdir, datetime_strings, git_author,
                                                               datetime_objects, datetime_objects_utc):
@@ -75,11 +71,9 @@ class TestGit(GitTestMixin):
         GitConsole.add_file(file_name)
         GitConsole.commit_file(file_name)
 
-        all_commits = git.get_commits(
-            repo_path=git_repo_path,
-            branch='master',
-            author=git_author,
-        )
+        with GitRepositorySwitch(new_repo_path=git_repo_path, new_repo_branch='master'):
+            all_commits = git.get_commits(author=git_author)
+
         assert all_commits == [datetime_objects_utc[2], datetime_objects_utc[0]]
 
     def test_get_commits_with_read_only_master_commits_case_2(self, tmpdir, datetime_strings, git_author,
@@ -102,11 +96,9 @@ class TestGit(GitTestMixin):
             GitConsole.add_file(file_name)
             GitConsole.commit_file(file_name)
 
-        all_commits = git.get_commits(
-            repo_path=git_repo_path,
-            branch='master',
-            author=git_author,
-        )
+        with GitRepositorySwitch(new_repo_path=git_repo_path, new_repo_branch='master'):
+            all_commits = git.get_commits(author=git_author)
+
         assert all_commits == [datetime_objects_utc[0]]
 
     def test_get_commits_with_read_only_master_commits_case_3(self, tmpdir, datetime_strings, git_author,
@@ -131,11 +123,9 @@ class TestGit(GitTestMixin):
             GitConsole.add_file(file_name)
             GitConsole.commit_file(file_name)
 
-        all_commits = git.get_commits(
-            repo_path=git_repo_path,
-            branch='master',
-            author=git_author,
-        )
+        with GitRepositorySwitch(new_repo_path=git_repo_path, new_repo_branch='master'):
+            all_commits = git.get_commits(author=git_author)
+
         assert all_commits == [datetime_objects_utc[2], datetime_objects_utc[1], datetime_objects_utc[0]]
 
     def test_get_commits_with_read_only_new_branch_commits_case_1(self, tmpdir, datetime_strings, git_author,
@@ -160,11 +150,9 @@ class TestGit(GitTestMixin):
             GitConsole.add_file(file_name)
             GitConsole.commit_file(file_name)
 
-        all_commits = git.get_commits(
-            repo_path=git_repo_path,
-            branch='new-branch',
-            author=git_author,
-        )
+        with GitRepositorySwitch(new_repo_path=git_repo_path, new_repo_branch='new-branch'):
+            all_commits = git.get_commits(author=git_author)
+
         assert all_commits == [datetime_objects_utc[0]]
 
     def test_get_commits_with_read_only_new_branch_commits_case_2(self, tmpdir, datetime_strings, git_author,
@@ -193,11 +181,9 @@ class TestGit(GitTestMixin):
         GitConsole.add_file(file_name)
         GitConsole.commit_file(file_name)
 
-        all_commits = git.get_commits(
-            repo_path=git_repo_path,
-            branch='new-branch',
-            author=git_author,
-        )
+        with GitRepositorySwitch(new_repo_path=git_repo_path, new_repo_branch='new-branch'):
+            all_commits = git.get_commits(author=git_author)
+
         assert all_commits == [datetime_objects_utc[1], datetime_objects_utc[0]]
 
     def test_get_commits_with_wrong_branch(self, tmpdir, datetime_strings, git_author):
@@ -212,11 +198,8 @@ class TestGit(GitTestMixin):
             GitConsole.commit_file(file_name)
 
         with pytest.raises(GitBranchNotFoundError):
-            git.get_commits(
-                repo_path=git_repo_path,
-                branch='wrong-branch',
-                author=git_author,
-            )
+            with GitRepositorySwitch(new_repo_path=git_repo_path, new_repo_branch='wrong-branch'):
+                git.get_commits()
 
     def test_create_repository(self, tmpdir, git_author):
         new_repo_path = tmpdir.strpath
@@ -337,4 +320,4 @@ class TestGit(GitTestMixin):
         )
         git.create_repository()
         git.build_repository(all_commits)
-        assert git.get_repo_branch() == branch_name
+        assert GitRepositorySwitch.get_selected_branch() == branch_name

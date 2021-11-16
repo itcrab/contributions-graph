@@ -1,7 +1,7 @@
 from datetime import datetime
 from typing import Optional, List
 
-from contributions_graph.git import Git
+from contributions_graph.git import Git, GitRepositorySwitch
 from contributions_graph.obfuscate import Obfuscate
 from contributions_graph.repository_list import RepositoryList
 
@@ -24,11 +24,8 @@ class ContributionsGraph:
     def get_all_commits(self) -> List[datetime]:
         all_commits = []
         for repository in self.repository_list:
-            commits = self.git.get_commits(
-                repo_path=repository['repo_path'],
-                branch=repository['branch'],
-                author=repository['author'],
-            )
+            with GitRepositorySwitch(new_repo_path=repository['repo_path'], new_repo_branch=repository['branch']):
+                commits = self.git.get_commits(author=repository['author'])
             all_commits.extend(commits)
 
         return all_commits
@@ -40,7 +37,8 @@ class ContributionsGraph:
         return all_commits
 
     def get_subtraction_commits(self, all_commits: List[datetime]) -> List[datetime]:
-        exists_commits = self.git.get_commits_exists()
+        with GitRepositorySwitch(new_repo_path=self.git.new_repo_path, new_repo_branch=self.git.new_repo_branch):
+            exists_commits = self.git.get_commits_exists()
         exists_commits = self.sort_commits(exists_commits)
 
         if self.obfuscate:

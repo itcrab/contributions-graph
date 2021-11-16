@@ -57,6 +57,42 @@ class GitConsole:
         return all_committers.splitlines()
 
 
+class GitRepositorySwitch:
+    def __init__(self, new_repo_path: str, new_repo_branch: str) -> None:
+        self.new_repo_path = new_repo_path
+        self.new_repo_branch = new_repo_branch
+
+        self.base_branch = 'master'
+        self.base_path = os.getcwd()
+
+    def __enter__(self) -> None:
+        os.chdir(self.new_repo_path)
+
+        self.base_branch = self.get_selected_branch()
+        if self.base_branch != self.new_repo_branch:
+            GitConsole.switch_branch(self.new_repo_branch)
+
+            selected_branch = self.get_selected_branch()
+            if selected_branch != self.new_repo_branch:
+                raise GitBranchNotFoundError(f'Git branch "{self.new_repo_branch}" not found!')
+
+    def __exit__(self, *exc) -> None:
+        selected_branch = self.get_selected_branch()
+        if self.base_branch != selected_branch:
+            GitConsole.switch_branch(self.base_branch)
+
+        os.chdir(self.base_path)
+
+    @staticmethod
+    def get_selected_branch() -> str:
+        repo_branches = GitConsole.get_branches()
+
+        repo_branch = [rb for rb in repo_branches if rb.startswith('* ')][0]
+        repo_branch = repo_branch[2:]
+
+        return repo_branch
+
+
 class Git:
     def __init__(self, new_repo_path: str, new_repo_branch: str, new_repo_author: str, file_dir: str, file_ext: str) -> None:
         self.new_repo_path = new_repo_path
@@ -73,39 +109,13 @@ class Git:
 
     def get_commits_exists(self) -> List[datetime]:
         return self.get_commits(
-            repo_path=self.new_repo_path,
-            branch=self.new_repo_branch,
             author=self.new_repo_author,
         )
 
-    def get_commits(self, repo_path: str, branch: str, author: str) -> List[datetime]:
-        os.chdir(repo_path)
-
-        repo_branch = self.get_repo_branch()
-
-        if repo_branch != branch:
-            GitConsole.switch_branch(branch)
-
-            selected_branch = self.get_repo_branch()
-            if selected_branch != branch:
-                raise GitBranchNotFoundError(f'Git branch "{branch}" not found!')
-
+    def get_commits(self, author: str) -> List[datetime]:
         all_commits = self.get_all_commits(author)
 
-        if repo_branch != branch:
-            GitConsole.switch_branch(branch)
-
-        os.chdir(self.current_path)
-
         return all_commits
-
-    def get_repo_branch(self) -> str:
-        repo_branches = GitConsole.get_branches()
-
-        repo_branch = [rb for rb in repo_branches if rb.startswith('* ')][0]
-        repo_branch = repo_branch[2:]
-
-        return repo_branch
 
     def get_all_commits(self, author: str) -> List[datetime]:
         all_commits = GitConsole.get_commits_by_author(author)
