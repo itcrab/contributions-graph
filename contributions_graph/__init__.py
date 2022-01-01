@@ -13,15 +13,18 @@ class ContributionsGraph:
         self.obfuscate = obfuscate
 
     def run(self) -> None:
-        all_commits = self.get_all_commits()
+        all_commits = self.get_commits_from_repositories()
         all_commits = self.sort_commits(all_commits)
 
         if self.obfuscate:
             all_commits = self.obfuscate.run(all_commits)
 
+        if self.git.repository_exists():
+            all_commits = self.get_subtraction_commits(all_commits)
+
         self.build_repo(all_commits)
 
-    def get_all_commits(self) -> List[datetime]:
+    def get_commits_from_repositories(self) -> List[datetime]:
         all_commits = []
         for repository in self.repository_list:
             with GitRepositorySwitch(new_repo_path=repository['repo_path'], new_repo_branch=repository['branch']):
@@ -41,18 +44,12 @@ class ContributionsGraph:
             exists_commits = self.git.get_commits(author=self.git.new_repo_author)
         exists_commits = self.sort_commits(exists_commits)
 
-        if self.obfuscate:
-            all_commits = self.obfuscate.run(all_commits)
-
         all_commits = list(set(set(all_commits) - set(exists_commits)))
-        all_commits.sort()
+        all_commits = self.sort_commits(all_commits)
 
         return all_commits
 
     def build_repo(self, all_commits: List[datetime]) -> None:
-        if self.git.repository_exists():
-            all_commits = self.get_subtraction_commits(all_commits)
-
         self.git.create_repository()
         self.git.create_readme()
         self.git.build_repository(all_commits)
