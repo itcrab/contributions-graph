@@ -207,7 +207,6 @@ class TestGit(GitTestMixin):
             new_repo_path=new_repo_path,
             new_repo_branch='master',
             new_repo_author=git_author,
-            file_dir='all_commits',
             file_ext='py',
         )
 
@@ -223,7 +222,6 @@ class TestGit(GitTestMixin):
             new_repo_path=new_repo_path,
             new_repo_branch='master',
             new_repo_author=git_author,
-            file_dir='all_commits',
             file_ext='py',
         )
 
@@ -248,18 +246,18 @@ class TestGit(GitTestMixin):
         all_commits = git.get_commits(git_author)
 
         assert all_commits == [datetime_objects[1], datetime_objects[0]]
-        assert os.path.isdir('all_commits') is True
+        assert os.path.isdir('test_reoo') is True
 
         committers = GitConsole.get_committers()
         assert committers == [git_author, git_author]
 
     def test_build_repository_with_commits_directory_exists(self, tmpdir, datetime_objects, datetime_strings,
                                                             git_author, datetime_objects_utc):
-        tmpdir.mkdir('build_git_repository').mkdir('all_commits')
-        git_repo_path = tmpdir.join('build_git_repository').strpath
+        tmpdir.mkdir('commits_directory_exists').mkdir('test_repo')
+        git_repo_path = tmpdir.join('commits_directory_exists').strpath
         os.chdir(git_repo_path)
 
-        assert os.path.isdir('all_commits') is True
+        assert os.path.isdir('test_repo') is True
 
         all_commits = {'test_repo': [
             datetime_objects[0],
@@ -272,34 +270,8 @@ class TestGit(GitTestMixin):
         all_commits = git.get_commits(git_author)
 
         assert all_commits == [datetime_objects_utc[1], datetime_objects_utc[0]]
-        assert os.path.isdir('all_commits') is True
-
-    def test_build_repository_with_custom_file_dir(self, tmpdir, datetime_objects, datetime_strings, git_author,
-                                                   datetime_objects_utc):
-        git_repo_path = tmpdir.mkdir('build_git_repository').strpath
-        os.chdir(git_repo_path)
-
-        assert os.path.isdir('custom_file_dir') is False
-
-        all_commits = {'test_repo': [
-            datetime_objects[0],
-            datetime_objects[1],
-        ]}
-
-        git = Git(
-            new_repo_path=git_repo_path,
-            new_repo_branch='master',
-            new_repo_author=git_author,
-            file_dir='custom_file_dir',
-            file_ext='py',
-        )
-        git.create_repository()
-        git.build_repository(all_commits)
-
-        all_commits = git.get_commits(git_author)
-
-        assert all_commits == [datetime_objects_utc[1], datetime_objects_utc[0]]
-        assert os.path.isdir('custom_file_dir') is True
+        assert os.listdir('.') == ['.git', 'test_repo']
+        assert len(os.listdir('test_repo')) == 2
 
     @pytest.mark.parametrize("branch_name", ['master', 'staging', 'testing'])
     def test_create_repository_with_custom_branch_name(self, tmpdir, git_author, datetime_objects, branch_name):
@@ -315,7 +287,6 @@ class TestGit(GitTestMixin):
             new_repo_path=git_repo_path,
             new_repo_branch=branch_name,
             new_repo_author=git_author,
-            file_dir='all_commits',
             file_ext='py',
         )
         git.create_repository()

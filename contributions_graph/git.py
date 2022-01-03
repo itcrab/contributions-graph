@@ -85,15 +85,14 @@ class GitRepositorySwitch:
 
 
 class Git:
-    def __init__(self, new_repo_path: str, new_repo_branch: str, new_repo_author: str, file_dir: str, file_ext: str) -> None:
+    def __init__(self, new_repo_path: str, new_repo_branch: str, new_repo_author: str, file_ext: str) -> None:
         self.new_repo_path = new_repo_path
         self.new_repo_branch = new_repo_branch
         self.new_repo_author = new_repo_author
 
-        self.file_dir = file_dir
         self.file_ext = file_ext
 
-        self.current_path = os.getcwd()
+        self.base_path = os.getcwd()
 
     def repository_exists(self) -> bool:
         return os.path.isdir(os.path.join(self.new_repo_path, '.git'))
@@ -125,11 +124,11 @@ class Git:
             GitConsole.commit_file(file_name)
 
     def build_repository(self, all_commits: Dict[str, List[datetime]]) -> None:
-        if not os.path.isdir(self.file_dir):
-            os.mkdir(self.file_dir)
-        os.chdir(self.file_dir)
-
         for repo_name in all_commits.keys():
+            if not os.path.isdir(repo_name):
+                os.mkdir(repo_name)
+            os.chdir(repo_name)
+
             for commit in all_commits[repo_name]:
                 date_string = commit.isoformat()
 
@@ -138,7 +137,7 @@ class Git:
                 GitConsole.add_file(file_name)
                 GitConsole.commit_file(file_name)
 
-        os.chdir(self.current_path)
+            os.chdir(self.base_path)
 
     def create_file(self, date_string: str) -> str:
         file_name = generate_full_file_name(self.file_ext)

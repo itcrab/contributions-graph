@@ -28,7 +28,6 @@ class TestContributionsGraph(GitTestMixin):
             new_repo_path=new_repo_path,
             new_repo_branch='master',
             new_repo_author=git_author,
-            file_dir='all_commits',
             file_ext='py',
         )
         obfuscate = Obfuscate(11, 0, 0, 5)
@@ -64,7 +63,6 @@ class TestContributionsGraph(GitTestMixin):
             new_repo_path=new_repo_path,
             new_repo_branch='master',
             new_repo_author=git_author,
-            file_dir='all_commits',
             file_ext='py',
         )
         contributions_graph = ContributionsGraph(repository_list, git)
@@ -111,7 +109,6 @@ class TestContributionsGraph(GitTestMixin):
             new_repo_path=new_repo_path,
             new_repo_branch='master',
             new_repo_author=git_author,
-            file_dir='all_commits',
             file_ext='py',
         )
         obfuscate = Obfuscate(11, 0, 0, 5)
@@ -165,7 +162,6 @@ class TestContributionsGraph(GitTestMixin):
             new_repo_path=new_repo_path,
             new_repo_branch='master',
             new_repo_author=git_author,
-            file_dir='all_commits',
             file_ext='py',
         )
         contributions_graph = ContributionsGraph(repository_list, git)
