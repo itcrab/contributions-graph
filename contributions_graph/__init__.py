@@ -1,5 +1,6 @@
+import os.path
 from datetime import datetime
-from typing import Optional, List
+from typing import Optional, List, Dict
 
 from contributions_graph.git import Git, GitRepositorySwitch
 from contributions_graph.obfuscate import Obfuscate
@@ -24,32 +25,47 @@ class ContributionsGraph:
 
         self.build_repo(all_commits)
 
-    def get_commits_from_repositories(self) -> List[datetime]:
-        all_commits = []
+    def get_commits_from_repositories(self) -> Dict[str, List[datetime]]:
+        all_commits = {}
         for repository in self.repository_list:
             with GitRepositorySwitch(new_repo_path=repository['repo_path'], new_repo_branch=repository['branch']):
                 commits = self.git.get_commits(author=repository['author'])
-            all_commits.extend(commits)
+
+            repo_name = os.path.basename(repository['repo_path'])
+            all_commits[repo_name] = commits
 
         return all_commits
 
-    def sort_commits(self, all_commits: List[datetime]) -> List[datetime]:
-        all_commits = list(set(all_commits))
-        all_commits.sort()
+    def sort_commits(self, all_commits: Dict[str, List[datetime]]) -> Dict[str, List[datetime]]:
+        for repo_name in all_commits.keys():
+            all_commits[repo_name] = list(set(all_commits[repo_name]))
+            all_commits[repo_name].sort()
 
         return all_commits
 
-    def get_subtraction_commits(self, all_commits: List[datetime]) -> List[datetime]:
+    def get_subtraction_commits(self, all_commits: Dict[str, List[datetime]]) -> Dict[str, List[datetime]]:
         with GitRepositorySwitch(new_repo_path=self.git.new_repo_path, new_repo_branch=self.git.new_repo_branch):
             exists_commits = self.git.get_commits(author=self.git.new_repo_author)
-        exists_commits = self.sort_commits(exists_commits)
+        exists_commits.sort()
 
-        all_commits = list(set(set(all_commits) - set(exists_commits)))
-        all_commits = self.sort_commits(all_commits)
+        for repo_name in all_commits:
+            skip_commit_idxs = []
+            for idx, commit in enumerate(all_commits[repo_name]):
+                try:
+                    commit_index = exists_commits.index(commit)
+                except ValueError as e:
+                    continue
+
+                skip_commit_idxs.append(idx)
+                del exists_commits[commit_index]
+
+            if skip_commit_idxs:
+                for idx in skip_commit_idxs[::-1]:
+                    del all_commits[repo_name][idx]
 
         return all_commits
 
-    def build_repo(self, all_commits: List[datetime]) -> None:
+    def build_repo(self, all_commits: Dict[str, List[datetime]]) -> None:
         self.git.create_repository()
         self.git.create_readme()
         self.git.build_repository(all_commits)

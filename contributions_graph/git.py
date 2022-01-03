@@ -1,7 +1,7 @@
 import os
 import subprocess
 from datetime import datetime
-from typing import List
+from typing import List, Dict
 
 from contributions_graph.exceptions import GitBranchNotFoundError
 from contributions_graph.utils import generate_full_file_name, write_file_data, parse_iso_8601_string_to_datetime
@@ -124,18 +124,19 @@ class Git:
             GitConsole.add_file(file_name)
             GitConsole.commit_file(file_name)
 
-    def build_repository(self, all_commits: List[datetime]) -> None:
+    def build_repository(self, all_commits: Dict[str, List[datetime]]) -> None:
         if not os.path.isdir(self.file_dir):
             os.mkdir(self.file_dir)
         os.chdir(self.file_dir)
 
-        for commit in all_commits:
-            date_string = commit.isoformat()
+        for repo_name in all_commits.keys():
+            for commit in all_commits[repo_name]:
+                date_string = commit.isoformat()
 
-            file_name = self.create_file(date_string)
-            GitConsole.set_current_datetime(date_string)
-            GitConsole.add_file(file_name)
-            GitConsole.commit_file(file_name)
+                file_name = self.create_file(date_string)
+                GitConsole.set_current_datetime(date_string)
+                GitConsole.add_file(file_name)
+                GitConsole.commit_file(file_name)
 
         os.chdir(self.current_path)
 
