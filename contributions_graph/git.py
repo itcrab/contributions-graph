@@ -127,11 +127,12 @@ class Git:
     def build_repository(self, all_commits: Dict[str, List[datetime]]) -> None:
         for repo_name in all_commits.keys():
             file_name = f'{repo_name}.{self.file_ext}'
+            commit_author = all_commits[repo_name]['author']
 
-            for commit in all_commits[repo_name]:
+            for commit in all_commits[repo_name]['commits']:
                 commit_datetime = commit.isoformat()
 
-                file_data = f'commit_datetime="{commit_datetime}"\n'
+                file_data = f'{commit_datetime}\t{commit_author}\n'
                 write_file_data(file_name, file_data, file_mode='a')
 
                 self.commit_file(commit_datetime, file_name)

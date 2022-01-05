@@ -32,14 +32,14 @@ class ContributionsGraph:
                 commits = self.git.get_commits(author=repository['author'])
 
             repo_name = os.path.basename(repository['repo_path'])
-            all_commits[repo_name] = commits
+            all_commits[repo_name] = dict(author=repository['author'], commits=commits)
 
         return all_commits
 
     def sort_commits(self, all_commits: Dict[str, List[datetime]]) -> Dict[str, List[datetime]]:
         for repo_name in all_commits.keys():
-            all_commits[repo_name] = list(set(all_commits[repo_name]))
-            all_commits[repo_name].sort()
+            all_commits[repo_name]['commits'] = list(set(all_commits[repo_name]['commits']))
+            all_commits[repo_name]['commits'].sort()
 
         return all_commits
 
@@ -50,7 +50,7 @@ class ContributionsGraph:
 
         for repo_name in all_commits:
             skip_commit_idxs = []
-            for idx, commit in enumerate(all_commits[repo_name]):
+            for idx, commit in enumerate(all_commits[repo_name]['commits']):
                 try:
                     commit_index = exists_commits.index(commit)
                 except ValueError as e:
@@ -61,7 +61,7 @@ class ContributionsGraph:
 
             if skip_commit_idxs:
                 for idx in skip_commit_idxs[::-1]:
-                    del all_commits[repo_name][idx]
+                    del all_commits[repo_name]['commits'][idx]
 
         return all_commits
 

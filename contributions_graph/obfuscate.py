@@ -21,12 +21,12 @@ class Obfuscate:
 
     def run(self, all_commits: Dict[str, List[datetime]]) -> Dict[str, List[datetime]]:
         for repo_name in all_commits.keys():
-            obfuscate_date = self.get_obfuscate_date(all_commits[repo_name][0])
-            for idx, commit in enumerate(all_commits[repo_name]):
+            obfuscate_date = self.get_obfuscate_date(all_commits[repo_name]['commits'][0])
+            for idx, commit in enumerate(all_commits[repo_name]['commits']):
                 if commit.day != obfuscate_date.day:
                     obfuscate_date = self.get_obfuscate_date(commit)
 
-                all_commits[repo_name][idx] = obfuscate_date
+                all_commits[repo_name]['commits'][idx] = obfuscate_date
                 obfuscate_date += self.delta_minutes
                 if obfuscate_date.day != commit.day:
                     raise DayCapacityOverflowObfuscateError(

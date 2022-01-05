@@ -13,10 +13,10 @@ class TestContributionsGraph(GitTestMixin):
         os.chdir(git_repo_path)
 
         git = self.git_create_repository(new_repo_path=git_repo_path, new_repo_author=git_author)
-        all_commits = {'test_repo': [
+        all_commits = {'test_repo': {'author': git_author, 'commits': [
             datetime_objects[0],
             datetime_objects[1],
-        ]}
+        ]}}
         git.build_repository(all_commits)
 
         repository_list = RepositoryList()
@@ -47,10 +47,10 @@ class TestContributionsGraph(GitTestMixin):
         os.chdir(git_repo_path)
 
         git = self.git_create_repository(new_repo_path=git_repo_path, new_repo_author=git_author)
-        all_commits = {'test_repo': [
+        all_commits = {'test_repo': {'author': git_author, 'commits': [
             datetime_objects[0],
             datetime_objects[1],
-        ]}
+        ]}}
         git.build_repository(all_commits)
 
         repository_list = RepositoryList()
@@ -81,20 +81,20 @@ class TestContributionsGraph(GitTestMixin):
         os.chdir(git_repo_path)
 
         git = self.git_create_repository(new_repo_path=git_repo_path, new_repo_author=git_author)
-        all_commits = {'test_repo': [
+        all_commits = {'test_repo': {'author': git_author, 'commits': [
             datetime_objects[0],
             datetime_objects[1],
             datetime_objects[2],
             datetime_objects[3],
-        ]}
+        ]}}
         git.build_repository(all_commits)
 
         new_repo_path = tmpdir.mkdir('new_git_repo').strpath
         git = self.git_create_repository(new_repo_path=new_repo_path, new_repo_author=git_author)
-        all_commits = {'test_repo': [
+        all_commits = {'test_repo': {'author': git_author, 'commits': [
             datetime_objects_obfuscate[0],
             datetime_objects_obfuscate[1],
-        ]}
+        ]}}
         git.build_repository(all_commits)
 
         all_commits = git.get_commits(git_author)
@@ -134,21 +134,21 @@ class TestContributionsGraph(GitTestMixin):
         os.chdir(git_repo_path)
 
         git = self.git_create_repository(new_repo_path=git_repo_path, new_repo_author=git_author)
-        all_commits = {'test_repo': [
+        all_commits = {'test_repo': {'author': git_author, 'commits': [
             datetime_objects[0],
             datetime_objects[1],
             datetime_objects[2],
             datetime_objects[3],
-        ]}
+        ]}}
         git.build_repository(all_commits)
 
         new_repo_path = tmpdir.mkdir('new_git_repo').strpath
 
         git = self.git_create_repository(new_repo_path=new_repo_path, new_repo_author=git_author)
-        all_commits = {'test_repo': [
+        all_commits = {'test_repo': {'author': git_author, 'commits': [
             datetime_objects[0],
             datetime_objects[1],
-        ]}
+        ]}}
         git.build_repository(all_commits)
 
         all_commits = git.get_commits(git_author)
