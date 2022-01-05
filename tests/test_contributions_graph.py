@@ -1,24 +1,23 @@
 import os
 
 from contributions_graph import ContributionsGraph
-from contributions_graph.git import Git, GitConsole
+from contributions_graph.git import Git
 from contributions_graph.obfuscate import Obfuscate
 from contributions_graph.repository_list import RepositoryList
 from tests.mixins import GitTestMixin
 
 
 class TestContributionsGraph(GitTestMixin):
-    def test_contributions_graph_with_obfuscate(self, tmpdir, datetime_strings, git_author, datetime_strings_obfuscate,
-                                                datetime_objects_obfuscate):
+    def test_contributions_graph_with_obfuscate(self, tmpdir, datetime_objects, git_author, datetime_objects_obfuscate):
         git_repo_path = tmpdir.mkdir('git_repo').strpath
         os.chdir(git_repo_path)
 
         git = self.git_create_repository(new_repo_path=git_repo_path, new_repo_author=git_author)
-        for i in range(2):
-            file_name = git.create_file(datetime_strings[i])
-            GitConsole.set_current_datetime(datetime_strings[i])
-            GitConsole.add_file(file_name)
-            GitConsole.commit_file(file_name)
+        all_commits = {'test_repo': [
+            datetime_objects[0],
+            datetime_objects[1],
+        ]}
+        git.build_repository(all_commits)
 
         repository_list = RepositoryList()
         repository_list.add(git_repo_path, 'master', git_author)
@@ -43,17 +42,16 @@ class TestContributionsGraph(GitTestMixin):
 
         assert all_commits == [datetime_objects_obfuscate[1], datetime_objects_obfuscate[0]]
 
-    def test_contributions_graph_without_obfuscate(self, tmpdir, datetime_strings, git_author, datetime_objects,
-                                                   datetime_objects_utc):
+    def test_contributions_graph_without_obfuscate(self, tmpdir, git_author, datetime_objects, datetime_objects_utc):
         git_repo_path = tmpdir.mkdir('git_repo').strpath
         os.chdir(git_repo_path)
 
         git = self.git_create_repository(new_repo_path=git_repo_path, new_repo_author=git_author)
-        for i in range(2):
-            file_name = git.create_file(datetime_strings[i])
-            GitConsole.set_current_datetime(datetime_strings[i])
-            GitConsole.add_file(file_name)
-            GitConsole.commit_file(file_name)
+        all_commits = {'test_repo': [
+            datetime_objects[0],
+            datetime_objects[1],
+        ]}
+        git.build_repository(all_commits)
 
         repository_list = RepositoryList()
         repository_list.add(git_repo_path, 'master', git_author)
@@ -77,26 +75,27 @@ class TestContributionsGraph(GitTestMixin):
 
         assert all_commits == [datetime_objects_utc[1], datetime_objects_utc[0]]
 
-    def test_contributions_graph_with_exists_repository_and_obfuscate(self, tmpdir, datetime_strings,
-                                                                      datetime_strings_obfuscate, git_author,
-                                                                      datetime_objects_obfuscate):
+    def test_contributions_graph_with_exists_repository_and_obfuscate(self, tmpdir, datetime_objects,
+                                                                      git_author, datetime_objects_obfuscate):
         git_repo_path = tmpdir.mkdir('git_repo').strpath
         os.chdir(git_repo_path)
 
         git = self.git_create_repository(new_repo_path=git_repo_path, new_repo_author=git_author)
-        for i in range(4):
-            file_name = git.create_file(datetime_strings[i])
-            GitConsole.set_current_datetime(datetime_strings[i])
-            GitConsole.add_file(file_name)
-            GitConsole.commit_file(file_name)
+        all_commits = {'test_repo': [
+            datetime_objects[0],
+            datetime_objects[1],
+            datetime_objects[2],
+            datetime_objects[3],
+        ]}
+        git.build_repository(all_commits)
 
         new_repo_path = tmpdir.mkdir('new_git_repo').strpath
         git = self.git_create_repository(new_repo_path=new_repo_path, new_repo_author=git_author)
-        for i in range(2):
-            file_name = git.create_file(datetime_strings_obfuscate[i])
-            GitConsole.set_current_datetime(datetime_strings_obfuscate[i])
-            GitConsole.add_file(file_name)
-            GitConsole.commit_file(file_name)
+        all_commits = {'test_repo': [
+            datetime_objects_obfuscate[0],
+            datetime_objects_obfuscate[1],
+        ]}
+        git.build_repository(all_commits)
 
         all_commits = git.get_commits(git_author)
 
@@ -129,27 +128,28 @@ class TestContributionsGraph(GitTestMixin):
             datetime_objects_obfuscate[0],
         ]
 
-    def test_contributions_graph_with_exists_repository_and_without_obfuscate(self, tmpdir, datetime_strings,
-                                                                              git_author, datetime_objects,
-                                                                              datetime_objects_utc):
+    def test_contributions_graph_with_exists_repository_and_without_obfuscate(self, tmpdir, git_author,
+                                                                              datetime_objects, datetime_objects_utc):
         git_repo_path = tmpdir.mkdir('git_repo').strpath
         os.chdir(git_repo_path)
 
         git = self.git_create_repository(new_repo_path=git_repo_path, new_repo_author=git_author)
-        for i in range(4):
-            file_name = git.create_file(datetime_strings[i])
-            GitConsole.set_current_datetime(datetime_strings[i])
-            GitConsole.add_file(file_name)
-            GitConsole.commit_file(file_name)
+        all_commits = {'test_repo': [
+            datetime_objects[0],
+            datetime_objects[1],
+            datetime_objects[2],
+            datetime_objects[3],
+        ]}
+        git.build_repository(all_commits)
 
         new_repo_path = tmpdir.mkdir('new_git_repo').strpath
 
         git = self.git_create_repository(new_repo_path=new_repo_path, new_repo_author=git_author)
-        for i in range(2):
-            file_name = git.create_file(datetime_strings[i])
-            GitConsole.set_current_datetime(datetime_strings[i])
-            GitConsole.add_file(file_name)
-            GitConsole.commit_file(file_name)
+        all_commits = {'test_repo': [
+            datetime_objects[0],
+            datetime_objects[1],
+        ]}
+        git.build_repository(all_commits)
 
         all_commits = git.get_commits(git_author)
 

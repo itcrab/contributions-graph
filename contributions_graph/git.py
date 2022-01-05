@@ -4,7 +4,7 @@ from datetime import datetime
 from typing import List, Dict
 
 from contributions_graph.exceptions import GitBranchNotFoundError
-from contributions_graph.utils import generate_full_file_name, write_file_data, parse_iso_8601_string_to_datetime
+from contributions_graph.utils import parse_iso_8601_string_to_datetime, write_file_data
 
 
 class GitConsole:
@@ -27,8 +27,8 @@ class GitConsole:
         os.system(f'git add {file_name}')
 
     @classmethod
-    def commit_file(cls, file_name: str) -> None:
-        os.system(f'git commit -m "Commit file {file_name}"')
+    def commit_file(cls, file_name: str, commit_datetime: str) -> None:
+        os.system(f'git commit -m "Commit file {file_name} by datetime {commit_datetime}"')
 
     @classmethod
     def set_current_datetime(cls, date_string: str) -> None:
@@ -115,33 +115,28 @@ class Git:
 
     def create_readme(self) -> None:
         file_name = 'README.md'
-        if not os.path.isfile(file_name):
-            file_data = '# Contribution Graph Repository'
-            write_file_data(file_name, file_data)
+        if os.path.isfile(file_name):
+            return
 
-            GitConsole.set_current_datetime(datetime.today().isoformat())
-            GitConsole.add_file(file_name)
-            GitConsole.commit_file(file_name)
+        file_data = '# Contribution Graph Repository'
+        write_file_data(file_name, file_data, file_mode='w')
+
+        commit_datetime = datetime.today().isoformat()
+        self.commit_file(commit_datetime, file_name)
 
     def build_repository(self, all_commits: Dict[str, List[datetime]]) -> None:
         for repo_name in all_commits.keys():
-            if not os.path.isdir(repo_name):
-                os.mkdir(repo_name)
-            os.chdir(repo_name)
+            file_name = f'{repo_name}.{self.file_ext}'
 
             for commit in all_commits[repo_name]:
-                date_string = commit.isoformat()
+                commit_datetime = commit.isoformat()
 
-                file_name = self.create_file(date_string)
-                GitConsole.set_current_datetime(date_string)
-                GitConsole.add_file(file_name)
-                GitConsole.commit_file(file_name)
+                file_data = f'commit_datetime="{commit_datetime}"\n'
+                write_file_data(file_name, file_data, file_mode='a')
 
-            os.chdir(self.base_path)
+                self.commit_file(commit_datetime, file_name)
 
-    def create_file(self, date_string: str) -> str:
-        file_name = generate_full_file_name(self.file_ext)
-        file_data = f'commit_datetime="{date_string}"'
-        write_file_data(file_name, file_data)
-
-        return file_name
+    def commit_file(self, commit_datetime, file_name):
+        GitConsole.set_current_datetime(commit_datetime)
+        GitConsole.add_file(file_name)
+        GitConsole.commit_file(file_name, commit_datetime)
