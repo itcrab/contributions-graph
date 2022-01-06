@@ -25,7 +25,7 @@ class ContributionsGraph:
 
         self.build_repo(all_commits)
 
-    def get_commits_from_repositories(self) -> dict[str, RepositoryCommitsTypeDict]:
+    def get_commits_from_repositories(self) -> Dict[str, RepositoryCommitsTypeDict]:
         all_commits = {}
         for repository in self.repository_list:
             with GitRepositorySwitch(new_repo_path=repository['repo_path'], new_repo_branch=repository['branch']):
