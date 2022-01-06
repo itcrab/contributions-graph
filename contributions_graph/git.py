@@ -4,6 +4,7 @@ from datetime import datetime
 from typing import List, Dict
 
 from contributions_graph.exceptions import GitBranchNotFoundError
+from contributions_graph.typing import RepositoryCommitsTypeDict
 from contributions_graph.utils import parse_iso_8601_string_to_datetime, write_file_data
 
 
@@ -124,7 +125,7 @@ class Git:
         commit_datetime = datetime.today().isoformat()
         self.commit_file(commit_datetime, file_name)
 
-    def build_repository(self, all_commits: Dict[str, List[datetime]]) -> None:
+    def build_repository(self, all_commits: Dict[str, RepositoryCommitsTypeDict]) -> None:
         for repo_name in all_commits.keys():
             file_name = f'{repo_name}.{self.file_ext}'
             commit_author = all_commits[repo_name]['author']

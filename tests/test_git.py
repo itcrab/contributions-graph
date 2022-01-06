@@ -87,7 +87,6 @@ class TestGit(GitTestMixin):
         ]}}
         git.build_repository(all_commits)
 
-
         GitConsole.create_branch('new-branch')
 
         all_commits = {'test_repo': {'author': git_author, 'commits': [
