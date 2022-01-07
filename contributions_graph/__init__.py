@@ -20,7 +20,7 @@ class ContributionsGraph:
         if self.obfuscate:
             all_commits = self.obfuscate.run(all_commits)
 
-        if self.git.repository_exists():
+        if self.git.repository_exists(new_repo_path=self.repository_list.import_repo['new_repo_path']):
             all_commits = self.get_subtraction_commits(all_commits)
 
         self.build_repo(all_commits)
@@ -45,8 +45,8 @@ class ContributionsGraph:
 
     def get_subtraction_commits(self, all_commits: Dict[str, RepositoryCommitsTypedDict]) -> \
             Dict[str, RepositoryCommitsTypedDict]:
-        with GitRepositorySwitch(new_repo_path=self.git.new_repo_path, new_repo_branch=self.git.new_repo_branch):
-            exists_commits = self.git.get_commits(author=self.git.new_repo_author)
+        with GitRepositorySwitch(new_repo_path=self.repository_list.import_repo['new_repo_path'], new_repo_branch=self.repository_list.import_repo['new_repo_branch']):
+            exists_commits = self.git.get_commits(author=self.repository_list.import_repo['new_repo_author'])
         exists_commits.sort()
 
         for repo_name in all_commits:
@@ -70,6 +70,10 @@ class ContributionsGraph:
         return all_commits
 
     def build_repo(self, all_commits: Dict[str, RepositoryCommitsTypedDict]) -> None:
-        self.git.create_repository()
+        self.git.create_repository(
+            new_repo_path=self.repository_list.import_repo['new_repo_path'],
+            new_repo_author=self.repository_list.import_repo['new_repo_author'],
+            new_repo_branch=self.repository_list.import_repo['new_repo_branch'],
+        )
         self.git.create_readme()
         self.git.build_repository(all_commits)

@@ -10,12 +10,12 @@ class TestRepositoryList:
         assert repository_list._position == 0
         assert repository_list._max_position == 0
 
-        repository_list.add(**repository_dicts[0])
+        repository_list.export_from(**repository_dicts[0])
         assert repository_list._repositories == [repository_dicts[0]]
         assert repository_list._position == 0
         assert repository_list._max_position == 1
 
-        repository_list.add(**repository_dicts[1])
+        repository_list.export_from(**repository_dicts[1])
         assert repository_list._repositories == [
             repository_dicts[0],
             repository_dicts[1],
@@ -23,7 +23,7 @@ class TestRepositoryList:
         assert repository_list._position == 0
         assert repository_list._max_position == 2
 
-        repository_list.add(**repository_dicts[2])
+        repository_list.export_from(**repository_dicts[2])
         assert repository_list._repositories == [
             repository_dicts[0],
             repository_dicts[1],
@@ -38,9 +38,9 @@ class TestRepositoryList:
         assert repository_list._position == 0
         assert repository_list._max_position == 0
 
-        repository_list.add(**repository_dicts[0])
-        repository_list.add(**repository_dicts[1])
-        repository_list.add(**repository_dicts[2])
+        repository_list.export_from(**repository_dicts[0])
+        repository_list.export_from(**repository_dicts[1])
+        repository_list.export_from(**repository_dicts[2])
         assert repository_list._repositories == [
             repository_dicts[0],
             repository_dicts[1],
@@ -85,9 +85,9 @@ class TestRepositoryList:
         assert repository_list._position == 0
         assert repository_list._max_position == 0
 
-        repository_list.add(**repository_dicts[0])
-        repository_list.add(**repository_dicts[1])
-        repository_list.add(**repository_dicts[2])
+        repository_list.export_from(**repository_dicts[0])
+        repository_list.export_from(**repository_dicts[1])
+        repository_list.export_from(**repository_dicts[2])
         assert repository_list._repositories == [
             repository_dicts[0],
             repository_dicts[1],

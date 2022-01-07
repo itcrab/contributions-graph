@@ -86,33 +86,29 @@ class GitRepositorySwitch:
 
 
 class Git:
-    def __init__(self, new_repo_path: str, new_repo_branch: str, new_repo_author: str, file_ext: str) -> None:
-        self.new_repo_path = new_repo_path
-        self.new_repo_branch = new_repo_branch
-        self.new_repo_author = new_repo_author
-
+    def __init__(self, file_ext: str) -> None:
         self.file_ext = file_ext
 
         self.base_path = os.getcwd()
 
-    def repository_exists(self) -> bool:
-        return os.path.isdir(os.path.join(self.new_repo_path, '.git'))
+    def repository_exists(self, new_repo_path) -> bool:
+        return os.path.isdir(os.path.join(new_repo_path, '.git'))
 
     def get_commits(self, author: str) -> List[datetime]:
         all_commits = GitConsole.get_commits_by_author(author)
 
         return list(map(parse_iso_8601_string_to_datetime, all_commits))
 
-    def create_repository(self) -> None:
-        if not os.path.isdir(self.new_repo_path):
-            os.mkdir(self.new_repo_path)
+    def create_repository(self, new_repo_path: str, new_repo_author: str, new_repo_branch: str) -> None:
+        if not os.path.isdir(new_repo_path):
+            os.mkdir(new_repo_path)
 
-        os.chdir(self.new_repo_path)
-        if not self.repository_exists():
-            repo_author = self.new_repo_author.split('<')
+        os.chdir(new_repo_path)
+        if not self.repository_exists(new_repo_path=new_repo_path):
+            repo_author = new_repo_author.split('<')
 
             GitConsole.init_repo(email=repo_author[1][:-1], name=repo_author[0])
-            GitConsole.create_branch(self.new_repo_branch)
+            GitConsole.create_branch(new_repo_branch)
 
     def create_readme(self) -> None:
         file_name = 'README.md'

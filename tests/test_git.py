@@ -203,32 +203,26 @@ class TestGit(GitTestMixin):
 
     def test_create_repository(self, tmpdir, git_author):
         new_repo_path = tmpdir.strpath
-        git = Git(
+        git_repo_path = os.path.join(new_repo_path, '.git')
+
+        assert os.path.isdir(git_repo_path) is False
+        git = self.git_create_repository(
             new_repo_path=new_repo_path,
             new_repo_branch='master',
             new_repo_author=git_author,
-            file_ext='py',
         )
-
-        git_repo_path = os.path.join(new_repo_path, '.git')
-        assert os.path.isdir(git_repo_path) is False
-
-        git.create_repository()
         assert os.path.isdir(git_repo_path) is True
 
     def test_create_repository_with_wrong_path(self, tmpdir, git_author):
         new_repo_path = os.path.join(tmpdir.strpath, 'wrong')
-        git = Git(
+        git_repo_path = new_repo_path
+
+        assert os.path.isdir(git_repo_path) is False
+        git = self.git_create_repository(
             new_repo_path=new_repo_path,
             new_repo_branch='master',
             new_repo_author=git_author,
-            file_ext='py',
         )
-
-        git_repo_path = new_repo_path
-        assert os.path.isdir(git_repo_path) is False
-
-        git.create_repository()
         assert os.path.isdir(git_repo_path) is True
 
     def test_build_repository(self, tmpdir, datetime_objects, git_author):
@@ -261,12 +255,10 @@ class TestGit(GitTestMixin):
             datetime_objects[1],
         ]}}
 
-        git = Git(
+        git = self.git_create_repository(
             new_repo_path=git_repo_path,
             new_repo_branch=branch_name,
             new_repo_author=git_author,
-            file_ext='py',
         )
-        git.create_repository()
         git.build_repository(all_commits)
         assert GitConsole.get_current_branch() == branch_name

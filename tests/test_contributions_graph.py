@@ -19,14 +19,17 @@ class TestContributionsGraph(GitTestMixin):
         ]}}
         git.build_repository(all_commits)
 
-        repository_list = RepositoryList()
-        repository_list.add(git_repo_path, 'master', git_author)
-
         new_repo_path = tmpdir.mkdir('new_git_repo').strpath
-        git = Git(
+
+        repository_list = RepositoryList()
+        repository_list.export_from(git_repo_path, 'master', git_author)
+        repository_list.import_to(
             new_repo_path=new_repo_path,
             new_repo_branch='master',
             new_repo_author=git_author,
+        )
+
+        git = Git(
             file_ext='py',
         )
         obfuscate = Obfuscate(11, 0, 0, 5)
@@ -53,14 +56,17 @@ class TestContributionsGraph(GitTestMixin):
         ]}}
         git.build_repository(all_commits)
 
-        repository_list = RepositoryList()
-        repository_list.add(git_repo_path, 'master', git_author)
-
         new_repo_path = tmpdir.mkdir('new_git_repo').strpath
-        git = Git(
+
+        repository_list = RepositoryList()
+        repository_list.export_from(git_repo_path, 'master', git_author)
+        repository_list.import_to(
             new_repo_path=new_repo_path,
             new_repo_branch='master',
             new_repo_author=git_author,
+        )
+
+        git = Git(
             file_ext='py',
         )
         contributions_graph = ContributionsGraph(repository_list, git)
@@ -102,12 +108,14 @@ class TestContributionsGraph(GitTestMixin):
         assert all_commits == [datetime_objects_obfuscate[1], datetime_objects_obfuscate[0]]
 
         repository_list = RepositoryList()
-        repository_list.add(git_repo_path, 'master', git_author)
-
-        git = Git(
+        repository_list.export_from(git_repo_path, 'master', git_author)
+        repository_list.import_to(
             new_repo_path=new_repo_path,
             new_repo_branch='master',
             new_repo_author=git_author,
+        )
+
+        git = Git(
             file_ext='py',
         )
         obfuscate = Obfuscate(11, 0, 0, 5)
@@ -156,12 +164,14 @@ class TestContributionsGraph(GitTestMixin):
         assert all_commits == [datetime_objects_utc[1], datetime_objects_utc[0]]
 
         repository_list = RepositoryList()
-        repository_list.add(git_repo_path, 'master', git_author)
-
-        git = Git(
+        repository_list.export_from(git_repo_path, 'master', git_author)
+        repository_list.import_to(
             new_repo_path=new_repo_path,
             new_repo_branch='master',
             new_repo_author=git_author,
+        )
+
+        git = Git(
             file_ext='py',
         )
         contributions_graph = ContributionsGraph(repository_list, git)

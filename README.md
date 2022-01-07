@@ -23,17 +23,17 @@ from contributions_graph.obfuscate import Obfuscate
 from contributions_graph.repository_list import RepositoryList
 
 repository_list = RepositoryList()
-repository_list.add(
+repository_list.export_from(
     repo_path='/home/arcady/projects/project_1',
     branch='master',
     author='Arcady Usov <arcady.usov@example.email.com>',
 )
-repository_list.add(
+repository_list.export_from(
     repo_path='/home/arcady/projects/project_2',
     branch='develop',
     author='Arcady Usov <arcady.usov@example.email.com>',
 )
-repository_list.add(
+repository_list.export_from(
     repo_path='/home/arcady/projects/project_3',
     branch='testing',
     author='Arcady Usov <arcady.usov@example.email.com>',
