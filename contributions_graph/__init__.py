@@ -4,7 +4,7 @@ from typing import Optional, Dict
 from contributions_graph.git import Git, GitRepositorySwitch
 from contributions_graph.obfuscate import Obfuscate
 from contributions_graph.repository_list import RepositoryList
-from contributions_graph.typing import RepositoryCommitsTypeDict
+from contributions_graph.typing import RepositoryCommitsTypedDict
 
 
 class ContributionsGraph:
@@ -25,26 +25,26 @@ class ContributionsGraph:
 
         self.build_repo(all_commits)
 
-    def get_commits_from_repositories(self) -> Dict[str, RepositoryCommitsTypeDict]:
+    def get_commits_from_repositories(self) -> Dict[str, RepositoryCommitsTypedDict]:
         all_commits = {}
         for repository in self.repository_list:
             with GitRepositorySwitch(new_repo_path=repository['repo_path'], new_repo_branch=repository['branch']):
                 commits = self.git.get_commits(author=repository['author'])
 
             repo_name = str(os.path.basename(repository['repo_path']))
-            all_commits[repo_name] = RepositoryCommitsTypeDict(author=repository['author'], commits=commits)
+            all_commits[repo_name] = RepositoryCommitsTypedDict(author=repository['author'], commits=commits)
 
         return all_commits
 
-    def sort_commits(self, all_commits: Dict[str, RepositoryCommitsTypeDict]) -> Dict[str, RepositoryCommitsTypeDict]:
+    def sort_commits(self, all_commits: Dict[str, RepositoryCommitsTypedDict]) -> Dict[str, RepositoryCommitsTypedDict]:
         for repo_name in all_commits.keys():
             all_commits[repo_name]['commits'] = list(set(all_commits[repo_name]['commits']))
             all_commits[repo_name]['commits'].sort()
 
         return all_commits
 
-    def get_subtraction_commits(self, all_commits: Dict[str, RepositoryCommitsTypeDict]) -> \
-            Dict[str, RepositoryCommitsTypeDict]:
+    def get_subtraction_commits(self, all_commits: Dict[str, RepositoryCommitsTypedDict]) -> \
+            Dict[str, RepositoryCommitsTypedDict]:
         with GitRepositorySwitch(new_repo_path=self.git.new_repo_path, new_repo_branch=self.git.new_repo_branch):
             exists_commits = self.git.get_commits(author=self.git.new_repo_author)
         exists_commits.sort()
@@ -66,7 +66,7 @@ class ContributionsGraph:
 
         return all_commits
 
-    def build_repo(self, all_commits: Dict[str, RepositoryCommitsTypeDict]) -> None:
+    def build_repo(self, all_commits: Dict[str, RepositoryCommitsTypedDict]) -> None:
         self.git.create_repository()
         self.git.create_readme()
         self.git.build_repository(all_commits)

@@ -2,6 +2,6 @@ from datetime import datetime
 from typing import TypedDict, List
 
 
-class RepositoryCommitsTypeDict(TypedDict):
+class RepositoryCommitsTypedDict(TypedDict):
     author: str
     commits: List[datetime]

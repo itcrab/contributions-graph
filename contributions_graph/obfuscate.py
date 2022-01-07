@@ -2,7 +2,7 @@ from datetime import timedelta, datetime, timezone
 from typing import Dict
 
 from contributions_graph.exceptions import DayCapacityOverflowObfuscateError
-from contributions_graph.typing import RepositoryCommitsTypeDict
+from contributions_graph.typing import RepositoryCommitsTypedDict
 
 
 class Obfuscate:
@@ -20,7 +20,7 @@ class Obfuscate:
             tzinfo=timezone.utc,
         )
 
-    def run(self, all_commits: Dict[str, RepositoryCommitsTypeDict]) -> Dict[str, RepositoryCommitsTypeDict]:
+    def run(self, all_commits: Dict[str, RepositoryCommitsTypedDict]) -> Dict[str, RepositoryCommitsTypedDict]:
         for repo_name in all_commits.keys():
             obfuscate_date = self.get_obfuscate_date(all_commits[repo_name]['commits'][0])
             for idx, commit in enumerate(all_commits[repo_name]['commits']):
