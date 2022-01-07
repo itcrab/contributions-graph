@@ -1,4 +1,4 @@
-from typing import List, Iterator
+from typing import List, Iterator, Dict
 
 
 class RepositoryList:
@@ -7,7 +7,7 @@ class RepositoryList:
         self._position = 0
         self._max_position = 0
 
-        self.import_repo = None
+        self.import_repo: Dict[str, str] = dict()
 
     def __next__(self) -> dict:
         if self._position == self._max_position:
