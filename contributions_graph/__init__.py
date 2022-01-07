@@ -50,6 +50,9 @@ class ContributionsGraph:
         exists_commits.sort()
 
         for repo_name in all_commits:
+            if not exists_commits:
+                break
+
             skip_commit_idxs = []
             for idx, commit in enumerate(all_commits[repo_name]['commits']):
                 try:
