@@ -45,7 +45,8 @@ class ContributionsGraph:
 
     def get_subtraction_commits(self, all_commits: Dict[str, RepositoryCommitsTypedDict]) -> \
             Dict[str, RepositoryCommitsTypedDict]:
-        with GitRepositorySwitch(new_repo_path=self.repository_list.import_repo['new_repo_path'], new_repo_branch=self.repository_list.import_repo['new_repo_branch']):
+        new_repo = self.repository_list.import_repo
+        with GitRepositorySwitch(new_repo_path=new_repo['new_repo_path'], new_repo_branch=new_repo['new_repo_branch']):
             exists_commits = self.git.get_commits(author=self.repository_list.import_repo['new_repo_author'])
         exists_commits.sort()
 

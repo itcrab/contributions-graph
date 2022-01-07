@@ -3,7 +3,7 @@ import os
 import pytest
 
 from contributions_graph.exceptions import GitBranchNotFoundError
-from contributions_graph.git import Git, GitConsole, GitRepositorySwitch
+from contributions_graph.git import GitConsole, GitRepositorySwitch
 from tests.mixins import GitTestMixin
 
 
@@ -206,7 +206,7 @@ class TestGit(GitTestMixin):
         git_repo_path = os.path.join(new_repo_path, '.git')
 
         assert os.path.isdir(git_repo_path) is False
-        git = self.git_create_repository(
+        self.git_create_repository(
             new_repo_path=new_repo_path,
             new_repo_branch='master',
             new_repo_author=git_author,
@@ -218,7 +218,7 @@ class TestGit(GitTestMixin):
         git_repo_path = new_repo_path
 
         assert os.path.isdir(git_repo_path) is False
-        git = self.git_create_repository(
+        self.git_create_repository(
             new_repo_path=new_repo_path,
             new_repo_branch='master',
             new_repo_author=git_author,
