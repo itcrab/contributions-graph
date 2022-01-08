@@ -8,16 +8,19 @@ repository_list.export_from(
     repo_path='/home/arcady/projects/project_1',
     branch='master',
     author='Arcady Usov <arcady.usov@example.email.com>',
+    file_ext='py',
 )
 repository_list.export_from(
     repo_path='/home/arcady/projects/project_2',
     branch='develop',
     author='Arcady Usov <arcady.usov@example.email.com>',
+    file_ext='py',
 )
 repository_list.export_from(
     repo_path='/home/arcady/projects/project_3',
     branch='testing',
     author='Arcady Usov <arcady.usov@example.email.com>',
+    file_ext='py',
 )
 repository_list.import_to(
     new_repo_path='/home/arcady/projects/contributions_graph',
@@ -25,9 +28,7 @@ repository_list.import_to(
     new_repo_author='Arcady Usov <arcady.usov@example.email.com>',
 )
 
-git = Git(
-    file_ext='py',
-)
+git = Git()
 
 obfuscate_enabled = False
 obfuscate = None if not obfuscate_enabled else Obfuscate(

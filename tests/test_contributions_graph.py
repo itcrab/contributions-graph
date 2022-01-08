@@ -13,7 +13,7 @@ class TestContributionsGraph(GitTestMixin):
         os.chdir(git_repo_path)
 
         git = self.git_create_repository(new_repo_path=git_repo_path, new_repo_author=git_author)
-        all_commits = {'test_repo': {'author': git_author, 'commits': [
+        all_commits = {'test_repo': {'author': git_author, 'file_ext': 'py', 'commits': [
             datetime_objects[0],
             datetime_objects[1],
         ]}}
@@ -22,16 +22,14 @@ class TestContributionsGraph(GitTestMixin):
         new_repo_path = tmpdir.mkdir('new_git_repo').strpath
 
         repository_list = RepositoryList()
-        repository_list.export_from(git_repo_path, 'master', git_author)
+        repository_list.export_from(git_repo_path, 'master', git_author, file_ext='py')
         repository_list.import_to(
             new_repo_path=new_repo_path,
             new_repo_branch='master',
             new_repo_author=git_author,
         )
 
-        git = Git(
-            file_ext='py',
-        )
+        git = Git()
         obfuscate = Obfuscate(11, 0, 0, 5)
         contributions_graph = ContributionsGraph(repository_list, git, obfuscate)
         contributions_graph.run()
@@ -50,7 +48,7 @@ class TestContributionsGraph(GitTestMixin):
         os.chdir(git_repo_path)
 
         git = self.git_create_repository(new_repo_path=git_repo_path, new_repo_author=git_author)
-        all_commits = {'test_repo': {'author': git_author, 'commits': [
+        all_commits = {'test_repo': {'author': git_author, 'file_ext': 'py', 'commits': [
             datetime_objects[0],
             datetime_objects[1],
         ]}}
@@ -59,16 +57,14 @@ class TestContributionsGraph(GitTestMixin):
         new_repo_path = tmpdir.mkdir('new_git_repo').strpath
 
         repository_list = RepositoryList()
-        repository_list.export_from(git_repo_path, 'master', git_author)
+        repository_list.export_from(git_repo_path, 'master', git_author, file_ext='py')
         repository_list.import_to(
             new_repo_path=new_repo_path,
             new_repo_branch='master',
             new_repo_author=git_author,
         )
 
-        git = Git(
-            file_ext='py',
-        )
+        git = Git()
         contributions_graph = ContributionsGraph(repository_list, git)
         contributions_graph.run()
 
@@ -87,7 +83,7 @@ class TestContributionsGraph(GitTestMixin):
         os.chdir(git_repo_path)
 
         git = self.git_create_repository(new_repo_path=git_repo_path, new_repo_author=git_author)
-        all_commits = {'test_repo': {'author': git_author, 'commits': [
+        all_commits = {'test_repo': {'author': git_author, 'file_ext': 'py', 'commits': [
             datetime_objects[0],
             datetime_objects[1],
             datetime_objects[2],
@@ -97,7 +93,7 @@ class TestContributionsGraph(GitTestMixin):
 
         new_repo_path = tmpdir.mkdir('new_git_repo').strpath
         git = self.git_create_repository(new_repo_path=new_repo_path, new_repo_author=git_author)
-        all_commits = {'test_repo': {'author': git_author, 'commits': [
+        all_commits = {'test_repo': {'author': git_author, 'file_ext': 'py', 'commits': [
             datetime_objects_obfuscate[0],
             datetime_objects_obfuscate[1],
         ]}}
@@ -108,16 +104,14 @@ class TestContributionsGraph(GitTestMixin):
         assert all_commits == [datetime_objects_obfuscate[1], datetime_objects_obfuscate[0]]
 
         repository_list = RepositoryList()
-        repository_list.export_from(git_repo_path, 'master', git_author)
+        repository_list.export_from(git_repo_path, 'master', git_author, file_ext='py')
         repository_list.import_to(
             new_repo_path=new_repo_path,
             new_repo_branch='master',
             new_repo_author=git_author,
         )
 
-        git = Git(
-            file_ext='py',
-        )
+        git = Git()
         obfuscate = Obfuscate(11, 0, 0, 5)
         contributions_graph = ContributionsGraph(repository_list, git, obfuscate)
         contributions_graph.run()
@@ -142,7 +136,7 @@ class TestContributionsGraph(GitTestMixin):
         os.chdir(git_repo_path)
 
         git = self.git_create_repository(new_repo_path=git_repo_path, new_repo_author=git_author)
-        all_commits = {'test_repo': {'author': git_author, 'commits': [
+        all_commits = {'test_repo': {'author': git_author, 'file_ext': 'py', 'commits': [
             datetime_objects[0],
             datetime_objects[1],
             datetime_objects[2],
@@ -153,7 +147,7 @@ class TestContributionsGraph(GitTestMixin):
         new_repo_path = tmpdir.mkdir('new_git_repo').strpath
 
         git = self.git_create_repository(new_repo_path=new_repo_path, new_repo_author=git_author)
-        all_commits = {'test_repo': {'author': git_author, 'commits': [
+        all_commits = {'test_repo': {'author': git_author, 'file_ext': 'py', 'commits': [
             datetime_objects[0],
             datetime_objects[1],
         ]}}
@@ -164,16 +158,14 @@ class TestContributionsGraph(GitTestMixin):
         assert all_commits == [datetime_objects_utc[1], datetime_objects_utc[0]]
 
         repository_list = RepositoryList()
-        repository_list.export_from(git_repo_path, 'master', git_author)
+        repository_list.export_from(git_repo_path, 'master', git_author, file_ext='py')
         repository_list.import_to(
             new_repo_path=new_repo_path,
             new_repo_branch='master',
             new_repo_author=git_author,
         )
 
-        git = Git(
-            file_ext='py',
-        )
+        git = Git()
         contributions_graph = ContributionsGraph(repository_list, git)
         contributions_graph.run()
 

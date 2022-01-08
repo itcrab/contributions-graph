@@ -3,7 +3,7 @@ from typing import List, Iterator, Dict
 
 class RepositoryList:
     def __init__(self) -> None:
-        self._repositories: List[dict] = []
+        self._repositories: List[Dict[str, str]] = []
         self._position = 0
         self._max_position = 0
 
@@ -21,11 +21,12 @@ class RepositoryList:
     def __iter__(self) -> Iterator[dict]:
         return self
 
-    def export_from(self, repo_path: str, branch: str, author: str) -> None:
+    def export_from(self, repo_path: str, branch: str, author: str, file_ext: str) -> None:
         self._repositories.append(dict(
             repo_path=repo_path,
             branch=branch,
             author=author,
+            file_ext=file_ext,
         ))
         self._max_position += 1
 

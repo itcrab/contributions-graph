@@ -32,7 +32,11 @@ class ContributionsGraph:
                 commits = self.git.get_commits(author=repository['author'])
 
             repo_name = str(os.path.basename(repository['repo_path']))
-            all_commits[repo_name] = RepositoryCommitsTypedDict(author=repository['author'], commits=commits)
+            all_commits[repo_name] = RepositoryCommitsTypedDict(
+                author=repository['author'],
+                file_ext=repository['file_ext'],
+                commits=commits,
+            )
 
         return all_commits
 

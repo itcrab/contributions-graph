@@ -86,9 +86,7 @@ class GitRepositorySwitch:
 
 
 class Git:
-    def __init__(self, file_ext: str) -> None:
-        self.file_ext = file_ext
-
+    def __init__(self) -> None:
         self.base_path = os.getcwd()
 
     def repository_exists(self, new_repo_path) -> bool:
@@ -123,7 +121,8 @@ class Git:
 
     def build_repository(self, all_commits: Dict[str, RepositoryCommitsTypedDict]) -> None:
         for repo_name in all_commits.keys():
-            file_name = f'{repo_name}.{self.file_ext}'
+            file_ext = all_commits[repo_name]['file_ext']
+            file_name = f'{repo_name}.{file_ext}'
             commit_author = all_commits[repo_name]['author']
 
             for commit in all_commits[repo_name]['commits']:
