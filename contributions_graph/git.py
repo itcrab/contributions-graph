@@ -5,7 +5,7 @@ from typing import List, Dict
 
 from contributions_graph.exceptions import GitBranchNotFoundError
 from contributions_graph.typing import RepositoryCommitsTypedDict
-from contributions_graph.utils import parse_iso_8601_string_to_datetime, write_file_data
+from contributions_graph.utils import parse_iso_8601_string_to_datetime, write_file_data, repository_exists
 
 
 class GitConsole:
@@ -89,9 +89,6 @@ class Git:
     def __init__(self) -> None:
         self.base_path = os.getcwd()
 
-    def repository_exists(self, new_repo_path) -> bool:
-        return os.path.isdir(os.path.join(new_repo_path, '.git'))
-
     def get_commits(self, author: str) -> List[datetime]:
         all_commits = GitConsole.get_commits_by_author(author)
 
@@ -102,7 +99,7 @@ class Git:
             os.mkdir(new_repo_path)
 
         os.chdir(new_repo_path)
-        if not self.repository_exists(new_repo_path=new_repo_path):
+        if not repository_exists(repo_path=new_repo_path):
             repo_author = new_repo_author.split('<')
 
             GitConsole.init_repo(email=repo_author[1][:-1], name=repo_author[0])

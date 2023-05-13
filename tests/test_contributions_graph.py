@@ -1,6 +1,6 @@
 import os
 
-from contributions_graph import ContributionsGraph
+from contributions_graph import ContributionsGraph, ImportRepository
 from contributions_graph.git import Git
 from contributions_graph.obfuscate import Obfuscate
 from contributions_graph.repository_list import RepositoryList
@@ -23,15 +23,17 @@ class TestContributionsGraph(GitTestMixin):
 
         repository_list = RepositoryList()
         repository_list.export_from(git_repo_path, 'master', git_author, file_ext='py')
-        repository_list.import_to(
-            new_repo_path=new_repo_path,
-            new_repo_branch='master',
-            new_repo_author=git_author,
-        )
 
         git = Git()
+        import_repository = ImportRepository(
+            git=git,
+            repo_path=new_repo_path,
+            repo_branch='master',
+            repo_author=git_author,
+        )
+
         obfuscate = Obfuscate(11, 0, 0, 5)
-        contributions_graph = ContributionsGraph(repository_list, git, obfuscate)
+        contributions_graph = ContributionsGraph(repository_list, import_repository, git, obfuscate)
         contributions_graph.run()
 
         os.chdir(new_repo_path)
@@ -58,14 +60,16 @@ class TestContributionsGraph(GitTestMixin):
 
         repository_list = RepositoryList()
         repository_list.export_from(git_repo_path, 'master', git_author, file_ext='py')
-        repository_list.import_to(
-            new_repo_path=new_repo_path,
-            new_repo_branch='master',
-            new_repo_author=git_author,
-        )
 
         git = Git()
-        contributions_graph = ContributionsGraph(repository_list, git)
+        import_repository = ImportRepository(
+            git=git,
+            repo_path=new_repo_path,
+            repo_branch='master',
+            repo_author=git_author,
+        )
+
+        contributions_graph = ContributionsGraph(repository_list, import_repository, git)
         contributions_graph.run()
 
         os.chdir(new_repo_path)
@@ -105,15 +109,17 @@ class TestContributionsGraph(GitTestMixin):
 
         repository_list = RepositoryList()
         repository_list.export_from(git_repo_path, 'master', git_author, file_ext='py')
-        repository_list.import_to(
-            new_repo_path=new_repo_path,
-            new_repo_branch='master',
-            new_repo_author=git_author,
-        )
 
         git = Git()
+        import_repository = ImportRepository(
+            git=git,
+            repo_path=new_repo_path,
+            repo_branch='master',
+            repo_author=git_author,
+        )
+
         obfuscate = Obfuscate(11, 0, 0, 5)
-        contributions_graph = ContributionsGraph(repository_list, git, obfuscate)
+        contributions_graph = ContributionsGraph(repository_list, import_repository, git, obfuscate)
         contributions_graph.run()
 
         os.chdir(new_repo_path)
@@ -159,14 +165,16 @@ class TestContributionsGraph(GitTestMixin):
 
         repository_list = RepositoryList()
         repository_list.export_from(git_repo_path, 'master', git_author, file_ext='py')
-        repository_list.import_to(
-            new_repo_path=new_repo_path,
-            new_repo_branch='master',
-            new_repo_author=git_author,
-        )
 
         git = Git()
-        contributions_graph = ContributionsGraph(repository_list, git)
+        import_repository = ImportRepository(
+            git=git,
+            repo_path=new_repo_path,
+            repo_branch='master',
+            repo_author=git_author,
+        )
+
+        contributions_graph = ContributionsGraph(repository_list, import_repository, git)
         contributions_graph.run()
 
         os.chdir(new_repo_path)
