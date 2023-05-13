@@ -24,13 +24,12 @@ repository_list.export_from(
     file_ext='py',
 )
 
-git = Git()
 import_repository = ImportRepository(
-    git=git,
     repo_path='D:\\Contribute\\contributions-graph\\git_repositories\\contributions_graph\\',
     repo_branch='master',
     repo_author='Arcady Usov <itcrab@gmail.com>',
 )
+git = Git()
 
 obfuscate_enabled = False
 obfuscate = None if not obfuscate_enabled else Obfuscate(

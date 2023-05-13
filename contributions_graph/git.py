@@ -1,11 +1,10 @@
 import os
 import subprocess
 from datetime import datetime
-from typing import List, Dict
+from typing import List
 
 from contributions_graph.exceptions import GitBranchNotFoundError
-from contributions_graph.typing import RepositoryCommitsTypedDict
-from contributions_graph.utils import parse_iso_8601_string_to_datetime, write_file_data, repository_exists
+from contributions_graph.utils import parse_iso_8601_string_to_datetime
 
 
 class GitConsole:
@@ -86,51 +85,7 @@ class GitRepositorySwitch:
 
 
 class Git:
-    def __init__(self) -> None:
-        self.base_path = os.getcwd()
-
     def get_commits(self, author: str) -> List[datetime]:
         all_commits = GitConsole.get_commits_by_author(author)
 
         return list(map(parse_iso_8601_string_to_datetime, all_commits))
-
-    def create_repository(self, new_repo_path: str, new_repo_author: str, new_repo_branch: str) -> None:
-        if not os.path.isdir(new_repo_path):
-            os.mkdir(new_repo_path)
-
-        os.chdir(new_repo_path)
-        if not repository_exists(repo_path=new_repo_path):
-            repo_author = new_repo_author.split('<')
-
-            GitConsole.init_repo(email=repo_author[1][:-1], name=repo_author[0])
-            GitConsole.create_branch(new_repo_branch)
-
-    def create_readme(self) -> None:
-        file_name = 'README.md'
-        if os.path.isfile(file_name):
-            return
-
-        file_data = '# Contribution Graph Repository'
-        write_file_data(file_name, file_data, file_mode='w')
-
-        commit_datetime = datetime.today().isoformat()
-        self.commit_file(commit_datetime, file_name)
-
-    def build_repository(self, all_commits: Dict[str, RepositoryCommitsTypedDict]) -> None:
-        for repo_name in all_commits.keys():
-            file_ext = all_commits[repo_name]['file_ext']
-            file_name = f'{repo_name}.{file_ext}'
-            commit_author = all_commits[repo_name]['author']
-
-            for commit in all_commits[repo_name]['commits']:
-                commit_datetime = commit.isoformat()
-
-                file_data = f'{commit_datetime}\t{commit_author}\n'
-                write_file_data(file_name, file_data, file_mode='a')
-
-                self.commit_file(commit_datetime, file_name)
-
-    def commit_file(self, commit_datetime, file_name):
-        GitConsole.set_current_datetime(commit_datetime)
-        GitConsole.add_file(file_name)
-        GitConsole.commit_file(file_name, commit_datetime)

@@ -3,22 +3,23 @@ import os
 import pytest
 
 from contributions_graph.exceptions import GitBranchNotFoundError
-from contributions_graph.git import GitConsole, GitRepositorySwitch
-from tests.mixins import GitTestMixin
+from contributions_graph.git import GitConsole, GitRepositorySwitch, Git
+from tests.helpers import git_create_repository
 
 
-class TestGit(GitTestMixin):
+class TestGit:
     def test_get_commits(self, tmpdir, git_author, datetime_objects, datetime_objects_utc):
         git_repo_path = tmpdir.mkdir('get_commits').strpath
         os.chdir(git_repo_path)
 
-        git = self.git_create_repository(new_repo_path=git_repo_path, new_repo_author=git_author)
+        import_repository = git_create_repository(repo_path=git_repo_path, repo_author=git_author)
         all_commits = {'test_repo': {'author': git_author, 'file_ext': 'py', 'commits': [
             datetime_objects[0],
             datetime_objects[1],
         ]}}
-        git.build_repository(all_commits)
+        import_repository._apply_all_commits(all_commits)
 
+        git = Git()
         with GitRepositorySwitch(new_repo_path=git_repo_path, new_repo_branch='master'):
             all_commits = git.get_commits(author=git_author)
 
@@ -28,16 +29,17 @@ class TestGit(GitTestMixin):
         git_repo_path = tmpdir.mkdir('get_commits').strpath
         os.chdir(git_repo_path)
 
-        git = self.git_create_repository(new_repo_path=git_repo_path, new_repo_author=git_author)
+        import_repository = git_create_repository(repo_path=git_repo_path, repo_author=git_author)
         all_commits = {'test_repo': {'author': git_author, 'file_ext': 'py', 'commits': [
             datetime_objects[0],
             datetime_objects[1],
         ]}}
-        git.build_repository(all_commits)
+        import_repository._apply_all_commits(all_commits)
 
         GitConsole.create_branch('new-branch')
         assert GitConsole.get_current_branch() == 'new-branch'
 
+        git = Git()
         with GitRepositorySwitch(new_repo_path=git_repo_path, new_repo_branch='master'):
             all_commits = git.get_commits(author=git_author)
 
@@ -49,27 +51,28 @@ class TestGit(GitTestMixin):
         git_repo_path = tmpdir.mkdir('get_commits').strpath
         os.chdir(git_repo_path)
 
-        git = self.git_create_repository(new_repo_path=git_repo_path, new_repo_author=git_author)
+        import_repository = git_create_repository(repo_path=git_repo_path, repo_author=git_author)
 
         all_commits = {'test_repo': {'author': git_author, 'file_ext': 'py', 'commits': [
             datetime_objects[0],
         ]}}
-        git.build_repository(all_commits)
+        import_repository._apply_all_commits(all_commits)
 
         GitConsole.create_branch('new-branch')
 
         all_commits = {'test_repo': {'author': git_author, 'file_ext': 'py', 'commits': [
             datetime_objects[1],
         ]}}
-        git.build_repository(all_commits)
+        import_repository._apply_all_commits(all_commits)
 
         GitConsole.switch_branch('master')
 
         all_commits = {'test_repo': {'author': git_author, 'file_ext': 'py', 'commits': [
             datetime_objects[2],
         ]}}
-        git.build_repository(all_commits)
+        import_repository._apply_all_commits(all_commits)
 
+        git = Git()
         with GitRepositorySwitch(new_repo_path=git_repo_path, new_repo_branch='master'):
             all_commits = git.get_commits(author=git_author)
 
@@ -80,12 +83,12 @@ class TestGit(GitTestMixin):
         git_repo_path = tmpdir.mkdir('get_commits').strpath
         os.chdir(git_repo_path)
 
-        git = self.git_create_repository(new_repo_path=git_repo_path, new_repo_author=git_author)
+        import_repository = git_create_repository(repo_path=git_repo_path, repo_author=git_author)
 
         all_commits = {'test_repo': {'author': git_author, 'file_ext': 'py', 'commits': [
             datetime_objects[0],
         ]}}
-        git.build_repository(all_commits)
+        import_repository._apply_all_commits(all_commits)
 
         GitConsole.create_branch('new-branch')
 
@@ -94,8 +97,9 @@ class TestGit(GitTestMixin):
             datetime_objects[2],
             datetime_objects[3],
         ]}}
-        git.build_repository(all_commits)
+        import_repository._apply_all_commits(all_commits)
 
+        git = Git()
         with GitRepositorySwitch(new_repo_path=git_repo_path, new_repo_branch='master'):
             all_commits = git.get_commits(author=git_author)
 
@@ -106,14 +110,14 @@ class TestGit(GitTestMixin):
         git_repo_path = tmpdir.mkdir('get_commits').strpath
         os.chdir(git_repo_path)
 
-        git = self.git_create_repository(new_repo_path=git_repo_path, new_repo_author=git_author)
+        import_repository = git_create_repository(repo_path=git_repo_path, repo_author=git_author)
 
         GitConsole.create_branch('new-branch')
 
         all_commits = {'test_repo': {'author': git_author, 'file_ext': 'py', 'commits': [
             datetime_objects[0],
         ]}}
-        git.build_repository(all_commits)
+        import_repository._apply_all_commits(all_commits)
 
         GitConsole.create_branch('master')
 
@@ -121,8 +125,9 @@ class TestGit(GitTestMixin):
             datetime_objects[1],
             datetime_objects[2],
         ]}}
-        git.build_repository(all_commits)
+        import_repository._apply_all_commits(all_commits)
 
+        git = Git()
         with GitRepositorySwitch(new_repo_path=git_repo_path, new_repo_branch='master'):
             all_commits = git.get_commits(author=git_author)
 
@@ -133,14 +138,14 @@ class TestGit(GitTestMixin):
         git_repo_path = tmpdir.mkdir('get_commits').strpath
         os.chdir(git_repo_path)
 
-        git = self.git_create_repository(new_repo_path=git_repo_path, new_repo_author=git_author)
+        import_repository = git_create_repository(repo_path=git_repo_path, repo_author=git_author)
 
         GitConsole.create_branch('new-branch')
 
         all_commits = {'test_repo': {'author': git_author, 'file_ext': 'py', 'commits': [
             datetime_objects[0],
         ]}}
-        git.build_repository(all_commits)
+        import_repository._apply_all_commits(all_commits)
 
         GitConsole.create_branch('master')
 
@@ -148,8 +153,9 @@ class TestGit(GitTestMixin):
             datetime_objects[1],
             datetime_objects[2],
         ]}}
-        git.build_repository(all_commits)
+        import_repository._apply_all_commits(all_commits)
 
+        git = Git()
         with GitRepositorySwitch(new_repo_path=git_repo_path, new_repo_branch='new-branch'):
             all_commits = git.get_commits(author=git_author)
 
@@ -160,27 +166,28 @@ class TestGit(GitTestMixin):
         git_repo_path = tmpdir.mkdir('get_commits').strpath
         os.chdir(git_repo_path)
 
-        git = self.git_create_repository(new_repo_path=git_repo_path, new_repo_author=git_author)
+        import_repository = git_create_repository(repo_path=git_repo_path, repo_author=git_author)
 
         all_commits = {'test_repo': {'author': git_author, 'file_ext': 'py', 'commits': [
             datetime_objects[0],
         ]}}
-        git.build_repository(all_commits)
+        import_repository._apply_all_commits(all_commits)
 
         GitConsole.create_branch('new-branch')
 
         all_commits = {'test_repo': {'author': git_author, 'file_ext': 'py', 'commits': [
             datetime_objects[1],
         ]}}
-        git.build_repository(all_commits)
+        import_repository._apply_all_commits(all_commits)
 
         GitConsole.switch_branch('master')
 
         all_commits = {'test_repo': {'author': git_author, 'file_ext': 'py', 'commits': [
             datetime_objects[2],
         ]}}
-        git.build_repository(all_commits)
+        import_repository._apply_all_commits(all_commits)
 
+        git = Git()
         with GitRepositorySwitch(new_repo_path=git_repo_path, new_repo_branch='new-branch'):
             all_commits = git.get_commits(author=git_author)
 
@@ -190,13 +197,14 @@ class TestGit(GitTestMixin):
         git_repo_path = tmpdir.mkdir('get_commits').strpath
         os.chdir(git_repo_path)
 
-        git = self.git_create_repository(new_repo_path=git_repo_path, new_repo_author=git_author)
+        import_repository = git_create_repository(repo_path=git_repo_path, repo_author=git_author)
         all_commits = {'test_repo': {'author': git_author, 'file_ext': 'py', 'commits': [
             datetime_objects[0],
             datetime_objects[1],
         ]}}
-        git.build_repository(all_commits)
+        import_repository._apply_all_commits(all_commits)
 
+        git = Git()
         with pytest.raises(GitBranchNotFoundError):
             with GitRepositorySwitch(new_repo_path=git_repo_path, new_repo_branch='wrong-branch'):
                 git.get_commits()
@@ -206,10 +214,10 @@ class TestGit(GitTestMixin):
         git_repo_path = os.path.join(new_repo_path, '.git')
 
         assert os.path.isdir(git_repo_path) is False
-        self.git_create_repository(
-            new_repo_path=new_repo_path,
-            new_repo_branch='master',
-            new_repo_author=git_author,
+        git_create_repository(
+            repo_path=new_repo_path,
+            repo_branch='master',
+            repo_author=git_author,
         )
         assert os.path.isdir(git_repo_path) is True
 
@@ -218,10 +226,10 @@ class TestGit(GitTestMixin):
         git_repo_path = new_repo_path
 
         assert os.path.isdir(git_repo_path) is False
-        self.git_create_repository(
-            new_repo_path=new_repo_path,
-            new_repo_branch='master',
-            new_repo_author=git_author,
+        git_create_repository(
+            repo_path=new_repo_path,
+            repo_branch='master',
+            repo_author=git_author,
         )
         assert os.path.isdir(git_repo_path) is True
 
@@ -234,9 +242,10 @@ class TestGit(GitTestMixin):
             datetime_objects[1],
         ]}}
 
-        git = self.git_create_repository(new_repo_path=git_repo_path, new_repo_author=git_author)
-        git.build_repository(all_commits)
+        import_repository = git_create_repository(repo_path=git_repo_path, repo_author=git_author)
+        import_repository._apply_all_commits(all_commits)
 
+        git = Git()
         all_commits = git.get_commits(git_author)
 
         assert all_commits == [datetime_objects[1], datetime_objects[0]]
@@ -255,10 +264,10 @@ class TestGit(GitTestMixin):
             datetime_objects[1],
         ]}}
 
-        git = self.git_create_repository(
-            new_repo_path=git_repo_path,
-            new_repo_branch=branch_name,
-            new_repo_author=git_author,
+        import_repository = git_create_repository(
+            repo_path=git_repo_path,
+            repo_branch=branch_name,
+            repo_author=git_author,
         )
-        git.build_repository(all_commits)
+        import_repository._apply_all_commits(all_commits)
         assert GitConsole.get_current_branch() == branch_name
