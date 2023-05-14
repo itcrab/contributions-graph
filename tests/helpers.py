@@ -1,4 +1,4 @@
-from contributions_graph import ImportRepository
+from contributions_graph.repositories import ImportRepository
 
 
 def git_create_repository(repo_path, repo_author, repo_branch='master'):

@@ -3,16 +3,15 @@ from typing import Optional, Dict
 
 from contributions_graph.git import Git, GitRepositorySwitch
 from contributions_graph.obfuscate import Obfuscate
-from contributions_graph.repositories import ImportRepository
-from contributions_graph.repository_list import RepositoryList
+from contributions_graph.repositories import ExportRepositories, ImportRepository
 from contributions_graph.typing import RepositoryCommitsTypedDict
 from contributions_graph.utils import repository_exists
 
 
 class ContributionsGraph:
-    def __init__(self, repository_list: RepositoryList, import_repository: ImportRepository, git: Git,
+    def __init__(self, export_repositories: ExportRepositories, import_repository: ImportRepository, git: Git,
                  obfuscate: Optional[Obfuscate] = None) -> None:
-        self.repository_list = repository_list
+        self.export_repositories = export_repositories
         self.import_repository = import_repository
         self.git = git
         self.obfuscate = obfuscate
@@ -31,7 +30,7 @@ class ContributionsGraph:
 
     def get_commits_from_repositories(self) -> Dict[str, RepositoryCommitsTypedDict]:
         all_commits = {}
-        for repository in self.repository_list:
+        for repository in self.export_repositories:
             with GitRepositorySwitch(new_repo_path=repository['repo_path'], new_repo_branch=repository['branch']):
                 commits = self.git.get_commits(author=repository['author'])
 
