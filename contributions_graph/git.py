@@ -43,11 +43,11 @@ class GitConsole:
         return current_branch.strip()
 
     @classmethod
-    def get_commits_by_author(cls, author: str) -> List[str]:
+    def get_commits_by_author(cls, author: str) -> List[datetime]:
         cmd = f'git --no-pager log --pretty="%cI" --author="{author}"'
-        export_commits = subprocess.check_output(cmd, shell=True, universal_newlines=True)
+        export_commits = subprocess.check_output(cmd, shell=True, universal_newlines=True).splitlines()
 
-        return export_commits.splitlines()
+        return list(map(parse_iso_8601_string_to_datetime, export_commits))
 
     @staticmethod
     def get_committers() -> List[str]:  # only for testing
@@ -82,10 +82,3 @@ class GitRepositorySwitch:
             GitConsole.switch_branch(self.base_branch)
 
         os.chdir(self.base_path)
-
-
-class Git:
-    def get_commits(self, author: str) -> List[datetime]:
-        export_commits = GitConsole.get_commits_by_author(author)
-
-        return list(map(parse_iso_8601_string_to_datetime, export_commits))

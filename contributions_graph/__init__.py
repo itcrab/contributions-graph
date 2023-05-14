@@ -1,6 +1,5 @@
 from typing import Optional
 
-from contributions_graph.git import Git, GitRepositorySwitch
 from contributions_graph.obfuscate import Obfuscate
 from contributions_graph.repositories import ExportRepositories, ImportRepository
 from contributions_graph.typing import RepositoryCommitsTypedDict

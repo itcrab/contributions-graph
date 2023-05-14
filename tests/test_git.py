@@ -3,7 +3,7 @@ import os
 import pytest
 
 from contributions_graph.exceptions import GitBranchNotFoundError
-from contributions_graph.git import GitConsole, GitRepositorySwitch, Git
+from contributions_graph.git import GitConsole, GitRepositorySwitch
 from tests.helpers import git_create_repository
 
 
@@ -19,9 +19,8 @@ class TestGit:
         ]}}
         import_repository._apply_export_commits(export_commits)
 
-        git = Git()
         with GitRepositorySwitch(new_repo_path=git_repo_path, new_repo_branch='master'):
-            export_commits = git.get_commits(author=git_author)
+            export_commits = GitConsole.get_commits_by_author(author=git_author)
 
         assert export_commits == [datetime_objects_utc[1], datetime_objects_utc[0]]
 
@@ -39,9 +38,8 @@ class TestGit:
         GitConsole.create_branch('new-branch')
         assert GitConsole.get_current_branch() == 'new-branch'
 
-        git = Git()
         with GitRepositorySwitch(new_repo_path=git_repo_path, new_repo_branch='master'):
-            export_commits = git.get_commits(author=git_author)
+            export_commits = GitConsole.get_commits_by_author(author=git_author)
 
             assert GitConsole.get_current_branch() == 'master'
             assert export_commits == [datetime_objects_utc[1], datetime_objects_utc[0]]
@@ -72,9 +70,8 @@ class TestGit:
         ]}}
         import_repository._apply_export_commits(export_commits)
 
-        git = Git()
         with GitRepositorySwitch(new_repo_path=git_repo_path, new_repo_branch='master'):
-            export_commits = git.get_commits(author=git_author)
+            export_commits = GitConsole.get_commits_by_author(author=git_author)
 
         assert export_commits == [datetime_objects_utc[2], datetime_objects_utc[0]]
 
@@ -99,9 +96,8 @@ class TestGit:
         ]}}
         import_repository._apply_export_commits(export_commits)
 
-        git = Git()
         with GitRepositorySwitch(new_repo_path=git_repo_path, new_repo_branch='master'):
-            export_commits = git.get_commits(author=git_author)
+            export_commits = GitConsole.get_commits_by_author(author=git_author)
 
         assert export_commits == [datetime_objects_utc[0]]
 
@@ -127,9 +123,8 @@ class TestGit:
         ]}}
         import_repository._apply_export_commits(export_commits)
 
-        git = Git()
         with GitRepositorySwitch(new_repo_path=git_repo_path, new_repo_branch='master'):
-            export_commits = git.get_commits(author=git_author)
+            export_commits = GitConsole.get_commits_by_author(author=git_author)
 
         assert export_commits == [datetime_objects_utc[2], datetime_objects_utc[1], datetime_objects_utc[0]]
 
@@ -155,9 +150,8 @@ class TestGit:
         ]}}
         import_repository._apply_export_commits(export_commits)
 
-        git = Git()
         with GitRepositorySwitch(new_repo_path=git_repo_path, new_repo_branch='new-branch'):
-            export_commits = git.get_commits(author=git_author)
+            export_commits = GitConsole.get_commits_by_author(author=git_author)
 
         assert export_commits == [datetime_objects_utc[0]]
 
@@ -187,9 +181,8 @@ class TestGit:
         ]}}
         import_repository._apply_export_commits(export_commits)
 
-        git = Git()
         with GitRepositorySwitch(new_repo_path=git_repo_path, new_repo_branch='new-branch'):
-            export_commits = git.get_commits(author=git_author)
+            export_commits = GitConsole.get_commits_by_author(author=git_author)
 
         assert export_commits == [datetime_objects_utc[1], datetime_objects_utc[0]]
 
@@ -204,10 +197,9 @@ class TestGit:
         ]}}
         import_repository._apply_export_commits(export_commits)
 
-        git = Git()
         with pytest.raises(GitBranchNotFoundError):
             with GitRepositorySwitch(new_repo_path=git_repo_path, new_repo_branch='wrong-branch'):
-                git.get_commits()
+                GitConsole.get_commits_by_author()
 
     def test_create_repository(self, tmpdir, git_author):
         new_repo_path = tmpdir.strpath
@@ -245,8 +237,7 @@ class TestGit:
         import_repository = git_create_repository(repo_path=git_repo_path, repo_author=git_author)
         import_repository._apply_export_commits(export_commits)
 
-        git = Git()
-        export_commits = git.get_commits(git_author)
+        export_commits = GitConsole.get_commits_by_author(git_author)
 
         assert export_commits == [datetime_objects[1], datetime_objects[0]]
         assert os.path.isfile('test_repo.py') is True

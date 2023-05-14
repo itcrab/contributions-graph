@@ -2,15 +2,13 @@ import os
 from datetime import datetime
 from typing import List, Dict, Iterator
 
-from contributions_graph.git import GitConsole, GitRepositorySwitch, Git
+from contributions_graph.git import GitConsole, GitRepositorySwitch
 from contributions_graph.typing import RepositoryCommitsTypedDict
 from contributions_graph.utils import write_file_data, repository_exists
 
 
 class ExportRepositories:
-    def __init__(self, git: Git) -> None:
-        self.git = git
-
+    def __init__(self) -> None:
         self._repositories: List[Dict[str, str]] = []
         self._position = 0
         self._max_position = 0
@@ -46,7 +44,7 @@ class ExportRepositories:
         export_commits = {}
         for repository in self:
             with GitRepositorySwitch(new_repo_path=repository['repo_path'], new_repo_branch=repository['branch']):
-                commits = self.git.get_commits(author=repository['author'])
+                commits = GitConsole.get_commits_by_author(author=repository['author'])
 
             repo_name = str(os.path.basename(repository['repo_path']))
             export_commits[repo_name] = RepositoryCommitsTypedDict(
@@ -66,9 +64,7 @@ class ExportRepositories:
 
 
 class ImportRepository:
-    def __init__(self, git: Git, repo_path: str, repo_branch: str, repo_author: str) -> None:
-        self.git = git
-
+    def __init__(self, repo_path: str, repo_branch: str, repo_author: str) -> None:
         self.repository = dict(
             repo_path=repo_path,
             repo_branch=repo_branch,
@@ -86,7 +82,7 @@ class ImportRepository:
     def _get_subtraction_commits(self, export_commits: Dict[str, RepositoryCommitsTypedDict]) -> \
             Dict[str, RepositoryCommitsTypedDict]:
         with GitRepositorySwitch(new_repo_path=self.repository['repo_path'], new_repo_branch=self.repository['repo_branch']):
-            exists_commits = self.git.get_commits(author=self.repository['repo_author'])
+            exists_commits = GitConsole.get_commits_by_author(author=self.repository['repo_author'])
         exists_commits.sort()
 
         for repo_name in export_commits:

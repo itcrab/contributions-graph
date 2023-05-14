@@ -18,12 +18,10 @@ This action will fix your contribution graph on GitHub.<br />
 `$ cat app.py`
 ```python
 from contributions_graph import ContributionsGraph
-from contributions_graph.git import Git
 from contributions_graph.obfuscate import Obfuscate
 from contributions_graph.repositories import ExportRepositories, ImportRepository
 
-git = Git()
-export_repositories = ExportRepositories(git=git)
+export_repositories = ExportRepositories()
 export_repositories.add(
     repo_path='/home/arcady/projects/project_1',
     branch='master',
@@ -44,7 +42,6 @@ export_repositories.add(
 )
 
 import_repository = ImportRepository(
-    git=git,
     repo_path='D:\\Contribute\\contributions-graph\\git_repositories\\contributions_graph\\',
     repo_branch='master',
     repo_author='Arcady Usov <itcrab@gmail.com>',

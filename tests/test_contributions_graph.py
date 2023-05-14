@@ -1,7 +1,7 @@
 import os
 
 from contributions_graph import ContributionsGraph
-from contributions_graph.git import Git
+from contributions_graph.git import GitConsole
 from contributions_graph.obfuscate import Obfuscate
 from contributions_graph.repositories import ExportRepositories, ImportRepository
 from tests.helpers import git_create_repository
@@ -21,12 +21,10 @@ class TestContributionsGraph:
 
         new_repo_path = tmpdir.mkdir('new_git_repo').strpath
 
-        git = Git()
-        export_repositories = ExportRepositories(git=git)
+        export_repositories = ExportRepositories()
         export_repositories.add(git_repo_path, 'master', git_author, file_ext='py')
 
         import_repository = ImportRepository(
-            git=git,
             repo_path=new_repo_path,
             repo_branch='master',
             repo_author=git_author,
@@ -38,7 +36,7 @@ class TestContributionsGraph:
 
         os.chdir(new_repo_path)
 
-        export_commits = git.get_commits(git_author)
+        export_commits = GitConsole.get_commits_by_author(git_author)
 
         del export_commits[-1]  # README.md
         assert os.path.isfile('README.md') is True
@@ -58,12 +56,10 @@ class TestContributionsGraph:
 
         new_repo_path = tmpdir.mkdir('new_git_repo').strpath
 
-        git = Git()
-        export_repositories = ExportRepositories(git=git)
+        export_repositories = ExportRepositories()
         export_repositories.add(git_repo_path, 'master', git_author, file_ext='py')
 
         import_repository = ImportRepository(
-            git=git,
             repo_path=new_repo_path,
             repo_branch='master',
             repo_author=git_author,
@@ -74,7 +70,7 @@ class TestContributionsGraph:
 
         os.chdir(new_repo_path)
 
-        export_commits = git.get_commits(git_author)
+        export_commits = GitConsole.get_commits_by_author(git_author)
 
         del export_commits[-1]  # README.md
         assert os.path.isfile('README.md') is True
@@ -103,16 +99,14 @@ class TestContributionsGraph:
         ]}}
         import_repository._apply_export_commits(export_commits)
 
-        git = Git()
-        export_commits = git.get_commits(git_author)
+        export_commits = GitConsole.get_commits_by_author(git_author)
 
         assert export_commits == [datetime_objects_obfuscate[1], datetime_objects_obfuscate[0]]
 
-        export_repositories = ExportRepositories(git=git)
+        export_repositories = ExportRepositories()
         export_repositories.add(git_repo_path, 'master', git_author, file_ext='py')
 
         import_repository = ImportRepository(
-            git=git,
             repo_path=new_repo_path,
             repo_branch='master',
             repo_author=git_author,
@@ -124,7 +118,7 @@ class TestContributionsGraph:
 
         os.chdir(new_repo_path)
 
-        export_commits = git.get_commits(git_author)
+        export_commits = GitConsole.get_commits_by_author(git_author)
 
         del export_commits[-3]  # README.md
         assert os.path.isfile('README.md') is True
@@ -159,16 +153,14 @@ class TestContributionsGraph:
         ]}}
         import_repository._apply_export_commits(export_commits)
 
-        git = Git()
-        export_commits = git.get_commits(git_author)
+        export_commits = GitConsole.get_commits_by_author(git_author)
 
         assert export_commits == [datetime_objects_utc[1], datetime_objects_utc[0]]
 
-        export_repositories = ExportRepositories(git=git)
+        export_repositories = ExportRepositories()
         export_repositories.add(git_repo_path, 'master', git_author, file_ext='py')
 
         import_repository = ImportRepository(
-            git=git,
             repo_path=new_repo_path,
             repo_branch='master',
             repo_author=git_author,
@@ -179,7 +171,7 @@ class TestContributionsGraph:
 
         os.chdir(new_repo_path)
 
-        export_commits = git.get_commits(git_author)
+        export_commits = GitConsole.get_commits_by_author(git_author)
 
         del export_commits[-3]  # README.md
         assert os.path.isfile('README.md') is True
