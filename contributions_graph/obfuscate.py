@@ -20,18 +20,18 @@ class Obfuscate:
             tzinfo=timezone.utc,
         )
 
-    def run(self, all_commits: Dict[str, RepositoryCommitsTypedDict]) -> Dict[str, RepositoryCommitsTypedDict]:
-        for repo_name in all_commits.keys():
-            obfuscate_date = self.get_obfuscate_date(all_commits[repo_name]['commits'][0])
-            for idx, commit in enumerate(all_commits[repo_name]['commits']):
+    def run(self, export_commits: Dict[str, RepositoryCommitsTypedDict]) -> Dict[str, RepositoryCommitsTypedDict]:
+        for repo_name in export_commits.keys():
+            obfuscate_date = self.get_obfuscate_date(export_commits[repo_name]['commits'][0])
+            for idx, commit in enumerate(export_commits[repo_name]['commits']):
                 if commit.day != obfuscate_date.day:
                     obfuscate_date = self.get_obfuscate_date(commit)
 
-                all_commits[repo_name]['commits'][idx] = obfuscate_date
+                export_commits[repo_name]['commits'][idx] = obfuscate_date
                 obfuscate_date += self.delta_minutes
                 if obfuscate_date.day != commit.day:
                     raise DayCapacityOverflowObfuscateError(
                         f'Commit {commit} have overflow day {commit.day} (next commit: {obfuscate_date})'
                     )
 
-        return all_commits
+        return export_commits

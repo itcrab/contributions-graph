@@ -29,11 +29,11 @@ class TestObfuscate:
             delta_minutes=5,
         )
 
-        all_commits = {'test_repo': {'author': git_author, 'file_ext': 'py', 'commits': [
+        export_commits = {'test_repo': {'author': git_author, 'file_ext': 'py', 'commits': [
             datetime_objects[0],
             datetime_objects[1],
         ]}}
-        obfuscate_commits = obfuscate.run(all_commits)
+        obfuscate_commits = obfuscate.run(export_commits)
         assert obfuscate_commits == {'test_repo': {'author': git_author, 'file_ext': 'py', 'commits': [
             datetime_objects_obfuscate[0],
             datetime_objects_obfuscate[1],
@@ -47,12 +47,12 @@ class TestObfuscate:
             delta_minutes=5,
         )
 
-        all_commits = {'test_repo': {'author': git_author, 'file_ext': 'py', 'commits': [
+        export_commits = {'test_repo': {'author': git_author, 'file_ext': 'py', 'commits': [
             datetime_objects[0],
             datetime_objects[1],
             datetime_objects[2],
         ]}}
-        obfuscate_commits = obfuscate.run(all_commits)
+        obfuscate_commits = obfuscate.run(export_commits)
         assert obfuscate_commits == {'test_repo': {'author': git_author, 'file_ext': 'py', 'commits': [
             datetime_objects_obfuscate[0],
             datetime_objects_obfuscate[1],
@@ -67,13 +67,13 @@ class TestObfuscate:
             delta_minutes=5,
         )
 
-        all_commits = {'test_repo': {'author': git_author, 'file_ext': 'py', 'commits': [
+        export_commits = {'test_repo': {'author': git_author, 'file_ext': 'py', 'commits': [
             datetime_objects[0],
             datetime_objects[1],
             datetime_objects[2],
             datetime_objects[3],
         ]}}
-        obfuscate_commits = obfuscate.run(all_commits)
+        obfuscate_commits = obfuscate.run(export_commits)
         assert obfuscate_commits == {'test_repo': {'author': git_author, 'file_ext': 'py', 'commits': [
             datetime_objects_obfuscate[0],
             datetime_objects_obfuscate[1],
@@ -89,14 +89,14 @@ class TestObfuscate:
             delta_minutes=10,
         )
 
-        all_commits = {'test_repo': {'author': git_author, 'file_ext': 'py', 'commits': [
+        export_commits = {'test_repo': {'author': git_author, 'file_ext': 'py', 'commits': [
             datetime(2021, 11, 14, 0, 18, 1, tzinfo=timezone(timedelta(hours=5))),
             datetime(2021, 11, 14, 0, 18, 2, tzinfo=timezone(timedelta(hours=5))),
             datetime(2021, 11, 14, 0, 18, 3, tzinfo=timezone(timedelta(hours=5))),
             datetime(2021, 11, 14, 0, 18, 4, tzinfo=timezone(timedelta(hours=5))),
             datetime(2021, 11, 14, 0, 18, 5, tzinfo=timezone(timedelta(hours=5))),
         ]}}
-        obfuscate_commits = obfuscate.run(all_commits)
+        obfuscate_commits = obfuscate.run(export_commits)
         assert obfuscate_commits == {'test_repo': {'author': git_author, 'file_ext': 'py', 'commits': [
             datetime(2021, 11, 14, 23, 0, tzinfo=timezone.utc),
             datetime(2021, 11, 14, 23, 10, tzinfo=timezone.utc),
@@ -113,7 +113,7 @@ class TestObfuscate:
             delta_minutes=10,
         )
 
-        all_commits = {'test_repo': {'author': git_author, 'file_ext': 'py', 'commits': [
+        export_commits = {'test_repo': {'author': git_author, 'file_ext': 'py', 'commits': [
             datetime(2021, 11, 14, 0, 18, 1, tzinfo=timezone(timedelta(hours=5))),
             datetime(2021, 11, 14, 0, 18, 2, tzinfo=timezone(timedelta(hours=5))),
             datetime(2021, 11, 14, 0, 18, 3, tzinfo=timezone(timedelta(hours=5))),
@@ -122,6 +122,6 @@ class TestObfuscate:
             datetime(2021, 11, 14, 0, 18, 6, tzinfo=timezone(timedelta(hours=5))),
         ]}}
         with pytest.raises(DayCapacityOverflowObfuscateError) as exc:
-            obfuscate.run(all_commits)
+            obfuscate.run(export_commits)
         assert str(exc.value) == 'Commit 2021-11-14 00:18:06+05:00 have overflow day 14 ' \
                                  '(next commit: 2021-11-15 00:00:00+00:00)'

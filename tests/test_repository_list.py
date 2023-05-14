@@ -1,11 +1,13 @@
 import pytest
 
+from contributions_graph.git import Git
 from contributions_graph.repositories import ExportRepositories
 
 
 class TestExportRepositories:
     def test_export_repositories_case_1(self, repository_dicts):
-        export_repositories = ExportRepositories()
+        git = Git()
+        export_repositories = ExportRepositories(git=git)
         assert export_repositories._repositories == []
         assert export_repositories._position == 0
         assert export_repositories._max_position == 0
@@ -33,7 +35,8 @@ class TestExportRepositories:
         assert export_repositories._max_position == 3
 
     def test_export_repositories_case_2(self, repository_dicts):
-        export_repositories = ExportRepositories()
+        git = Git()
+        export_repositories = ExportRepositories(git=git)
         assert export_repositories._repositories == []
         assert export_repositories._position == 0
         assert export_repositories._max_position == 0
@@ -80,7 +83,8 @@ class TestExportRepositories:
             next(export_repositories)
 
     def test_export_repositories_case_3(self, repository_dicts):
-        export_repositories = ExportRepositories()
+        git = Git()
+        export_repositories = ExportRepositories(git=git)
         assert export_repositories._repositories == []
         assert export_repositories._position == 0
         assert export_repositories._max_position == 0

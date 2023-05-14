@@ -45,16 +45,16 @@ class GitConsole:
     @classmethod
     def get_commits_by_author(cls, author: str) -> List[str]:
         cmd = f'git --no-pager log --pretty="%cI" --author="{author}"'
-        all_commits = subprocess.check_output(cmd, shell=True, universal_newlines=True)
+        export_commits = subprocess.check_output(cmd, shell=True, universal_newlines=True)
 
-        return all_commits.splitlines()
+        return export_commits.splitlines()
 
     @staticmethod
     def get_committers() -> List[str]:  # only for testing
         cmd = 'git --no-pager log --pretty="%cn <%ce>"'
-        all_committers = subprocess.check_output(cmd, shell=True, universal_newlines=True)
+        committers = subprocess.check_output(cmd, shell=True, universal_newlines=True)
 
-        return all_committers.splitlines()
+        return committers.splitlines()
 
 
 class GitRepositorySwitch:
@@ -86,6 +86,6 @@ class GitRepositorySwitch:
 
 class Git:
     def get_commits(self, author: str) -> List[datetime]:
-        all_commits = GitConsole.get_commits_by_author(author)
+        export_commits = GitConsole.get_commits_by_author(author)
 
-        return list(map(parse_iso_8601_string_to_datetime, all_commits))
+        return list(map(parse_iso_8601_string_to_datetime, export_commits))

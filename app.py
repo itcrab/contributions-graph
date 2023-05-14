@@ -3,7 +3,8 @@ from contributions_graph.git import Git
 from contributions_graph.obfuscate import Obfuscate
 from contributions_graph.repositories import ExportRepositories, ImportRepository
 
-export_repositories = ExportRepositories()
+git = Git()
+export_repositories = ExportRepositories(git=git)
 export_repositories.add(
     repo_path='/home/arcady/projects/project_1',
     branch='master',
@@ -24,11 +25,11 @@ export_repositories.add(
 )
 
 import_repository = ImportRepository(
+    git=git,
     repo_path='D:\\Contribute\\contributions-graph\\git_repositories\\contributions_graph\\',
     repo_branch='master',
     repo_author='Arcady Usov <itcrab@gmail.com>',
 )
-git = Git()
 
 obfuscate_enabled = False
 obfuscate = None if not obfuscate_enabled else Obfuscate(
@@ -39,5 +40,5 @@ obfuscate = None if not obfuscate_enabled else Obfuscate(
 )
 
 if __name__ == '__main__':
-    contributions_graph = ContributionsGraph(export_repositories, import_repository, git, obfuscate)
+    contributions_graph = ContributionsGraph(export_repositories, import_repository, obfuscate)
     contributions_graph.run()

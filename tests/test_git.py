@@ -13,38 +13,38 @@ class TestGit:
         os.chdir(git_repo_path)
 
         import_repository = git_create_repository(repo_path=git_repo_path, repo_author=git_author)
-        all_commits = {'test_repo': {'author': git_author, 'file_ext': 'py', 'commits': [
+        export_commits = {'test_repo': {'author': git_author, 'file_ext': 'py', 'commits': [
             datetime_objects[0],
             datetime_objects[1],
         ]}}
-        import_repository._apply_all_commits(all_commits)
+        import_repository._apply_export_commits(export_commits)
 
         git = Git()
         with GitRepositorySwitch(new_repo_path=git_repo_path, new_repo_branch='master'):
-            all_commits = git.get_commits(author=git_author)
+            export_commits = git.get_commits(author=git_author)
 
-        assert all_commits == [datetime_objects_utc[1], datetime_objects_utc[0]]
+        assert export_commits == [datetime_objects_utc[1], datetime_objects_utc[0]]
 
     def test_get_commits_with_different_base_branch(self, tmpdir, git_author, datetime_objects, datetime_objects_utc):
         git_repo_path = tmpdir.mkdir('get_commits').strpath
         os.chdir(git_repo_path)
 
         import_repository = git_create_repository(repo_path=git_repo_path, repo_author=git_author)
-        all_commits = {'test_repo': {'author': git_author, 'file_ext': 'py', 'commits': [
+        export_commits = {'test_repo': {'author': git_author, 'file_ext': 'py', 'commits': [
             datetime_objects[0],
             datetime_objects[1],
         ]}}
-        import_repository._apply_all_commits(all_commits)
+        import_repository._apply_export_commits(export_commits)
 
         GitConsole.create_branch('new-branch')
         assert GitConsole.get_current_branch() == 'new-branch'
 
         git = Git()
         with GitRepositorySwitch(new_repo_path=git_repo_path, new_repo_branch='master'):
-            all_commits = git.get_commits(author=git_author)
+            export_commits = git.get_commits(author=git_author)
 
             assert GitConsole.get_current_branch() == 'master'
-            assert all_commits == [datetime_objects_utc[1], datetime_objects_utc[0]]
+            assert export_commits == [datetime_objects_utc[1], datetime_objects_utc[0]]
 
     def test_get_commits_with_read_only_master_commits_case_1(self, tmpdir, git_author, datetime_objects,
                                                               datetime_objects_utc):
@@ -53,30 +53,30 @@ class TestGit:
 
         import_repository = git_create_repository(repo_path=git_repo_path, repo_author=git_author)
 
-        all_commits = {'test_repo': {'author': git_author, 'file_ext': 'py', 'commits': [
+        export_commits = {'test_repo': {'author': git_author, 'file_ext': 'py', 'commits': [
             datetime_objects[0],
         ]}}
-        import_repository._apply_all_commits(all_commits)
+        import_repository._apply_export_commits(export_commits)
 
         GitConsole.create_branch('new-branch')
 
-        all_commits = {'test_repo': {'author': git_author, 'file_ext': 'py', 'commits': [
+        export_commits = {'test_repo': {'author': git_author, 'file_ext': 'py', 'commits': [
             datetime_objects[1],
         ]}}
-        import_repository._apply_all_commits(all_commits)
+        import_repository._apply_export_commits(export_commits)
 
         GitConsole.switch_branch('master')
 
-        all_commits = {'test_repo': {'author': git_author, 'file_ext': 'py', 'commits': [
+        export_commits = {'test_repo': {'author': git_author, 'file_ext': 'py', 'commits': [
             datetime_objects[2],
         ]}}
-        import_repository._apply_all_commits(all_commits)
+        import_repository._apply_export_commits(export_commits)
 
         git = Git()
         with GitRepositorySwitch(new_repo_path=git_repo_path, new_repo_branch='master'):
-            all_commits = git.get_commits(author=git_author)
+            export_commits = git.get_commits(author=git_author)
 
-        assert all_commits == [datetime_objects_utc[2], datetime_objects_utc[0]]
+        assert export_commits == [datetime_objects_utc[2], datetime_objects_utc[0]]
 
     def test_get_commits_with_read_only_master_commits_case_2(self, tmpdir, git_author, datetime_objects,
                                                               datetime_objects_utc):
@@ -85,25 +85,25 @@ class TestGit:
 
         import_repository = git_create_repository(repo_path=git_repo_path, repo_author=git_author)
 
-        all_commits = {'test_repo': {'author': git_author, 'file_ext': 'py', 'commits': [
+        export_commits = {'test_repo': {'author': git_author, 'file_ext': 'py', 'commits': [
             datetime_objects[0],
         ]}}
-        import_repository._apply_all_commits(all_commits)
+        import_repository._apply_export_commits(export_commits)
 
         GitConsole.create_branch('new-branch')
 
-        all_commits = {'test_repo': {'author': git_author, 'file_ext': 'py', 'commits': [
+        export_commits = {'test_repo': {'author': git_author, 'file_ext': 'py', 'commits': [
             datetime_objects[1],
             datetime_objects[2],
             datetime_objects[3],
         ]}}
-        import_repository._apply_all_commits(all_commits)
+        import_repository._apply_export_commits(export_commits)
 
         git = Git()
         with GitRepositorySwitch(new_repo_path=git_repo_path, new_repo_branch='master'):
-            all_commits = git.get_commits(author=git_author)
+            export_commits = git.get_commits(author=git_author)
 
-        assert all_commits == [datetime_objects_utc[0]]
+        assert export_commits == [datetime_objects_utc[0]]
 
     def test_get_commits_with_read_only_master_commits_case_3(self, tmpdir, git_author, datetime_objects,
                                                               datetime_objects_utc):
@@ -114,24 +114,24 @@ class TestGit:
 
         GitConsole.create_branch('new-branch')
 
-        all_commits = {'test_repo': {'author': git_author, 'file_ext': 'py', 'commits': [
+        export_commits = {'test_repo': {'author': git_author, 'file_ext': 'py', 'commits': [
             datetime_objects[0],
         ]}}
-        import_repository._apply_all_commits(all_commits)
+        import_repository._apply_export_commits(export_commits)
 
         GitConsole.create_branch('master')
 
-        all_commits = {'test_repo': {'author': git_author, 'file_ext': 'py', 'commits': [
+        export_commits = {'test_repo': {'author': git_author, 'file_ext': 'py', 'commits': [
             datetime_objects[1],
             datetime_objects[2],
         ]}}
-        import_repository._apply_all_commits(all_commits)
+        import_repository._apply_export_commits(export_commits)
 
         git = Git()
         with GitRepositorySwitch(new_repo_path=git_repo_path, new_repo_branch='master'):
-            all_commits = git.get_commits(author=git_author)
+            export_commits = git.get_commits(author=git_author)
 
-        assert all_commits == [datetime_objects_utc[2], datetime_objects_utc[1], datetime_objects_utc[0]]
+        assert export_commits == [datetime_objects_utc[2], datetime_objects_utc[1], datetime_objects_utc[0]]
 
     def test_get_commits_with_read_only_new_branch_commits_case_1(self, tmpdir, git_author, datetime_objects,
                                                                   datetime_objects_utc):
@@ -142,24 +142,24 @@ class TestGit:
 
         GitConsole.create_branch('new-branch')
 
-        all_commits = {'test_repo': {'author': git_author, 'file_ext': 'py', 'commits': [
+        export_commits = {'test_repo': {'author': git_author, 'file_ext': 'py', 'commits': [
             datetime_objects[0],
         ]}}
-        import_repository._apply_all_commits(all_commits)
+        import_repository._apply_export_commits(export_commits)
 
         GitConsole.create_branch('master')
 
-        all_commits = {'test_repo': {'author': git_author, 'file_ext': 'py', 'commits': [
+        export_commits = {'test_repo': {'author': git_author, 'file_ext': 'py', 'commits': [
             datetime_objects[1],
             datetime_objects[2],
         ]}}
-        import_repository._apply_all_commits(all_commits)
+        import_repository._apply_export_commits(export_commits)
 
         git = Git()
         with GitRepositorySwitch(new_repo_path=git_repo_path, new_repo_branch='new-branch'):
-            all_commits = git.get_commits(author=git_author)
+            export_commits = git.get_commits(author=git_author)
 
-        assert all_commits == [datetime_objects_utc[0]]
+        assert export_commits == [datetime_objects_utc[0]]
 
     def test_get_commits_with_read_only_new_branch_commits_case_2(self, tmpdir, git_author, datetime_objects,
                                                                   datetime_objects_utc):
@@ -168,41 +168,41 @@ class TestGit:
 
         import_repository = git_create_repository(repo_path=git_repo_path, repo_author=git_author)
 
-        all_commits = {'test_repo': {'author': git_author, 'file_ext': 'py', 'commits': [
+        export_commits = {'test_repo': {'author': git_author, 'file_ext': 'py', 'commits': [
             datetime_objects[0],
         ]}}
-        import_repository._apply_all_commits(all_commits)
+        import_repository._apply_export_commits(export_commits)
 
         GitConsole.create_branch('new-branch')
 
-        all_commits = {'test_repo': {'author': git_author, 'file_ext': 'py', 'commits': [
+        export_commits = {'test_repo': {'author': git_author, 'file_ext': 'py', 'commits': [
             datetime_objects[1],
         ]}}
-        import_repository._apply_all_commits(all_commits)
+        import_repository._apply_export_commits(export_commits)
 
         GitConsole.switch_branch('master')
 
-        all_commits = {'test_repo': {'author': git_author, 'file_ext': 'py', 'commits': [
+        export_commits = {'test_repo': {'author': git_author, 'file_ext': 'py', 'commits': [
             datetime_objects[2],
         ]}}
-        import_repository._apply_all_commits(all_commits)
+        import_repository._apply_export_commits(export_commits)
 
         git = Git()
         with GitRepositorySwitch(new_repo_path=git_repo_path, new_repo_branch='new-branch'):
-            all_commits = git.get_commits(author=git_author)
+            export_commits = git.get_commits(author=git_author)
 
-        assert all_commits == [datetime_objects_utc[1], datetime_objects_utc[0]]
+        assert export_commits == [datetime_objects_utc[1], datetime_objects_utc[0]]
 
     def test_get_commits_with_wrong_branch(self, tmpdir, datetime_objects, git_author):
         git_repo_path = tmpdir.mkdir('get_commits').strpath
         os.chdir(git_repo_path)
 
         import_repository = git_create_repository(repo_path=git_repo_path, repo_author=git_author)
-        all_commits = {'test_repo': {'author': git_author, 'file_ext': 'py', 'commits': [
+        export_commits = {'test_repo': {'author': git_author, 'file_ext': 'py', 'commits': [
             datetime_objects[0],
             datetime_objects[1],
         ]}}
-        import_repository._apply_all_commits(all_commits)
+        import_repository._apply_export_commits(export_commits)
 
         git = Git()
         with pytest.raises(GitBranchNotFoundError):
@@ -237,18 +237,18 @@ class TestGit:
         git_repo_path = tmpdir.mkdir('build_git_repository').strpath
         os.chdir(git_repo_path)
 
-        all_commits = {'test_repo': {'author': git_author, 'file_ext': 'py', 'commits': [
+        export_commits = {'test_repo': {'author': git_author, 'file_ext': 'py', 'commits': [
             datetime_objects[0],
             datetime_objects[1],
         ]}}
 
         import_repository = git_create_repository(repo_path=git_repo_path, repo_author=git_author)
-        import_repository._apply_all_commits(all_commits)
+        import_repository._apply_export_commits(export_commits)
 
         git = Git()
-        all_commits = git.get_commits(git_author)
+        export_commits = git.get_commits(git_author)
 
-        assert all_commits == [datetime_objects[1], datetime_objects[0]]
+        assert export_commits == [datetime_objects[1], datetime_objects[0]]
         assert os.path.isfile('test_repo.py') is True
 
         committers = GitConsole.get_committers()
@@ -259,7 +259,7 @@ class TestGit:
         git_repo_path = tmpdir.mkdir(branch_name).strpath
         os.chdir(git_repo_path)
 
-        all_commits = {'test_repo': {'author': git_author, 'file_ext': 'py', 'commits': [
+        export_commits = {'test_repo': {'author': git_author, 'file_ext': 'py', 'commits': [
             datetime_objects[0],
             datetime_objects[1],
         ]}}
@@ -269,5 +269,5 @@ class TestGit:
             repo_branch=branch_name,
             repo_author=git_author,
         )
-        import_repository._apply_all_commits(all_commits)
+        import_repository._apply_export_commits(export_commits)
         assert GitConsole.get_current_branch() == branch_name
