@@ -72,16 +72,19 @@ def repository_dicts(tmpdir):
             repo_path=tmpdir,
             branch='branch-name-first',
             author='Developer Name <e-first@mail.com>',
+            file_ext='py',
         ),
         dict(
             repo_path=tmpdir,
             branch='branch-name-second',
             author='Developer Name <e-second@mail.com>',
+            file_ext='py',
         ),
         dict(
             repo_path=tmpdir,
             branch='branch-name-third',
             author='Developer Name <e-third@mail.com>',
+            file_ext='py',
         )
     ]
 

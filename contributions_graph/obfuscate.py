@@ -1,5 +1,8 @@
 from datetime import timedelta, datetime, timezone
-from typing import List
+from typing import Dict
+
+from contributions_graph.exceptions import DayCapacityOverflowObfuscateError
+from contributions_graph.typing import RepositoryCommitsTypedDict
 
 
 class Obfuscate:
@@ -17,13 +20,18 @@ class Obfuscate:
             tzinfo=timezone.utc,
         )
 
-    def run(self, all_commits: List[datetime]) -> List[datetime]:
-        ofuscate_date = self.get_obfuscate_date(all_commits[0])
-        for idx, commit in enumerate(all_commits):
-            if commit.day != ofuscate_date.day:
-                ofuscate_date = self.get_obfuscate_date(commit)
+    def run(self, export_commits: Dict[str, RepositoryCommitsTypedDict]) -> Dict[str, RepositoryCommitsTypedDict]:
+        for repo_name in export_commits.keys():
+            obfuscate_date = self.get_obfuscate_date(export_commits[repo_name]['commits'][0])
+            for idx, commit in enumerate(export_commits[repo_name]['commits']):
+                if commit.day != obfuscate_date.day:
+                    obfuscate_date = self.get_obfuscate_date(commit)
 
-            all_commits[idx] = ofuscate_date
-            ofuscate_date += self.delta_minutes
+                export_commits[repo_name]['commits'][idx] = obfuscate_date
+                obfuscate_date += self.delta_minutes
+                if obfuscate_date.day != commit.day:
+                    raise DayCapacityOverflowObfuscateError(
+                        f'Commit {commit} have overflow day {commit.day} (next commit: {obfuscate_date})'
+                    )
 
-        return all_commits
+        return export_commits
