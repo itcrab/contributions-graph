@@ -2,12 +2,16 @@
 .vscode/
 
 # Python
+venv/
 __pycache__/
 *.py[cod]
 
 # Pytest
 .pytest_cache/
 .coverage
+
+# GIT repositories
+git_repositories/
 
 # mypy
 .mypy_cache/
