@@ -28,8 +28,9 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         PY_VERSION=$(python -c 'import sys; print(f"{sys.version_info.major}.{sys.version_info.minor}")')
+        echo "Python version: $PY_VERSION"
         if [ "$PY_VERSION" = "3.14" || "$PY_VERSION" = "3.15" ]; then
-          pip install typed-ast
+          python -m pip install typed-ast
         fi
         pip install -r test_requirements.txt
     - name: Lint with flake8
