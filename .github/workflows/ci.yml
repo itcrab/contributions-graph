@@ -27,7 +27,6 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install typed-ast
         pip install -r test_requirements.txt
     - name: Lint with flake8
       run: |
