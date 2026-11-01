@@ -1,5 +1,6 @@
 ![GitHub Actions CI](https://github.com/itcrab/contributions-graph/actions/workflows/ci.yml/badge.svg)
 
+
 # Contributions Graph
 Copy meta-data of all your commits from any repositories outside GitHub to one repository on GitHub.
 It's a simple way to build the right GitHub Contributions Graph.
@@ -18,33 +19,33 @@ This action will fix your contribution graph on GitHub.<br />
 `$ cat app.py`
 ```python
 from contributions_graph import ContributionsGraph
+from contributions_graph.git import Git
 from contributions_graph.obfuscate import Obfuscate
-from contributions_graph.repositories import ExportRepositories, ImportRepository
+from contributions_graph.repository_list import RepositoryList
 
-export_repositories = ExportRepositories()
-export_repositories.add(
+repository_list = RepositoryList()
+repository_list.add(
     repo_path='/home/arcady/projects/project_1',
     branch='master',
     author='Arcady Usov <arcady.usov@example.email.com>',
-    file_ext='py',
 )
-export_repositories.add(
+repository_list.add(
     repo_path='/home/arcady/projects/project_2',
     branch='develop',
     author='Arcady Usov <arcady.usov@example.email.com>',
-    file_ext='py',
 )
-export_repositories.add(
+repository_list.add(
     repo_path='/home/arcady/projects/project_3',
     branch='testing',
     author='Arcady Usov <arcady.usov@example.email.com>',
-    file_ext='py',
 )
 
-import_repository = ImportRepository(
-    repo_path='D:\\Contribute\\contributions-graph\\git_repositories\\contributions_graph\\',
-    repo_branch='master',
-    repo_author='Arcady Usov <itcrab@gmail.com>',
+git = Git(
+    new_repo_path='/home/arcady/projects/contributions_graph',
+    new_repo_branch='master',
+    new_repo_author='Arcady Usov <arcady.usov@example.email.com>',
+    file_dir='all_commits',
+    file_ext='py',
 )
 
 obfuscate_enabled = False
@@ -56,6 +57,6 @@ obfuscate = None if not obfuscate_enabled else Obfuscate(
 )
 
 if __name__ == '__main__':
-    contributions_graph = ContributionsGraph(export_repositories, import_repository, obfuscate)
+    contributions_graph = ContributionsGraph(repository_list, git, obfuscate)
     contributions_graph.run()
 ```
