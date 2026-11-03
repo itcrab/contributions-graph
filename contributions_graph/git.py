@@ -34,7 +34,7 @@ class Git:
         repo_branch = self.get_repo_branch()
 
         if repo_branch != branch:
-            subprocess.run(f'git checkout {branch}')
+            subprocess.run(f'git checkout {branch}', shell=True)
 
             selected_branch = self.get_repo_branch()
             if selected_branch != branch:
@@ -45,7 +45,7 @@ class Git:
         all_commits = self.get_all_commits(author)
 
         if repo_branch != branch:
-            subprocess.run(f'git checkout {repo_branch}')
+            subprocess.run(f'git checkout {repo_branch}', shell=True)
 
         os.chdir(self.current_path)
 
@@ -85,9 +85,9 @@ class Git:
         if not self.repository_exists():
             repo_author = self.new_repo_author.split('<')
 
-            subprocess.run('git init')
-            subprocess.run(f'git config user.email "{repo_author[1][:-1]}"')
-            subprocess.run(f'git config user.name "{repo_author[0]}"')
+            subprocess.run('git init', shell=True)
+            subprocess.run(f'git config user.email "{repo_author[1][:-1]}"', shell=True)
+            subprocess.run(f'git config user.name "{repo_author[0]}"', shell=True)
 
     def create_readme(self) -> None:
         file_name = 'README.md'
@@ -132,5 +132,5 @@ class Git:
             'GIT_COMMITTER_DATE': date_string,
         }
 
-        subprocess.run(f'git add {file_name}', env=os.environ | git_date_override_vars)
-        subprocess.run(f'git commit -m "Commit file {file_name}"', env=os.environ | git_date_override_vars)
+        subprocess.run(f'git add {file_name}', shell=True, env=os.environ | git_date_override_vars)
+        subprocess.run(f'git commit -m "Commit file {file_name}"', shell=True, env=os.environ | git_date_override_vars)
