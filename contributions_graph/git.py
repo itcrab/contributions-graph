@@ -4,7 +4,7 @@ from datetime import datetime
 from typing import List
 
 from contributions_graph.exceptions import GitBranchNotFoundError
-from contributions_graph.utils import generate_full_file_name, write_file_data, parse_iso_8601_string_to_datetime
+from contributions_graph.utils import write_file_data, parse_iso_8601_string_to_datetime
 
 
 class Git:
@@ -95,7 +95,7 @@ class Git:
             file_data = '# Contribution Graph Repository'
             write_file_data(file_name, file_data)
 
-            self.set_current_datetime(datetime.today().isoformat())
+            self.set_current_datetime(datetime.today())
             self.commit_file(file_name)
 
     def build_repository(self, all_commits: List[datetime]) -> None:
@@ -104,22 +104,27 @@ class Git:
         os.chdir(self.file_dir)
 
         for commit in all_commits:
-            date_string = commit.isoformat()
-
-            file_name = self.create_file(date_string)
-            self.set_current_datetime(date_string)
-            self.commit_file(file_name)
+            file_path = self.create_file(commit)
+            self.set_current_datetime(commit)
+            self.commit_file(file_path)
 
         os.chdir(self.current_path)
 
-    def create_file(self, date_string: str) -> str:
-        file_name = generate_full_file_name(self.file_ext)
-        file_data = 'commit_datetime="{}"'.format(date_string)
-        write_file_data(file_name, file_data)
+    def create_file(self, commit: datetime) -> str:
+        dir_path = commit.strftime('%Y/%m')
+        os.makedirs(dir_path, exist_ok=True)
+        file_name = commit.strftime('%Y_%m_%d__%H_%M_%S')
+        tz_str = commit.strftime('%z')
+        tz_str_in_path = tz_str.replace('+', 'p').replace('-', 'm')
+        file_path = f'{dir_path}/{file_name}__{tz_str_in_path}.{self.file_ext}'
 
-        return file_name
+        file_data = f'commit_datetime="{file_name}_{tz_str}"'
+        write_file_data(file_path, file_data)
 
-    def set_current_datetime(self, date_string: str) -> None:
+        return file_path
+
+    def set_current_datetime(self, commit: datetime) -> None:
+        date_string = commit.isoformat()
         os.environ['GIT_AUTHOR_DATE'] = date_string
         os.environ['GIT_COMMITTER_DATE'] = date_string
 
