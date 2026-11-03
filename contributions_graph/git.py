@@ -95,8 +95,7 @@ class Git:
             file_data = '# Contribution Graph Repository'
             write_file_data(file_name, file_data)
 
-            self.set_current_datetime(datetime.today())
-            self.commit_file(file_name)
+            self.commit_file(None, file_name)
 
     def build_repository(self, all_commits: List[datetime]) -> None:
         if not os.path.isdir(self.file_dir):
@@ -105,8 +104,7 @@ class Git:
 
         for commit in all_commits:
             file_path = self.create_file(commit)
-            self.set_current_datetime(commit)
-            self.commit_file(file_path)
+            self.commit_file(commit, file_path)
 
         os.chdir(self.current_path)
 
@@ -123,11 +121,16 @@ class Git:
 
         return file_path
 
-    def set_current_datetime(self, commit: datetime) -> None:
-        date_string = commit.isoformat()
-        os.environ['GIT_AUTHOR_DATE'] = date_string
-        os.environ['GIT_COMMITTER_DATE'] = date_string
+    def commit_file(self, commit: datetime | None, file_name: str) -> None:
+        if commit is None:
+            date_string = datetime.today().isoformat()
+        else:
+            date_string = commit.isoformat()
 
-    def commit_file(self, file_name: str) -> None:
-        subprocess.run(f'git add {file_name}')
-        subprocess.run(f'git commit -m "Commit file {file_name}"')
+        git_date_override_vars = {
+            'GIT_AUTHOR_DATE': date_string,
+            'GIT_COMMITTER_DATE': date_string,
+        }
+
+        subprocess.run(f'git add {file_name}', env=os.environ | git_date_override_vars)
+        subprocess.run(f'git commit -m "Commit file {file_name}"', env=os.environ | git_date_override_vars)

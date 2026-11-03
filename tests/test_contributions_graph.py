@@ -16,8 +16,7 @@ class TestContributionsGraph(GitTestMixin):
         git = self.git_create_repository(new_repo_path=git_repo_path, new_repo_author=git_author)
         for i in range(2):
             file_name = git.create_file(datetime_objects[i])
-            git.set_current_datetime(datetime_objects[i])
-            git.commit_file(file_name)
+            git.commit_file(datetime_objects[i], file_name)
 
         repository_list = RepositoryList()
         repository_list.add(git_repo_path, 'master', git_author)
@@ -51,8 +50,7 @@ class TestContributionsGraph(GitTestMixin):
         git = self.git_create_repository(new_repo_path=git_repo_path, new_repo_author=git_author)
         for i in range(2):
             file_name = git.create_file(datetime_objects[i])
-            git.set_current_datetime(datetime_objects[i])
-            git.commit_file(file_name)
+            git.commit_file(datetime_objects[i], file_name)
 
         repository_list = RepositoryList()
         repository_list.add(git_repo_path, 'master', git_author)
@@ -85,15 +83,13 @@ class TestContributionsGraph(GitTestMixin):
         git = self.git_create_repository(new_repo_path=git_repo_path, new_repo_author=git_author)
         for i in range(4):
             file_name = git.create_file(datetime_objects[i])
-            git.set_current_datetime(datetime_objects[i])
-            git.commit_file(file_name)
+            git.commit_file(datetime_objects[i], file_name)
 
         new_repo_path = tmpdir.mkdir('new_git_repo').strpath
         git = self.git_create_repository(new_repo_path=new_repo_path, new_repo_author=git_author)
         for i in range(2):
             file_name = git.create_file(datetime_objects_obfuscate[i])
-            git.set_current_datetime(datetime_objects_obfuscate[i])
-            git.commit_file(file_name)
+            git.commit_file(datetime_objects_obfuscate[i], file_name)
 
         all_commits = git.get_all_commits(git_author)
 
@@ -135,16 +131,14 @@ class TestContributionsGraph(GitTestMixin):
         git = self.git_create_repository(new_repo_path=git_repo_path, new_repo_author=git_author)
         for i in range(4):
             file_name = git.create_file(datetime_objects[i])
-            git.set_current_datetime(datetime_objects[i])
-            git.commit_file(file_name)
+            git.commit_file(datetime_objects[i], file_name)
 
         new_repo_path = tmpdir.mkdir('new_git_repo').strpath
 
         git = self.git_create_repository(new_repo_path=new_repo_path, new_repo_author=git_author)
         for i in range(2):
             file_name = git.create_file(datetime_objects[i])
-            git.set_current_datetime(datetime_objects[i])
-            git.commit_file(file_name)
+            git.commit_file(datetime_objects[i], file_name)
 
         all_commits = git.get_all_commits(git_author)
 

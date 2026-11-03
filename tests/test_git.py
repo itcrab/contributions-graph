@@ -16,8 +16,7 @@ class TestGit(GitTestMixin):
         git = self.git_create_repository(new_repo_path=git_repo_path, new_repo_author=git_author)
         for i in range(2):
             file_name = git.create_file(datetime_objects[i])
-            git.set_current_datetime(datetime_objects[i])
-            git.commit_file(file_name)
+            git.commit_file(datetime_objects[i], file_name)
 
         all_commits = git.get_commits(
             repo_path=git_repo_path,
@@ -34,8 +33,7 @@ class TestGit(GitTestMixin):
         git = self.git_create_repository(new_repo_path=git_repo_path, new_repo_author=git_author)
         for i in range(2):
             file_name = git.create_file(datetime_objects[i])
-            git.set_current_datetime(datetime_objects[i])
-            git.commit_file(file_name)
+            git.commit_file(datetime_objects[i], file_name)
 
         subprocess.run('git checkout -b new-branch')
 
@@ -56,20 +54,17 @@ class TestGit(GitTestMixin):
         git = self.git_create_repository(new_repo_path=git_repo_path, new_repo_author=git_author)
 
         file_name = git.create_file(datetime_objects[0])
-        git.set_current_datetime(datetime_objects[0])
-        git.commit_file(file_name)
+        git.commit_file(datetime_objects[0], file_name)
 
         subprocess.run('git checkout -b new-branch')
 
         file_name = git.create_file(datetime_objects[1])
-        git.set_current_datetime(datetime_objects[1])
-        git.commit_file(file_name)
+        git.commit_file(datetime_objects[1], file_name)
 
         subprocess.run('git checkout master')
 
         file_name = git.create_file(datetime_objects[2])
-        git.set_current_datetime(datetime_objects[2])
-        git.commit_file(file_name)
+        git.commit_file(datetime_objects[2], file_name)
 
         all_commits = git.get_commits(
             repo_path=git_repo_path,
@@ -86,15 +81,13 @@ class TestGit(GitTestMixin):
         git = self.git_create_repository(new_repo_path=git_repo_path, new_repo_author=git_author)
 
         file_name = git.create_file(datetime_objects[0])
-        git.set_current_datetime(datetime_objects[0])
-        git.commit_file(file_name)
+        git.commit_file(datetime_objects[0], file_name)
 
         subprocess.run('git checkout -b new-branch')
 
         for i in range(1, 3):
             file_name = git.create_file(datetime_objects[i])
-            git.set_current_datetime(datetime_objects[i])
-            git.commit_file(file_name)
+            git.commit_file(datetime_objects[i], file_name)
 
         all_commits = git.get_commits(
             repo_path=git_repo_path,
@@ -113,15 +106,13 @@ class TestGit(GitTestMixin):
         subprocess.run('git checkout -b new-branch')
 
         file_name = git.create_file(datetime_objects[0])
-        git.set_current_datetime(datetime_objects[0])
-        git.commit_file(file_name)
+        git.commit_file(datetime_objects[0], file_name)
 
         subprocess.run('git checkout -b master')
 
         for i in range(1, 3):
             file_name = git.create_file(datetime_objects[i])
-            git.set_current_datetime(datetime_objects[i])
-            git.commit_file(file_name)
+            git.commit_file(datetime_objects[i], file_name)
 
         all_commits = git.get_commits(
             repo_path=git_repo_path,
@@ -140,15 +131,13 @@ class TestGit(GitTestMixin):
         subprocess.run('git checkout -b new-branch')
 
         file_name = git.create_file(datetime_objects[0])
-        git.set_current_datetime(datetime_objects[0])
-        git.commit_file(file_name)
+        git.commit_file(datetime_objects[0], file_name)
 
         subprocess.run('git checkout -b master')
 
         for i in range(1, 3):
             file_name = git.create_file(datetime_objects[i])
-            git.set_current_datetime(datetime_objects[i])
-            git.commit_file(file_name)
+            git.commit_file(datetime_objects[i], file_name)
 
         all_commits = git.get_commits(
             repo_path=git_repo_path,
@@ -165,20 +154,17 @@ class TestGit(GitTestMixin):
         git = self.git_create_repository(new_repo_path=git_repo_path, new_repo_author=git_author)
 
         file_name = git.create_file(datetime_objects[0])
-        git.set_current_datetime(datetime_objects[0])
-        git.commit_file(file_name)
+        git.commit_file(datetime_objects[0], file_name)
 
         subprocess.run('git checkout -b new-branch')
 
         file_name = git.create_file(datetime_objects[1])
-        git.set_current_datetime(datetime_objects[1])
-        git.commit_file(file_name)
+        git.commit_file(datetime_objects[1], file_name)
 
         subprocess.run('git checkout master')
 
         file_name = git.create_file(datetime_objects[2])
-        git.set_current_datetime(datetime_objects[2])
-        git.commit_file(file_name)
+        git.commit_file(datetime_objects[2], file_name)
 
         all_commits = git.get_commits(
             repo_path=git_repo_path,
@@ -194,8 +180,7 @@ class TestGit(GitTestMixin):
         git = self.git_create_repository(new_repo_path=git_repo_path, new_repo_author=git_author)
         for i in range(2):
             file_name = git.create_file(datetime_objects[i])
-            git.set_current_datetime(datetime_objects[i])
-            git.commit_file(file_name)
+            git.commit_file(datetime_objects[i], file_name)
 
         with pytest.raises(GitBranchNotFoundError):
             git.get_commits(
