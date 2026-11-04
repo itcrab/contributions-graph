@@ -19,8 +19,9 @@ class RepositoryList:
     def __iter__(self) -> Iterator[dict]:
         return self
 
-    def add(self, repo_path: str, branch: str, author: str) -> None:
+    def add(self, repo_name: str, repo_path: str, branch: str, author: str) -> None:
         self._repositories.append(dict(
+            repo_name=repo_name,
             repo_path=repo_path,
             branch=branch,
             author=author,

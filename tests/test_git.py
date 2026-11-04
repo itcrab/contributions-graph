@@ -195,7 +195,6 @@ class TestGit(GitTestMixin):
             new_repo_path=new_repo_path,
             new_repo_branch='master',
             new_repo_author=git_author,
-            file_dir='all_commits',
         )
 
         git_repo_path = os.path.join(new_repo_path, '.git')
@@ -210,7 +209,6 @@ class TestGit(GitTestMixin):
             new_repo_path=new_repo_path,
             new_repo_branch='master',
             new_repo_author=git_author,
-            file_dir='all_commits',
         )
 
         git_repo_path = new_repo_path
@@ -223,10 +221,10 @@ class TestGit(GitTestMixin):
         git_repo_path = tmpdir.mkdir('build_git_repository').strpath
         os.chdir(git_repo_path)
 
-        all_commits = [
+        all_commits = {'all_commits': [
             datetime_objects[0],
             datetime_objects[1],
-        ]
+        ]}
 
         git = self.git_create_repository(new_repo_path=git_repo_path, new_repo_author=git_author)
         git.build_repository(all_commits)
@@ -247,10 +245,10 @@ class TestGit(GitTestMixin):
 
         assert os.path.isdir('all_commits') is True
 
-        all_commits = [
+        all_commits = {'all_commits': [
             datetime_objects[0],
             datetime_objects[1],
-        ]
+        ]}
 
         git = self.git_create_repository(new_repo_path=git_repo_path, new_repo_author=git_author)
         git.build_repository(all_commits)
@@ -267,16 +265,15 @@ class TestGit(GitTestMixin):
 
         assert os.path.isdir('custom_file_dir') is False
 
-        all_commits = [
+        all_commits = {'custom_file_dir': [
             datetime_objects[0],
             datetime_objects[1],
-        ]
+        ]}
 
         git = Git(
             new_repo_path=git_repo_path,
             new_repo_branch='master',
             new_repo_author=git_author,
-            file_dir='custom_file_dir',
         )
         git.create_repository()
         git.build_repository(all_commits)

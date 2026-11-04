@@ -19,14 +19,13 @@ class TestContributionsGraph(GitTestMixin):
             git.commit_file(datetime_objects[i], file_name)
 
         repository_list = RepositoryList()
-        repository_list.add(git_repo_path, 'master', git_author)
+        repository_list.add('all_commits', git_repo_path, 'master', git_author)
 
         new_repo_path = tmpdir.mkdir('new_git_repo').strpath
         git = Git(
             new_repo_path=new_repo_path,
             new_repo_branch='master',
             new_repo_author=git_author,
-            file_dir='all_commits',
         )
         obfuscate = Obfuscate(11, 0, 0, 5)
         contributions_graph = ContributionsGraph(repository_list, git, obfuscate)
@@ -52,14 +51,13 @@ class TestContributionsGraph(GitTestMixin):
             git.commit_file(datetime_objects[i], file_name)
 
         repository_list = RepositoryList()
-        repository_list.add(git_repo_path, 'master', git_author)
+        repository_list.add('all_commits', git_repo_path, 'master', git_author)
 
         new_repo_path = tmpdir.mkdir('new_git_repo').strpath
         git = Git(
             new_repo_path=new_repo_path,
             new_repo_branch='master',
             new_repo_author=git_author,
-            file_dir='all_commits',
         )
         contributions_graph = ContributionsGraph(repository_list, git)
         contributions_graph.run()
@@ -94,13 +92,12 @@ class TestContributionsGraph(GitTestMixin):
         assert all_commits == [datetime_objects_obfuscate[1], datetime_objects_obfuscate[0]]
 
         repository_list = RepositoryList()
-        repository_list.add(git_repo_path, 'master', git_author)
+        repository_list.add('all_commits', git_repo_path, 'master', git_author)
 
         git = Git(
             new_repo_path=new_repo_path,
             new_repo_branch='master',
             new_repo_author=git_author,
-            file_dir='all_commits',
         )
         obfuscate = Obfuscate(11, 0, 0, 5)
         contributions_graph = ContributionsGraph(repository_list, git, obfuscate)
@@ -142,13 +139,12 @@ class TestContributionsGraph(GitTestMixin):
         assert all_commits == [datetime_objects_utc[1], datetime_objects_utc[0]]
 
         repository_list = RepositoryList()
-        repository_list.add(git_repo_path, 'master', git_author)
+        repository_list.add('all_commits', git_repo_path, 'master', git_author)
 
         git = Git(
             new_repo_path=new_repo_path,
             new_repo_branch='master',
             new_repo_author=git_author,
-            file_dir='all_commits',
         )
         contributions_graph = ContributionsGraph(repository_list, git)
         contributions_graph.run()

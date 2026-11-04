@@ -8,12 +8,10 @@ from contributions_graph.utils import write_file_data, parse_iso_8601_string_to_
 
 
 class Git:
-    def __init__(self, new_repo_path: str, new_repo_branch: str, new_repo_author: str, file_dir: str) -> None:
+    def __init__(self, new_repo_path: str, new_repo_branch: str, new_repo_author: str) -> None:
         self.new_repo_path = new_repo_path
         self.new_repo_branch = new_repo_branch
         self.new_repo_author = new_repo_author
-
-        self.file_dir = file_dir
 
         self.current_path = os.getcwd()
 
@@ -96,14 +94,15 @@ class Git:
 
             self.commit_file(None, file_name)
 
-    def build_repository(self, all_commits: List[datetime]) -> None:
-        if not os.path.isdir(self.file_dir):
-            os.mkdir(self.file_dir)
-        os.chdir(self.file_dir)
-
-        for commit in all_commits:
-            file_path = self.create_file(commit)
-            self.commit_file(commit, file_path)
+    def build_repository(self, all_commits: dict[str, list[datetime]]) -> None:
+        for repo_name in all_commits:
+            if not os.path.isdir(repo_name):
+                os.mkdir(repo_name)
+            os.chdir(repo_name)
+            for commit in all_commits[repo_name]:
+                file_path = self.create_file(commit)
+                self.commit_file(commit, file_path)
+            os.chdir('..')
 
         os.chdir(self.current_path)
 
