@@ -24,27 +24,28 @@ from contributions_graph.repository_list import RepositoryList
 
 repository_list = RepositoryList()
 repository_list.add(
-    repo_path='/home/arcady/projects/project_1',
+    repo_name='project_1',
+    repo_path='/path/to/project_1',
     branch='master',
-    author='Arcady Usov <arcady.usov@example.email.com>',
+    author='Arcady Usov <arcady.usov@project1.com>',
 )
 repository_list.add(
-    repo_path='/home/arcady/projects/project_2',
+    repo_name='project_2',
+    repo_path='/path/to/project_2',
     branch='develop',
-    author='Arcady Usov <arcady.usov@example.email.com>',
+    author='Arcady Usov <arcady.usov@project2.com>',
 )
 repository_list.add(
-    repo_path='/home/arcady/projects/project_3',
+    repo_name='project_3',
+    repo_path='/path/to/project_3',
     branch='testing',
-    author='Arcady Usov <arcady.usov@example.email.com>',
+    author='Arcady Usov <arcady.usov@project3.com>',
 )
 
 git = Git(
-    new_repo_path='/home/arcady/projects/contributions_graph',
+    new_repo_path='/path/to/contributions_graph',
     new_repo_branch='master',
-    new_repo_author='Arcady Usov <arcady.usov@example.email.com>',
-    file_dir='all_commits',
-    file_ext='py',
+    new_repo_author='Arcady Usov <arcady.usov@email.com>',
 )
 
 obfuscate_enabled = False
