@@ -1,5 +1,4 @@
 from datetime import timedelta, datetime, timezone
-from typing import List
 
 
 class Obfuscate:
@@ -17,13 +16,14 @@ class Obfuscate:
             tzinfo=timezone.utc,
         )
 
-    def run(self, all_commits: List[datetime]) -> List[datetime]:
-        ofuscate_date = self.get_obfuscate_date(all_commits[0])
-        for idx, commit in enumerate(all_commits):
-            if commit.day != ofuscate_date.day:
-                ofuscate_date = self.get_obfuscate_date(commit)
+    def run(self, all_commits: dict[str, list[datetime]]) -> dict[str, list[datetime]]:
+        obfuscate_date_date = self.get_obfuscate_date(all_commits[next(iter(all_commits))][0])
+        for repo_name in all_commits:
+            for idx, commit in enumerate(all_commits[repo_name]):
+                if commit.day != obfuscate_date_date.day:
+                    obfuscate_date_date = self.get_obfuscate_date(commit)
 
-            all_commits[idx] = ofuscate_date
-            ofuscate_date += self.delta_minutes
+                all_commits[repo_name][idx] = obfuscate_date_date
+                obfuscate_date_date += self.delta_minutes
 
         return all_commits

@@ -1,4 +1,3 @@
-import os
 from datetime import datetime
 from datetime import timezone, timedelta
 
@@ -69,16 +68,19 @@ def datetime_strings_obfuscate(datetime_objects_obfuscate):
 def repository_dicts(tmpdir):
     return [
         dict(
+            repo_name='all_commits',
             repo_path=tmpdir,
             branch='branch-name-first',
             author='Developer Name <e-first@mail.com>',
         ),
         dict(
+            repo_name='all_commits',
             repo_path=tmpdir,
             branch='branch-name-second',
             author='Developer Name <e-second@mail.com>',
         ),
         dict(
+            repo_name='all_commits',
             repo_path=tmpdir,
             branch='branch-name-third',
             author='Developer Name <e-third@mail.com>',
@@ -90,8 +92,5 @@ def repository_dicts(tmpdir):
 def git_author():
     user_name = 'Arcady Usov'
     user_email = 'arcady.usov@example.email.com'
-
-    os.environ['GIT_AUTHOR_NAME'] = user_name
-    os.environ['GIT_AUTHOR_EMAIL'] = user_email
 
     return f'{user_name} <{user_email}>'

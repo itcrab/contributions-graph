@@ -1,9 +1,9 @@
-from typing import List, Iterator
+from typing import Iterator
 
 
 class RepositoryList:
     def __init__(self) -> None:
-        self._repositories: List[dict] = []
+        self._repositories: list[dict] = []
         self._position = 0
         self._max_position = 0
 
@@ -19,8 +19,9 @@ class RepositoryList:
     def __iter__(self) -> Iterator[dict]:
         return self
 
-    def add(self, repo_path: str, branch: str, author: str) -> None:
+    def add(self, repo_name: str, repo_path: str, branch: str, author: str) -> None:
         self._repositories.append(dict(
+            repo_name=repo_name,
             repo_path=repo_path,
             branch=branch,
             author=author,

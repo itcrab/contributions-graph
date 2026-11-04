@@ -1,40 +1,36 @@
 import os
 import subprocess
 from datetime import datetime
-from typing import List
 
 from contributions_graph.exceptions import GitBranchNotFoundError
-from contributions_graph.utils import generate_full_file_name, write_file_data, parse_iso_8601_string_to_datetime
+from contributions_graph.utils import write_file_data, parse_iso_8601_string_to_datetime
 
 
 class Git:
-    def __init__(self, new_repo_path: str, new_repo_branch: str, new_repo_author: str, file_dir: str, file_ext: str) -> None:
+    def __init__(self, new_repo_path: str, new_repo_branch: str, new_repo_author: str) -> None:
         self.new_repo_path = new_repo_path
         self.new_repo_branch = new_repo_branch
         self.new_repo_author = new_repo_author
-
-        self.file_dir = file_dir
-        self.file_ext = file_ext
 
         self.current_path = os.getcwd()
 
     def repository_exists(self) -> bool:
         return os.path.isdir(os.path.join(self.new_repo_path, '.git'))
 
-    def get_commits_exists(self) -> List[datetime]:
+    def get_commits_exists(self) -> list[datetime]:
         return self.get_commits(
             repo_path=self.new_repo_path,
             branch=self.new_repo_branch,
             author=self.new_repo_author,
         )
 
-    def get_commits(self, repo_path: str, branch: str, author: str) -> List[datetime]:
+    def get_commits(self, repo_path: str, branch: str, author: str) -> list[datetime]:
         os.chdir(repo_path)
 
         repo_branch = self.get_repo_branch()
 
         if repo_branch != branch:
-            os.system('git checkout {}'.format(branch))
+            subprocess.run(f'git checkout {branch}', shell=True)
 
             selected_branch = self.get_repo_branch()
             if selected_branch != branch:
@@ -45,13 +41,13 @@ class Git:
         all_commits = self.get_all_commits(author)
 
         if repo_branch != branch:
-            os.system('git checkout {}'.format(repo_branch))
+            subprocess.run(f'git checkout {repo_branch}', shell=True)
 
         os.chdir(self.current_path)
 
         return all_commits
 
-    def get_repo_branches(self) -> List[str]:
+    def get_repo_branches(self) -> list[str]:
         cmd = 'git branch'
         repo_branches = subprocess.check_output(cmd, shell=True, universal_newlines=True)
 
@@ -65,14 +61,14 @@ class Git:
 
         return repo_branch
 
-    def get_all_commits(self, author: str) -> List[datetime]:
+    def get_all_commits(self, author: str) -> list[datetime]:
         cmd = 'git --no-pager log --pretty="%cI" --author="{}"'.format(author)
         all_commits = subprocess.check_output(cmd, shell=True, universal_newlines=True)
         all_commits_list = all_commits.splitlines()
 
         return list(map(parse_iso_8601_string_to_datetime, all_commits_list))
 
-    def get_committers(self) -> List[str]:
+    def get_committers(self) -> list[str]:
         cmd = 'git --no-pager log --pretty="%cn <%ce>"'
         all_commits = subprocess.check_output(cmd, shell=True, universal_newlines=True)
 
@@ -85,9 +81,9 @@ class Git:
         if not self.repository_exists():
             repo_author = self.new_repo_author.split('<')
 
-            os.system('git init')
-            os.system('git config user.email "{}"'.format(repo_author[1][:-1]))
-            os.system('git config user.name "{}"'.format(repo_author[0]))
+            subprocess.run('git init', shell=True)
+            subprocess.run(f'git config user.email "{repo_author[1][:-1]}"', shell=True)
+            subprocess.run(f'git config user.name "{repo_author[0]}"', shell=True)
 
     def create_readme(self) -> None:
         file_name = 'README.md'
@@ -95,34 +91,43 @@ class Git:
             file_data = '# Contribution Graph Repository'
             write_file_data(file_name, file_data)
 
-            self.set_current_datetime(datetime.today().isoformat())
-            self.commit_file(file_name)
+            self.commit_file(None, file_name)
 
-    def build_repository(self, all_commits: List[datetime]) -> None:
-        if not os.path.isdir(self.file_dir):
-            os.mkdir(self.file_dir)
-        os.chdir(self.file_dir)
-
-        for commit in all_commits:
-            date_string = commit.isoformat()
-
-            file_name = self.create_file(date_string)
-            self.set_current_datetime(date_string)
-            self.commit_file(file_name)
+    def build_repository(self, all_commits: dict[str, list[datetime]]) -> None:
+        for repo_name in all_commits:
+            if not os.path.isdir(repo_name):
+                os.mkdir(repo_name)
+            os.chdir(repo_name)
+            for commit in all_commits[repo_name]:
+                file_path = self.create_file(commit)
+                self.commit_file(commit, file_path)
+            os.chdir('..')
 
         os.chdir(self.current_path)
 
-    def create_file(self, date_string: str) -> str:
-        file_name = generate_full_file_name(self.file_ext)
-        file_data = 'commit_datetime="{}"'.format(date_string)
-        write_file_data(file_name, file_data)
+    def create_file(self, commit: datetime) -> str:
+        dir_path = commit.strftime('%Y/%m')
+        os.makedirs(dir_path, exist_ok=True)
+        file_name = commit.strftime('%Y_%m_%d__%H_%M_%S')
+        tz_str = commit.strftime('%z')
+        tz_str_in_path = tz_str.replace('+', 'p').replace('-', 'm')
+        file_path = f'{dir_path}/{file_name}__{tz_str_in_path}.commit'
 
-        return file_name
+        file_data = commit.isoformat()
+        write_file_data(file_path, file_data)
 
-    def set_current_datetime(self, date_string: str) -> None:
-        os.environ['GIT_AUTHOR_DATE'] = date_string
-        os.environ['GIT_COMMITTER_DATE'] = date_string
+        return file_path
 
-    def commit_file(self, file_name: str) -> None:
-        os.system('git add {}'.format(file_name))
-        os.system('git commit -m "Commit file {}"'.format(file_name))
+    def commit_file(self, commit: datetime | None, file_name: str) -> None:
+        if commit is None:
+            date_string = datetime.today().isoformat()
+        else:
+            date_string = commit.isoformat()
+
+        git_date_override_vars = {
+            'GIT_AUTHOR_DATE': date_string,
+            'GIT_COMMITTER_DATE': date_string,
+        }
+
+        subprocess.run(f'git add {file_name}', shell=True, env=os.environ | git_date_override_vars)
+        subprocess.run(f'git commit -m "Commit file {file_name}"', shell=True, env=os.environ | git_date_override_vars)

@@ -24,15 +24,15 @@ class TestObfuscate:
             delta_minutes=5,
         )
 
-        all_commits = [
+        all_commits = {'all_commits': [
             datetime_objects[0],
             datetime_objects[1]
-        ]
+        ]}
         obfuscate_commits = obfuscate.run(all_commits)
-        assert obfuscate_commits == [
+        assert obfuscate_commits == {'all_commits': [
             datetime_objects_obfuscate[0],
             datetime_objects_obfuscate[1],
-        ]
+        ]}
 
     def test_obfuscate_case_2(self, datetime_objects, datetime_objects_obfuscate):
         obfuscate = Obfuscate(
@@ -42,17 +42,17 @@ class TestObfuscate:
             delta_minutes=5,
         )
 
-        all_commits = [
+        all_commits = {'all_commits': [
             datetime_objects[0],
             datetime_objects[1],
             datetime_objects[2],
-        ]
+        ]}
         obfuscate_commits = obfuscate.run(all_commits)
-        assert obfuscate_commits == [
+        assert obfuscate_commits == {'all_commits': [
             datetime_objects_obfuscate[0],
             datetime_objects_obfuscate[1],
             datetime_objects_obfuscate[2],
-        ]
+        ]}
 
     def test_obfuscate_case_3(self, datetime_objects, datetime_objects_obfuscate):
         obfuscate = Obfuscate(
@@ -62,16 +62,16 @@ class TestObfuscate:
             delta_minutes=5,
         )
 
-        all_commits = [
+        all_commits = {'all_commits': [
             datetime_objects[0],
             datetime_objects[1],
             datetime_objects[2],
             datetime_objects[3],
-        ]
+        ]}
         obfuscate_commits = obfuscate.run(all_commits)
-        assert obfuscate_commits == [
+        assert obfuscate_commits == {'all_commits': [
             datetime_objects_obfuscate[0],
             datetime_objects_obfuscate[1],
             datetime_objects_obfuscate[2],
             datetime_objects_obfuscate[3],
-        ]
+        ]}

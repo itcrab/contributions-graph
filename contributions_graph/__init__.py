@@ -1,5 +1,6 @@
+from collections import defaultdict
 from datetime import datetime
-from typing import Optional, List
+from typing import Optional
 
 from contributions_graph.git import Git
 from contributions_graph.obfuscate import Obfuscate
@@ -21,37 +22,40 @@ class ContributionsGraph:
 
         self.build_repo(all_commits)
 
-    def get_all_commits(self) -> List[datetime]:
-        all_commits = []
+    def get_all_commits(self) -> dict[str, list[datetime]]:
+        all_commits = defaultdict(list)
         for repository in self.repository_list:
             commits = self.git.get_commits(
                 repo_path=repository['repo_path'],
                 branch=repository['branch'],
                 author=repository['author'],
             )
-            all_commits.extend(commits)
+            all_commits[repository['repo_name']].extend(commits)
 
         return all_commits
 
-    def sort_commits(self, all_commits: List[datetime]) -> List[datetime]:
-        all_commits = list(set(all_commits))
-        all_commits.sort()
+    def sort_commits(self, all_commits: dict[str, list[datetime]]) -> dict[str, list[datetime]]:
+        for repo_name in all_commits:
+            all_commits[repo_name] = list(set(all_commits[repo_name]))
+            all_commits[repo_name].sort()
 
         return all_commits
 
-    def get_subtraction_commits(self, all_commits: List[datetime]) -> List[datetime]:
+    def get_subtraction_commits(self, all_commits: dict[str, list[datetime]]) -> dict[str, list[datetime]]:
         exists_commits = self.git.get_commits_exists()
-        exists_commits = self.sort_commits(exists_commits)
+        exists_commits = list(set(exists_commits))
+        exists_commits.sort()
 
         if self.obfuscate:
             all_commits = self.obfuscate.run(all_commits)
 
-        all_commits = list(set(set(all_commits) - set(exists_commits)))
-        all_commits.sort()
+        for repo_name in all_commits:
+            all_commits[repo_name] = list(set(set(all_commits[repo_name]) - set(exists_commits)))
+            all_commits[repo_name].sort()
 
         return all_commits
 
-    def build_repo(self, all_commits: List[datetime]) -> None:
+    def build_repo(self, all_commits: dict[str, list[datetime]]) -> None:
         if self.git.repository_exists():
             all_commits = self.get_subtraction_commits(all_commits)
 
