@@ -8,13 +8,12 @@ from contributions_graph.utils import write_file_data, parse_iso_8601_string_to_
 
 
 class Git:
-    def __init__(self, new_repo_path: str, new_repo_branch: str, new_repo_author: str, file_dir: str, file_ext: str) -> None:
+    def __init__(self, new_repo_path: str, new_repo_branch: str, new_repo_author: str, file_dir: str) -> None:
         self.new_repo_path = new_repo_path
         self.new_repo_branch = new_repo_branch
         self.new_repo_author = new_repo_author
 
         self.file_dir = file_dir
-        self.file_ext = file_ext
 
         self.current_path = os.getcwd()
 
@@ -114,9 +113,9 @@ class Git:
         file_name = commit.strftime('%Y_%m_%d__%H_%M_%S')
         tz_str = commit.strftime('%z')
         tz_str_in_path = tz_str.replace('+', 'p').replace('-', 'm')
-        file_path = f'{dir_path}/{file_name}__{tz_str_in_path}.{self.file_ext}'
+        file_path = f'{dir_path}/{file_name}__{tz_str_in_path}.commit'
 
-        file_data = f'commit_datetime="{file_name}_{tz_str}"'
+        file_data = commit.isoformat()
         write_file_data(file_path, file_data)
 
         return file_path

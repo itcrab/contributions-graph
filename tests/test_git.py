@@ -196,7 +196,6 @@ class TestGit(GitTestMixin):
             new_repo_branch='master',
             new_repo_author=git_author,
             file_dir='all_commits',
-            file_ext='py',
         )
 
         git_repo_path = os.path.join(new_repo_path, '.git')
@@ -212,7 +211,6 @@ class TestGit(GitTestMixin):
             new_repo_branch='master',
             new_repo_author=git_author,
             file_dir='all_commits',
-            file_ext='py',
         )
 
         git_repo_path = new_repo_path
@@ -279,7 +277,6 @@ class TestGit(GitTestMixin):
             new_repo_branch='master',
             new_repo_author=git_author,
             file_dir='custom_file_dir',
-            file_ext='py',
         )
         git.create_repository()
         git.build_repository(all_commits)
