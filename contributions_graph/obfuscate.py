@@ -17,13 +17,13 @@ class Obfuscate:
         )
 
     def run(self, all_commits: dict[str, list[datetime]]) -> dict[str, list[datetime]]:
-        ofuscate_date = self.get_obfuscate_date(all_commits[next(iter(all_commits))][0])
+        obfuscate_date_date = self.get_obfuscate_date(all_commits[next(iter(all_commits))][0])
         for repo_name in all_commits:
             for idx, commit in enumerate(all_commits[repo_name]):
-                if commit.day != ofuscate_date.day:
-                    ofuscate_date = self.get_obfuscate_date(commit)
+                if commit.day != obfuscate_date_date.day:
+                    obfuscate_date_date = self.get_obfuscate_date(commit)
 
-                all_commits[repo_name][idx] = ofuscate_date
-                ofuscate_date += self.delta_minutes
+                all_commits[repo_name][idx] = obfuscate_date_date
+                obfuscate_date_date += self.delta_minutes
 
         return all_commits
