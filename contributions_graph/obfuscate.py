@@ -20,11 +20,7 @@ class Obfuscate:
         date_str = f'{date_year}-{date_month}-{date_day}'
 
         obfuscate_dt = datetime(date_year, date_month, date_day, self.start_hour, self.start_minute, self.start_second, tzinfo=date_tz)
-        print('============================')
-        print('commit_dt', commit_dt)
-        print('obfuscate_dt', obfuscate_dt)
         obfuscate_dt += timedelta(minutes=self.delta_minutes * self._obfuscate_counts[date_str])
-        print('obfuscate_dt', obfuscate_dt)
 
         self._obfuscate_counts[date_str] += 1
 
