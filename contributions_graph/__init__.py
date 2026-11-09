@@ -21,7 +21,7 @@ class ContributionsGraph:
                 if commit_dt in import_commits:
                     continue
 
-                # if self.obfuscate:
-                #     all_commits = self.obfuscate.run(all_commits)
+                if self.obfuscate:
+                    commit_dt = self.obfuscate.run(commit_dt)
 
                 self.import_repository.create_commit(commit_dt, export_repository.name)
