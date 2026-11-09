@@ -2,6 +2,8 @@ import os
 import subprocess
 from typing import Generator, Iterator
 
+from contributions_graph.git import GitConsole
+
 
 class ExportRepository:
     def __init__(self, name: str, path: str, branch: str, author: str):
@@ -51,6 +53,10 @@ class ImportRepository:
         self.branch = branch
         self.author = author
 
+        self.git_console = GitConsole(
+            path=self.path,
+        )
+
     def create(self) -> None:
         if not os.path.isdir(self.path):
             os.mkdir(self.path)
@@ -60,9 +66,9 @@ class ImportRepository:
             repo_user_name = author_split[0]
             repo_user_email = author_split[1][:-1]
 
-            subprocess.run(f'cd {self.path} && git init', shell=True)
-            subprocess.run(f'cd {self.path} && git config user.name "{repo_user_name}"', shell=True)
-            subprocess.run(f'cd {self.path} && git config user.email "{repo_user_email}"', shell=True)
+            self.git_console.exec('init')
+            self.git_console.exec(f'config user.name "{repo_user_name}"')
+            self.git_console.exec(f'config user.email "{repo_user_email}"')
 
             readme_file_name = f'{self.path}/README.md'
             if not os.path.isfile(readme_file_name):
@@ -70,8 +76,8 @@ class ImportRepository:
                 with open(readme_file_name, 'w') as f:
                     f.write(readme_content)
 
-            subprocess.run(f'cd {self.path} && git add {readme_file_name}', shell=True)
-            subprocess.run(f'cd {self.path} && git commit -m "Initial commit: add file {readme_file_name}"', shell=True)
+            self.git_console.exec(f'add {readme_file_name}')
+            self.git_console.exec(f'commit -m "Initial commit: add file {readme_file_name}"')
 
     def get_commits(self) -> set[str]:
         cmd = f'cd {self.path} && git --no-pager log --pretty="%cI" --author="{self.author}"'
@@ -104,5 +110,5 @@ class ImportRepository:
             'GIT_COMMITTER_DATE': commit_dt,
         }
 
-        subprocess.run(f'cd {self.path} && git add {file_path}', shell=True, env=os.environ | git_date_override_vars)
-        subprocess.run(f'cd {self.path} && git commit -m "Commit file {file_name}"', shell=True, env=os.environ | git_date_override_vars)
+        self.git_console.exec(f'add {file_path}', env_override=git_date_override_vars)
+        self.git_console.exec(f'commit -m "Commit file {file_name}"', env_override=git_date_override_vars)

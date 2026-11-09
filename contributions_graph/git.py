@@ -5,6 +5,18 @@ from datetime import datetime
 from contributions_graph.exceptions import GitBranchNotFoundError
 
 
+class GitConsole:
+    def __init__(self, path: str) -> None:
+        self.path = path
+
+    def exec(self, cmd: str, env_override: dict | None = None):
+        run_kwargs = {'shell': True}
+        if env_override:
+            run_kwargs['env'] = os.environ | env_override
+
+        subprocess.run(f'cd {self.path} && git {cmd}', **run_kwargs)
+
+
 class Git:
     def __init__(self, new_repo_path: str, new_repo_branch: str, new_repo_author: str) -> None:
         self.new_repo_path = new_repo_path
